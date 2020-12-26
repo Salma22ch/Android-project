@@ -1,5 +1,4 @@
-package com.example.task_management_app;
-
+package com.example.task_management_app.Goals;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,10 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-public class Calendar extends Fragment{
+
+import com.example.task_management_app.R;
+
+public class Goals extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
+        return inflater.inflate(R.layout.fragment_gaols, container, false);
     }
 }

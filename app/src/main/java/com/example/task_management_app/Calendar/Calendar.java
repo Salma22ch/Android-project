@@ -1,4 +1,4 @@
-package com.example.task_management_app;
+package com.example.task_management_app.Calendar;
 
 
 import android.os.Bundle;
@@ -10,15 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.util.zip.Inflater;
+import com.example.task_management_app.R;
 
-public class My_tasks extends Fragment{
-
+public class Calendar extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_mytask, container, false);
-
+        return inflater.inflate(R.layout.fragment_calendar, container, false);
     }
 }
-

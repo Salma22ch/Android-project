@@ -1,4 +1,4 @@
-package com.example.task_management_app;
+package com.example.task_management_app.Add;
 
 
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import com.example.task_management_app.R;
 
 public class Add extends AppCompatActivity {
 
