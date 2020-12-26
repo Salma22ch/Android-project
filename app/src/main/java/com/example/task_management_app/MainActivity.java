@@ -2,6 +2,7 @@ package com.example.task_management_app;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.task_management_app.Add.Add;
 import com.example.task_management_app.Calendar.Calendar;
 import com.example.task_management_app.Completed.Completed;
 import com.example.task_management_app.Goals.Goals;
@@ -30,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"Add new task",Toast.LENGTH_SHORT).show();
 
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialog = Add.newInstance();
+                dialog.show(getSupportFragmentManager(), "tag");
             }
+
         });
     }
 
