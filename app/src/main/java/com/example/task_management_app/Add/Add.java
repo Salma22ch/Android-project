@@ -19,17 +19,22 @@ import com.example.task_management_app.R;
 
 import javax.security.auth.callback.Callback;
 
-public class Add extends DialogFragment  {
+public class Add extends DialogFragment implements View.OnClickListener{
 
     private Callback callback;
 
     public static Add newInstance() {
         return new Add();
     }
+
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogTheme);
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.Animation_Design_BottomSheetDialog);
 
     }
 
@@ -37,8 +42,37 @@ public class Add extends DialogFragment  {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add, container, false);
+        ImageButton close = view.findViewById(R.id.fullscreen_dialog_close);
+        TextView action = view.findViewById(R.id.fullscreen_dialog_action);
+        close.setOnClickListener(this);
+        action.setOnClickListener(this);
 
         return view;
+    }
+
+
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id) {
+
+            case R.id.fullscreen_dialog_close:
+                dismiss();
+                break;
+
+            case R.id.fullscreen_dialog_action:
+                callback.onActionClick("Saved");
+                dismiss();
+                break;
+
+        }
+
+    }
+
+    public interface Callback {
+
+        void onActionClick(String name);
+
     }
 }
 

@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DialogFragment dialog = Add.newInstance();
+                ((Add) dialog).setCallback(new Add.Callback() {
+                    @Override
+                    public void onActionClick(String name) {
+                        Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 dialog.show(getSupportFragmentManager(), "tag");
             }
 
