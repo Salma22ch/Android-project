@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.task_management_app.Add.Add;
-import com.example.task_management_app.Calendar.Calendar;
+import com.example.task_management_app.Calendar.MyCalendar;
 import com.example.task_management_app.Completed.Completed;
 import com.example.task_management_app.Goals.Goals;
 import com.example.task_management_app.My_tasks.My_tasks;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     SelectedFragement=new My_tasks();
                     break;
                 case R.id.Calendar:
-                    SelectedFragement=new Calendar();
+                    SelectedFragement=new MyCalendar();
                     break;
                 case R.id.Goals:
                     SelectedFragement=new Goals();
