@@ -17,11 +17,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import android.app.TimePickerDialog;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import com.example.task_management_app.R;
+import android.text.format.DateFormat;
+import android.widget.TimePicker;
 
 import javax.security.auth.callback.Callback;
 
@@ -32,6 +34,11 @@ public class Add extends  DialogFragment implements View.OnClickListener {
     DatePickerDialog day_picker;
     EditText text_Day;
     String db_date;
+
+    //time picker
+    TimePickerDialog time_picker;
+    EditText text_time;
+    String db_time;
     public static Add newInstance() {
         return new Add();
     }
@@ -54,10 +61,11 @@ public class Add extends  DialogFragment implements View.OnClickListener {
         ImageButton close = view.findViewById(R.id.fullscreen_dialog_close);
         TextView action = view.findViewById(R.id.fullscreen_dialog_action);
         ImageButton btnday = view.findViewById(R.id.DayButton);
+        ImageButton btntime = view.findViewById(R.id.TimeButton);
         close.setOnClickListener(this);
         action.setOnClickListener(this);
         btnday.setOnClickListener(this);
-
+        btntime .setOnClickListener(this);
         return view;
     }
 
@@ -79,7 +87,7 @@ public class Add extends  DialogFragment implements View.OnClickListener {
             case R.id.DayButton:
             { final Calendar c = Calendar.getInstance();
                 int year = c.get(Calendar.YEAR );
-                final int month = c.get(Calendar.MONTH);
+                int month = c.get(Calendar.MONTH);
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 day_picker=new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
@@ -87,17 +95,36 @@ public class Add extends  DialogFragment implements View.OnClickListener {
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 Calendar c = Calendar.getInstance();
                                 c.set(Calendar.YEAR, year);
-                                c.set(Calendar.MONTH, month);
+                                c.set(Calendar.MONTH, monthOfYear);
                                 c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
-                                System.out.println(currentDateString);
+                                db_date=year+"/"+monthOfYear+"/"+dayOfMonth;
+                                System.out.println(db_date);
                             }
                         }
 
                         , year, month, day);
                 day_picker.show();
                 break;}
+            case R.id.TimeButton:
+            {
 
+                Calendar c = Calendar.getInstance();
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+               time_picker=  new TimePickerDialog(getActivity(),
+                       new TimePickerDialog.OnTimeSetListener() {
+                           @Override
+                           public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+                               Calendar c = Calendar.getInstance();
+                               c.set(Calendar.HOUR_OF_DAY,sHour);
+                               c.set(Calendar.MINUTE ,sMinute);
+                               db_time="Selected Date: "+ sHour +":"+ sMinute ;
+                               System.out.println(db_time);
+                           }
+                       }, hour, minute, true);
+                time_picker.show();
+                break;
+            }
 
         }
 
