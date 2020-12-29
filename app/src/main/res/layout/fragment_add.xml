@@ -58,35 +58,38 @@
             android:layout_marginRight="55dp"
             android:background="@drawable/background_transparent"
             android:contentDescription="Date_picker"
+            android:clickable="true"
             android:src="@drawable/ic_day"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton8"
+            app:layout_constraintEnd_toStartOf="@+id/NotifButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/TimeButton"
             android:layout_width="51dp"
             android:layout_height="44dp"
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:background="@drawable/background_transparent"
             android:contentDescription="Time_picker"
+            android:clickable="true"
             android:src="@drawable/ic_time"
             app:layout_constraintStart_toEndOf="@+id/DayButton"
             app:layout_constraintTop_toTopOf="@+id/DayButton" />
 
         <ImageButton
-            android:id="@+id/imageButton8"
+            android:id="@+id/NotifButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="237dp"
             android:layout_marginRight="237dp"
+            android:clickable="true"
             android:background="@drawable/background_transparent"
             android:src="@drawable/ic_notifications"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButton2"
+            app:layout_constraintBottom_toBottomOf="@+id/TimeButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/DayButton"
-            app:layout_constraintTop_toTopOf="@+id/imageButton2" />
+            app:layout_constraintTop_toTopOf="@+id/TimeButton" />
 
         <ImageButton
             android:id="@+id/imageButton9"
@@ -94,9 +97,10 @@
             android:layout_height="43dp"
             android:layout_marginStart="172dp"
             android:layout_marginLeft="172dp"
+            android:clickable="true"
             android:background="@drawable/background_transparent"
             android:src="@drawable/ic_attachment"
-            app:layout_constraintStart_toEndOf="@+id/imageButton8"
+            app:layout_constraintStart_toEndOf="@+id/NotifButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
@@ -105,8 +109,8 @@
             android:layout_height="44dp"
             android:background="@drawable/background_transparent"
             android:src="@drawable/ic_category"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButton8"
-            app:layout_constraintStart_toEndOf="@+id/imageButton8"
+            app:layout_constraintBottom_toBottomOf="@+id/NotifButton"
+            app:layout_constraintStart_toEndOf="@+id/NotifButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
@@ -207,13 +211,13 @@
             android:layout_marginTop="32dp"
             android:text="Priority :"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/seekBar"
-            app:layout_constraintStart_toStartOf="@+id/seekBar"
+            app:layout_constraintBottom_toTopOf="@+id/id_priority"
+            app:layout_constraintStart_toStartOf="@+id/id_priority"
             app:layout_constraintTop_toBottomOf="@+id/id_details"
             app:layout_constraintVertical_bias="0.6" />
 
         <com.google.android.material.slider.RangeSlider
-            android:id="@+id/seekBar"
+            android:id="@+id/id_priority"
             android:layout_width="0dp"
             android:layout_height="28dp"
             android:layout_marginStart="28dp"
