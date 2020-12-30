@@ -51,14 +51,16 @@
 
         <ImageButton
             android:id="@+id/DayButton"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginEnd="55dp"
             android:layout_marginRight="55dp"
             android:background="@drawable/background_transparent"
-            android:contentDescription="Date_picker"
             android:clickable="true"
+            android:contentDescription="Date_picker"
             android:src="@drawable/ic_day"
             app:layout_constraintEnd_toStartOf="@+id/NotifButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,25 +68,29 @@
 
         <ImageButton
             android:id="@+id/TimeButton"
-            android:layout_width="51dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:background="@drawable/background_transparent"
-            android:contentDescription="Time_picker"
             android:clickable="true"
+            android:contentDescription="Time_picker"
             android:src="@drawable/ic_time"
+            android:state_selected="true"
+            app:layout_constraintEnd_toStartOf="@+id/NotifButton"
             app:layout_constraintStart_toEndOf="@+id/DayButton"
             app:layout_constraintTop_toTopOf="@+id/DayButton" />
 
         <ImageButton
             android:id="@+id/NotifButton"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="48dp"
+            android:layout_height="39dp"
             android:layout_marginEnd="237dp"
             android:layout_marginRight="237dp"
-            android:clickable="true"
             android:background="@drawable/background_transparent"
+            android:clickable="true"
             android:src="@drawable/ic_notifications"
             app:layout_constraintBottom_toBottomOf="@+id/TimeButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -105,13 +111,17 @@
 
         <ImageButton
             android:id="@+id/CategoryButton"
-            android:layout_width="56dp"
-            android:layout_height="44dp"
+            android:layout_width="51dp"
+            android:layout_height="39dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
             android:background="@drawable/background_transparent"
+            android:clickable="true"
             android:src="@drawable/ic_category"
             app:layout_constraintBottom_toBottomOf="@+id/NotifButton"
             app:layout_constraintStart_toEndOf="@+id/NotifButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <View
             android:id="@+id/divider"
@@ -206,15 +216,12 @@
             android:id="@+id/textView4"
             android:layout_width="72dp"
             android:layout_height="20dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="32dp"
             android:text="Priority :"
             android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/id_priority"
             app:layout_constraintStart_toStartOf="@+id/id_priority"
-            app:layout_constraintTop_toBottomOf="@+id/id_details"
-            app:layout_constraintVertical_bias="0.6" />
+            app:layout_constraintTop_toBottomOf="@+id/id_details" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/id_priority"
