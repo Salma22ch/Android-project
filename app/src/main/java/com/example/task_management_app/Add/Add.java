@@ -1,7 +1,12 @@
 package com.example.task_management_app.Add;
 
+import com.example.task_management_app.MainActivity;
+import com.example.task_management_app.models.DBOpenHelper;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -10,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.app.DatePickerDialog;
 import android.widget.Button;
@@ -25,16 +31,23 @@ import android.app.TimePickerDialog;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import com.example.task_management_app.R;
+import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.timepicker.TimeFormat;
 
 import android.text.format.DateFormat;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import javax.security.auth.callback.Callback;
 
 public class Add extends  DialogFragment implements View.OnClickListener {
 
     private Callback callback;
+    ContentValues contentValues = new ContentValues();
+    // Databae section
+    private SQLiteDatabase db;
+    DBOpenHelper dbOpenHelper;
+
     //date picker
     DatePickerDialog day_picker;
     EditText text_Day;
@@ -47,6 +60,16 @@ public class Add extends  DialogFragment implements View.OnClickListener {
 
     //category_picker
     String db_category;
+
+    //title value
+    EditText title;
+    String db_title;
+    EditText details;
+    String db_details;
+
+    //priority
+    int db_prority;
+
     public static Add newInstance() {
         return new Add();
     }
@@ -60,6 +83,13 @@ public class Add extends  DialogFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.Animation_Design_BottomSheetDialog);
 
+        // Create  database
+        dbOpenHelper = new DBOpenHelper(getContext() , DBOpenHelper.Constants.DATABASE_NAME, null,
+                DBOpenHelper.Constants.DATABASE_VERSION);
+        openDB();
+        // rowId = updateRecord(contentValues, rowId);
+        //queryTheDatabase();
+        //deleteRecord(rowId);
     }
 
     @Nullable
@@ -72,6 +102,12 @@ public class Add extends  DialogFragment implements View.OnClickListener {
         ImageButton btntime = view.findViewById(R.id.TimeButton);
         ImageButton btncateg = view.findViewById(R.id.CategoryButton);
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
+        title=view.findViewById(R.id.id_title);
+        details=view.findViewById(R.id.id_details);
+        db_title=title.getText().toString();
+        db_title=details.getText().toString();
+        RangeSlider priSeekBar = view.findViewById(R.id.id_priority);
+        db_prority=priSeekBar.getScrollY();
         close.setOnClickListener(this);
         action.setOnClickListener(this);
         btnday.setOnClickListener(this);
@@ -93,6 +129,7 @@ public class Add extends  DialogFragment implements View.OnClickListener {
 
             case R.id.fullscreen_dialog_action:
                 callback.onActionClick("Saved");
+                long rowId = insertRecord(contentValues);
                 dismiss();
                 break;
 
@@ -204,9 +241,61 @@ public class Add extends  DialogFragment implements View.OnClickListener {
     }
 
     public interface Callback {
-
         void onActionClick(String name);
-
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        openDB();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        closeDB();
+    }
+
+    /**
+     * * Open the database* *
+     *
+     * @throws SQLiteException
+     */
+    public void openDB() throws SQLiteException {
+        try {
+            db = dbOpenHelper.getWritableDatabase();
+        } catch (SQLiteException ex) {
+            db = dbOpenHelper.getReadableDatabase();
+        }
+    }
+
+    /** *Close Database */
+    public void closeDB() {
+        db.close();
+    }
+
+    /**
+     * Insert a record
+     *
+     * @param contentValues
+     *            (an empty contentValues)
+     * @return the inserted row id
+     */
+    private long insertRecord(ContentValues contentValues) {
+        // Assign the values for each column.
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DATE, db_date);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TIME, db_time);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_CATEGORY, db_category);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TYPE, "Task");
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, db_title);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DETAILS, db_details);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PRIORITY, db_prority);
+
+        // Insert the line in the database
+        long rowId = db.insert(DBOpenHelper.Constants.MY_TABLE, null, contentValues);
+        return rowId;
+    }
+
+
 }
 
