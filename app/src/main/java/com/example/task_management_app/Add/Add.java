@@ -104,10 +104,8 @@ public class Add extends  DialogFragment implements View.OnClickListener {
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
-        db_title=title.getText().toString();
-        db_title=details.getText().toString();
         RangeSlider priSeekBar = view.findViewById(R.id.id_priority);
-        db_prority=priSeekBar.getScrollY();
+        db_prority=50;
         close.setOnClickListener(this);
         action.setOnClickListener(this);
         btnday.setOnClickListener(this);
@@ -129,6 +127,9 @@ public class Add extends  DialogFragment implements View.OnClickListener {
 
             case R.id.fullscreen_dialog_action:
                 callback.onActionClick("Saved");
+                db_title=title.getText().toString();
+                db_details=details.getText().toString();
+                System.out.println(db_title + "database"+ db_details);
                 long rowId = insertRecord(contentValues);
                 dismiss();
                 break;
@@ -236,6 +237,8 @@ public class Add extends  DialogFragment implements View.OnClickListener {
                 btnnot.setColorFilter(Color.argb(255, 255, 255, 255));
             }
 
+
+
         }
 
     }
@@ -295,6 +298,7 @@ public class Add extends  DialogFragment implements View.OnClickListener {
         long rowId = db.insert(DBOpenHelper.Constants.MY_TABLE, null, contentValues);
         return rowId;
     }
+
 
 
 }
