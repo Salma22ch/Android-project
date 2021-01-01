@@ -85,4 +85,17 @@ public class Note {
     public void setState(String state) {
         this.state = state;
     }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", category='" + category + '\'' +
+                ", date=" + date +
+                ", priority=" + priority +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }
