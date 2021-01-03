@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,20 +8,31 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        app:titleTextColor="@color/colorPrimaryDark"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/compactcalendar_view"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="250dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        app:compactCalendarBackgroundColor="@color/cardview_dark_background"
+        app:compactCalendarTargetHeight="250dp"
+        app:compactCalendarTextSize="12sp"
+
+        app:compactCalendarTextColor="#000000"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorAccent"
         app:compactCalendarCurrentDayBackgroundColor="@color/colorPrimary"
-        app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
-        app:compactCalendarTextColor="@color/colorAccentLight"
-        app:compactCalendarTextSize="12sp" />
+
+        app:compactCalendarCurrentDayIndicatorStyle="fill_large_indicator"
+        app:compactCalendarEventIndicatorStyle="small_indicator"
+        app:compactCalendarOtherMonthDaysTextColor="#534c4c"
+        app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="true"
+        />
+    <ListView
+        android:id="@+id/task_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </ListView>
 </LinearLayout>

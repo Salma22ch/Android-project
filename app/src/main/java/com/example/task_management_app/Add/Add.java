@@ -68,7 +68,7 @@ public class Add extends  DialogFragment implements View.OnClickListener {
     String db_details;
 
     //priority
-    int db_prority;
+    String db_prority;
 
     public static Add newInstance() {
         return new Add();
@@ -104,8 +104,7 @@ public class Add extends  DialogFragment implements View.OnClickListener {
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
-        RangeSlider priSeekBar = view.findViewById(R.id.id_priority);
-        db_prority=50;
+        db_prority="Medium";
         close.setOnClickListener(this);
         action.setOnClickListener(this);
         btnday.setOnClickListener(this);

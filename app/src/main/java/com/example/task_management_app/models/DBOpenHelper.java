@@ -57,7 +57,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             + Constants.KEY_COL_TYPE+ " TEXT, "
             + Constants.KEY_COL_TITLE + " TEXT, "
             + Constants.KEY_COL_DETAILS + " TEXT, "
-            + Constants.KEY_COL_PRIORITY + " INTEGER)";
+            + Constants.KEY_COL_PRIORITY + " TEXT)";
 
 
     /**
