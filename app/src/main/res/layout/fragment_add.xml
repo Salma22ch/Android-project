@@ -103,8 +103,8 @@
             android:layout_height="43dp"
             android:layout_marginStart="172dp"
             android:layout_marginLeft="172dp"
-            android:clickable="true"
             android:background="@drawable/background_transparent"
+            android:clickable="true"
             android:src="@drawable/ic_attachment"
             app:layout_constraintStart_toEndOf="@+id/NotifButton"
             app:layout_constraintTop_toTopOf="parent" />
@@ -135,26 +135,26 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip6"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
             android:layout_width="120dp"
             android:layout_height="49dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="20dp"
-            android:text="Task"
             android:checked="true"
-            style="@style/Widget.MaterialComponents.Chip.Entry"
+            android:text="Task"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/DayButton"
             app:textStartPadding="15dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip7"
+            style="@style/Widget.MaterialComponents.Chip.Entry"
             android:layout_width="114dp"
             android:layout_height="47dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            style="@style/Widget.MaterialComponents.Chip.Entry"
             android:text="Goal"
             android:textColor="#FFFFFF"
             app:chipBackgroundColor="#81A8DF"
@@ -165,13 +165,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="430dp"
-        android:layout_height="662dp"
+        android:layout_width="415dp"
+        android:layout_height="729dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
+
 
         <EditText
             android:id="@+id/id_title"
@@ -180,16 +183,18 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="22dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
-            app:boxBackgroundMode="none"
+            android:layout_marginBottom="168dp"
             android:ems="10"
             android:gravity="start|top"
             android:hint="Title...."
             android:inputType="textMultiLine"
             android:paddingLeft="15dp"
             android:textSize="17sp"
+            app:boxBackgroundMode="none"
+            app:layout_constraintBottom_toTopOf="@+id/id_High"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -204,12 +209,12 @@
             android:layout_marginTop="44dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            app:boxBackgroundMode="none"
             android:ems="10"
             android:gravity="start|top"
             android:hint="Details.."
             android:inputType="textMultiLine"
             android:paddingLeft="15dp"
+            app:boxBackgroundMode="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/id_title" />
@@ -223,7 +228,47 @@
             android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/id_priority"
             app:layout_constraintStart_toStartOf="@+id/id_priority"
-            app:layout_constraintTop_toBottomOf="@+id/id_details" />
+            app:layout_constraintTop_toBottomOf="@+id/id_details"
+            app:layout_constraintVertical_bias="0.094" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/id_Low"
+            android:layout_width="82dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="33dp"
+            android:layout_marginLeft="33dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/id_Medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/id_Medium"
+            android:layout_width="75dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginEnd="204dp"
+            android:layout_marginRight="204dp"
+            android:layout_marginBottom="456dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/id_Low"
+            app:layout_constraintTop_toBottomOf="@+id/id_title"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/id_High"
+            android:layout_width="87dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginBottom="455dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/id_Medium"
+            app:layout_constraintTop_toBottomOf="@+id/id_title" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/id_priority"
@@ -231,12 +276,13 @@
             android:layout_height="28dp"
             android:layout_marginStart="28dp"
             android:layout_marginLeft="28dp"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="188dp"
             android:layout_marginEnd="28dp"
             android:layout_marginRight="28dp"
             android:valueFrom="0.0"
             android:valueTo="100.0"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/id_details" />
 
