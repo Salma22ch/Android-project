@@ -13,9 +13,12 @@ import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.app.DatePickerDialog;
 import android.widget.Button;
@@ -28,6 +31,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import android.app.TimePickerDialog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import com.example.task_management_app.R;
@@ -40,10 +44,11 @@ import android.widget.Toast;
 
 import javax.security.auth.callback.Callback;
 
-public class Add extends  DialogFragment implements View.OnClickListener {
+public class Add extends  DialogFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private Callback callback;
     ContentValues contentValues = new ContentValues();
+    String[] list_priority = {"None", "Low", "Medium", "High" };
     // Databae section
     private SQLiteDatabase db;
     DBOpenHelper dbOpenHelper;
@@ -69,6 +74,7 @@ public class Add extends  DialogFragment implements View.OnClickListener {
 
     //priority
     String db_prority;
+    Spinner prio_spinner;
 
     public static Add newInstance() {
         return new Add();
@@ -104,13 +110,19 @@ public class Add extends  DialogFragment implements View.OnClickListener {
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
-        db_prority="Medium";
+        // set priority adapter
+        prio_spinner = view.findViewById(R.id.id_priority);
+        prio_spinner.setOnItemSelectedListener(this);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list_priority);
+        prio_spinner.setAdapter(adapter);
+        // set on click listener
         close.setOnClickListener(this);
         action.setOnClickListener(this);
         btnday.setOnClickListener(this);
         btntime.setOnClickListener(this);
         btncateg.setOnClickListener(this);
         btnnot.setOnClickListener(this);
+
         return view;
     }
 
@@ -242,6 +254,17 @@ public class Add extends  DialogFragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        db_prority=list_priority[position];
+        System.out.println(db_prority);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+       db_prority="None";
+    }
+
     public interface Callback {
         void onActionClick(String name);
     }
@@ -297,6 +320,7 @@ public class Add extends  DialogFragment implements View.OnClickListener {
         long rowId = db.insert(DBOpenHelper.Constants.MY_TABLE, null, contentValues);
         return rowId;
     }
+
 
 
 

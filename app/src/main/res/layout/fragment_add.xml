@@ -171,7 +171,7 @@
     <ScrollView
         android:id="@+id/scrollView8"
         android:layout_width="0dp"
-        android:layout_height="548dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -186,6 +186,30 @@
             app:layout_constraintTop_toTopOf="@+id/id_details">
 
 
+            <Spinner
+                android:id="@+id/id_priority"
+                android:layout_width="166dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginRight="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.134"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/id_repeat"
+                android:layout_width="146dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.947"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <EditText
                 android:id="@+id/id_title"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -193,7 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="56dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="16dp"
                 android:ems="10"
@@ -204,43 +228,49 @@
                 android:textSize="17sp"
                 app:boxBackgroundMode="none"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.181"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/id_priority" />
 
             <EditText
                 android:id="@+id/id_details"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="340dp"
+                android:layout_width="337dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="56dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="Details.."
                 android:inputType="textMultiLine"
                 android:paddingLeft="15dp"
                 app:boxBackgroundMode="none"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.205"
+                app:layout_constraintEnd_toEndOf="@+id/id_title"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/id_title" />
 
-            <EditText
-                android:id="@+id/id_priority"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="49dp"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Priority"
-                app:layout_constraintEnd_toEndOf="@+id/id_title"
-                app:layout_constraintStart_toStartOf="@+id/id_title"
-                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/priority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Priority :"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/colorPrimary"
+                app:layout_constraintBottom_toTopOf="@+id/id_priority"
+                app:layout_constraintStart_toStartOf="@+id/id_priority" />
+
+            <TextView
+                android:id="@+id/reapeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:text="Repeat :"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/colorPrimary"
+                app:layout_constraintBottom_toTopOf="@+id/id_repeat"
+                app:layout_constraintStart_toStartOf="@+id/id_repeat" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
