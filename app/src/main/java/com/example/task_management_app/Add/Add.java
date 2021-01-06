@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import com.example.task_management_app.R;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.timepicker.TimeFormat;
 
@@ -72,6 +74,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     EditText details;
     String db_details;
 
+    //type
+     String db_type="Task";
     //priority
     String db_prority;
     Spinner prio_spinner;
@@ -115,6 +119,20 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         prio_spinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list_priority);
         prio_spinner.setAdapter(adapter);
+        // set chip type selector
+        ChipGroup chipGroup = view.findViewById(R.id.id_type);
+        chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup chipGroup, int i) {
+
+                Chip chip = chipGroup.findViewById(i);
+                if (chip != null)
+                    db_type= (String) chip.getChipText();
+
+                 System.out.println(db_type);
+
+            }
+        });
         // set on click listener
         close.setOnClickListener(this);
         action.setOnClickListener(this);
@@ -311,7 +329,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DATE, db_date);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_TIME, db_time);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_CATEGORY, db_category);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TYPE, "Task");
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TYPE, db_type);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, db_title);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DETAILS, db_details);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_PRIORITY, db_prority);
