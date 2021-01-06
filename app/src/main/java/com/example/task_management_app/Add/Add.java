@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,12 +60,17 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     DatePickerDialog day_picker;
     EditText text_Day;
     String db_date;
-
+    final Calendar c = Calendar.getInstance();
+    int year = c.get(Calendar.YEAR );
+    int month = c.get(Calendar.MONTH);
+    int day = c.get(Calendar.DAY_OF_MONTH);
     //time picker
     TimePickerDialog time_picker;
     EditText text_time;
     String db_time;
-
+    //Calendar c = Calendar.getInstance();
+    int hour = c.get(Calendar.HOUR_OF_DAY);
+    int minute = c.get(Calendar.MINUTE);
     //category_picker
     String db_category;
 
@@ -114,10 +120,12 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
+        details.setMovementMethod(new ScrollingMovementMethod());
         // set priority adapter
         prio_spinner = view.findViewById(R.id.id_priority);
         prio_spinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list_priority);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         prio_spinner.setAdapter(adapter);
         // set chip type selector
         ChipGroup chipGroup = view.findViewById(R.id.id_type);
@@ -168,20 +176,21 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 ImageButton btnday= v.findViewById(R.id.DayButton);
                 btnday.setBackgroundResource(R.drawable.background_blue_light);
                 btnday.setColorFilter(Color.argb(255, 255, 255, 255));
-                final Calendar c = Calendar.getInstance();
-                int year = c.get(Calendar.YEAR );
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
+
                 day_picker=new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
                                 Calendar c = Calendar.getInstance();
-                                c.set(Calendar.YEAR, year);
+                                c.set(Calendar.YEAR, Year);
                                 c.set(Calendar.MONTH, monthOfYear);
                                 c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                db_date=year+"/"+monthOfYear+"/"+dayOfMonth;
+                                year=Year;
+                                month=monthOfYear;
+                                day=dayOfMonth;
+                                db_date=Year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
                                 System.out.println(db_date);
+                                //String currentDateString = TimeFormat.getTimeInstance(DateFormat.FULL).format(c.getTime());
                             }
                         }
 
@@ -193,9 +202,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 ImageButton btntime = v.findViewById(R.id.TimeButton);
                 btntime.setBackgroundResource(R.drawable.background_blue_light);
                 btntime.setColorFilter(Color.argb(255, 255, 255, 255));
-                Calendar c = Calendar.getInstance();
-                int hour = c.get(Calendar.HOUR_OF_DAY);
-                int minute = c.get(Calendar.MINUTE);
+
                time_picker=  new TimePickerDialog(getActivity(),
                        new TimePickerDialog.OnTimeSetListener() {
                            @Override
@@ -203,9 +210,12 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                                Calendar c = Calendar.getInstance();
                                c.set(Calendar.HOUR_OF_DAY,sHour);
                                c.set(Calendar.MINUTE ,sMinute);
+                               hour=sHour;
+                               minute=sMinute;
                                db_time=String.format("%02d:%02d", sHour, sMinute);
                                System.out.println(db_time);
-                               //String currentDateString = TimeFormat.getTimeInstance(DateFormat.FULL).format(c.getTime());
+
+
                            }
                        }, hour, minute, true);
                 time_picker.show();
