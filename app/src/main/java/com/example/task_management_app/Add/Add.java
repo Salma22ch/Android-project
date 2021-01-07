@@ -3,11 +3,16 @@ package com.example.task_management_app.Add;
 import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.models.DBOpenHelper;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.method.ScrollingMovementMethod;
@@ -46,6 +51,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import javax.security.auth.callback.Callback;
+
+import static android.content.Context.ALARM_SERVICE;
 
 public class Add extends  DialogFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -274,6 +281,17 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 ImageButton btnnot = v.findViewById(R.id.NotifButton);
                 btnnot.setBackgroundResource(R.drawable.background_blue_light);
                 btnnot.setColorFilter(Color.argb(255, 255, 255, 255));
+                Calendar beginTime = Calendar.getInstance();
+                beginTime.set(year, month, day, hour, minute);
+                System.out.println(year+ ":"+hour+":"+minute);
+                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                Intent intent = new Intent(getActivity().getApplicationContext() , AlertReceiver.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext() , 1, intent, 0);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, beginTime.getTimeInMillis(), pendingIntent);
+                }
+                System.out.println("notification succeed");
             }
 
 
