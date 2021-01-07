@@ -93,6 +93,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     String db_prority;
     Spinner prio_spinner;
 
+    //set notification
+    boolean not_on=false;
     public static Add newInstance() {
         return new Add();
     }
@@ -174,6 +176,19 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 db_title=title.getText().toString();
                 db_details=details.getText().toString();
                 System.out.println(db_title + "database"+ db_details);
+                if(not_on) {
+                    Calendar beginTime = Calendar.getInstance();
+                    beginTime.set(year, month, day, hour, minute);
+                    System.out.println(year+ ":"+hour+":"+minute);
+                    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                    Intent intent = new Intent(getActivity().getApplicationContext() , AlertReceiver.class);
+                    intent.putExtra("title", db_title);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext() , 1, intent, 0);
+                    getContext().sendBroadcast( intent );
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, beginTime.getTimeInMillis(), pendingIntent);
+                    }
+                }
                 long rowId = insertRecord(contentValues);
                 dismiss();
                 break;
@@ -281,17 +296,9 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 ImageButton btnnot = v.findViewById(R.id.NotifButton);
                 btnnot.setBackgroundResource(R.drawable.background_blue_light);
                 btnnot.setColorFilter(Color.argb(255, 255, 255, 255));
-                Calendar beginTime = Calendar.getInstance();
-                beginTime.set(year, month, day, hour, minute);
-                System.out.println(year+ ":"+hour+":"+minute);
-                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-                Intent intent = new Intent(getActivity().getApplicationContext() , AlertReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext() , 1, intent, 0);
+                not_on=true;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, beginTime.getTimeInMillis(), pendingIntent);
-                }
-                System.out.println("notification succeed");
+
             }
 
 
