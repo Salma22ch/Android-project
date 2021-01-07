@@ -10,28 +10,15 @@
     >
 
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="75"
-        android:id="@+id/note_title"
-        android:textSize="20sp"
-        android:lines="1"
-        android:text="Work on the Android App"
-        android:padding="10dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:background="@color/colorAccentLight"
-        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/recyclerView"
+        android:padding="10dp">
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/note_timestamp"
-        style="@style/Widget.MaterialComponents.Chip.Action"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="25"
-        android:layout_marginHorizontal="5dp"
-        android:text="Today"
-        android:textSize="20sp"
-        android:padding="10dp"/>
+    </androidx.recyclerview.widget.RecyclerView>
+
+
 
 </LinearLayout>
