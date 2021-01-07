@@ -17,7 +17,7 @@ public class AlertReceiver extends BroadcastReceiver {
         System.out.println(text);
         NotificationHelper notificationHelper = new NotificationHelper(context);
         NotificationCompat.Builder nb = notificationHelper.getChannelNotification();
-        nb.setContentTitle("Alarm!").setContentText(text);
+        nb.setContentTitle("Task reminder").setContentText(text);
         notificationHelper.getManager().notify(1, nb.build());
     }
 }

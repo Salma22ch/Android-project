@@ -186,7 +186,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext() , 1, intent, 0);
                     getContext().sendBroadcast( intent );
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, beginTime.getTimeInMillis(), pendingIntent);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, beginTime.getTimeInMillis() -5*60*3600 , pendingIntent);
                     }
                 }
                 long rowId = insertRecord(contentValues);
