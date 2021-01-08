@@ -362,12 +362,13 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     private long insertRecord(ContentValues contentValues) {
         // Assign the values for each column.
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DATE, db_date);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TIME, db_time);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_CATEGORY, db_category);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_TYPE, db_type);
+        //time is deleted
         contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, db_title);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DETAILS, db_details);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, db_details);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_PRIORITY, db_prority);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE, "upcoming");
 
         // Insert the line in the database
         long rowId = db.insert(DBOpenHelper.Constants.MY_TABLE, null, contentValues);

@@ -14,16 +14,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import java.net.NoRouteToHostException;
 import java.util.Arrays;
 import java.util.Calendar;
+
 import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.R;
 
 import android.graphics.Color;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.task_management_app.models.DBOpenHelper;
+import com.example.task_management_app.models.Note;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.*;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -39,22 +44,30 @@ import java.util.Locale;
 public class MyCalendar extends Fragment {
 
     private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.getDefault());
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MyCalendar";
     private Toolbar toolbar;
+    private ImageView imageView;
     CompactCalendarView compactCalendarView;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM- yyyy", Locale.getDefault());
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
+    DBOpenHelper db;
+    Note note;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        final View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        //find the view
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         final ListView TasksListView = view.findViewById(R.id.task_listview);
-        final List<String> mutableBookings = new ArrayList<>();
-        final ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mutableBookings);
+        compactCalendarView = (CompactCalendarView) view.findViewById(R.id.compactcalendar_view);
+        imageView = (ImageView) view.findViewById(R.id.calendar_imageView);
+
+
+        final List<String> listOfTasks = new ArrayList<>();
+        final ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listOfTasks);
         TasksListView.setAdapter(adapter);
 
 
@@ -66,26 +79,16 @@ public class MyCalendar extends Fragment {
         actionBar.setTitle(null);
 
 
-        compactCalendarView = (CompactCalendarView) view.findViewById(R.id.compactcalendar_view);
-
         compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
         compactCalendarView.setIsRtl(false);
         compactCalendarView.displayOtherMonthDays(false);
-        //compactCalendarView.setIsRtl(true);
         compactCalendarView.invalidate();
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
 
-
-
-           loadEvents();
-           //loadEventsForYear(2017);
-           //logEventsByMonth(compactCalendarView);
-
-
-
-
-
+        //loadEvents();
+        //loadEventsForYear(2017);
+        //logEventsByMonth(compactCalendarView);
 
 
         //set initial title
@@ -95,17 +98,25 @@ public class MyCalendar extends Fragment {
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
+
+
                 Toast.makeText(getActivity(), "Date : " + dateClicked.toString(), Toast.LENGTH_SHORT).show();
                 toolbar.setTitle(dateFormatForMonth.format(dateClicked));
+
+                //load task lists of the day
                 List<Event> tasksFromMap = compactCalendarView.getEvents(dateClicked);
                 Log.d(TAG, "inside onclick " + dateFormatForDisplaying.format(dateClicked));
+
                 if (tasksFromMap != null) {
-                    Log.d(TAG, tasksFromMap.toString());
-                    mutableBookings.clear();
-                    for (Event booking : tasksFromMap) {
-                        mutableBookings.add((String) booking.getData());
+
+                    Log.d(TAG, "aaaaaaaa" + tasksFromMap.toString());
+                    listOfTasks.clear();
+                    for (Event task : tasksFromMap) {
+                        listOfTasks.add((String) task.getData());
                     }
                     adapter.notifyDataSetChanged();
+                } else {
+
                 }
 
 
@@ -195,11 +206,35 @@ public class MyCalendar extends Fragment {
 //        }
 //    }
 
+
     private void loadEvents() {
-        addEvents(3,1,6);
+        List<Event> events = getEvents();
+        compactCalendarView.addEvents(events);
+        db.insertData("sd","23","VHIHAJA","VHIHAJA","VHIHAJA","VHIHAJA","VHIHAJA");
     }
 
-    private void addEvents(int month, int year,int day) {
+    private List<Event> getEvents() {
+        ArrayList<Note> listOfTask ;
+        listOfTask = db.getAllRecord();
+        ArrayList<Event> listOfEvent = new ArrayList<Event>();
+
+        for (Note list : listOfTask){
+            Log.d(TAG, "get date from database "+list.getDate());
+        }
+
+        listOfEvent.add(new Event(Color.argb(255, 169, 68, 65), 1610113527000L, "Task at " + new Date(1610280000000L)));
+        listOfEvent.add(new Event(Color.argb(255, 100, 68, 65), 1610280000000L, "Task 2 at " + new Date(1610280000000L)));
+        return listOfEvent;
+    }
+
+  /*
+    private void loadEvents() {
+        addEvents(3, 1, 6);
+    }
+
+
+
+    private void addEvents(int month, int year, int day) {
         currentCalender.setTime(new Date());
         currentCalender.set(Calendar.DAY_OF_MONTH, day);
 
@@ -207,16 +242,14 @@ public class MyCalendar extends Fragment {
         long timeInMillis = currentCalender.getTimeInMillis();
         List<Event> events = getEvents(timeInMillis, day);
         compactCalendarView.addEvents(events);
-
     }
-
     private List<Event> getEvents(long timeInMillis, int day) {
-        ArrayList<Event> listOfEvent = new ArrayList<Event>() ;
+        ArrayList<Event> listOfEvent = new ArrayList<Event>();
         listOfEvent.add(new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Task at " + new Date(timeInMillis)));
         listOfEvent.add(new Event(Color.argb(255, 100, 68, 65), timeInMillis, "Task 2 at " + new Date(timeInMillis)));
         return listOfEvent;
     }
-
+*/
     public void gotoToday() {
         compactCalendarView.setCurrentDate(Calendar.getInstance(Locale.getDefault()).getTime());
     }

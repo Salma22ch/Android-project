@@ -9,13 +9,15 @@ public class Note {
     private String title;
     private String description;
     private String category;
-    private Date date;
-    private Integer priority;
+    private Long date;
+    private String priority;
     private String state;
+    private String type;
 
     // Constructors
 
-    public Note(Integer id, String title, String description, String category, Date date, Integer priority, String state) {
+
+    public Note(Integer id, String title, String description, String category, Long date, String priority, String state, String type) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -23,9 +25,11 @@ public class Note {
         this.date = date;
         this.priority = priority;
         this.state = state;
+        this.type = type;
     }
 
-    public Note() {}
+    public Note() {
+    }
 
     // Getters and Setters
 
@@ -62,19 +66,19 @@ public class Note {
         this.category = category;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 
-    public Integer getPriority() {
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 
@@ -86,6 +90,14 @@ public class Note {
         this.state = state;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Note{" +
@@ -94,8 +106,9 @@ public class Note {
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", date=" + date +
-                ", priority=" + priority +
+                ", priority='" + priority + '\'' +
                 ", state='" + state + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 }
