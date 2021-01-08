@@ -77,6 +77,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         super(context, name, factory, version);
     }
 
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create the new database using the SQL string Database_create
@@ -97,57 +98,4 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    /**
-     * this methode for inserting data in the dataBase and returning the rowId
-     **/
-    public long insertData(String db_date, String db_time, String db_category, String db_type, String db_title, String db_details, String db_prority) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        // Assign the values for each column.
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DATE, db_date);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TIME, db_time);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_CATEGORY, db_category);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TYPE, db_type);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, db_title);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, db_details);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PRIORITY, db_prority);
-
-        // Insert the line in the database
-        long rowId = db.insert(DBOpenHelper.Constants.MY_TABLE, null, contentValues);
-        return rowId;
-    }
-
-    /**
-     * this methode for fetching data from the dataBase
-     **/
-    public ArrayList<Note> getAllRecord() {
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<Note> listOfNote = new ArrayList<Note>();
-        Note note;
-
-        Cursor res = db.rawQuery("select * from Note", null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            //integer
-            Integer id = res.getInt(res.getColumnIndex(Constants.KEY_COL_ID));
-            //string
-            String title = res.getString(res.getColumnIndex(Constants.KEY_COL_TITLE));
-            String description = res.getString(res.getColumnIndex(Constants.KEY_COL_DESCRIPTION));
-            String category = res.getString(res.getColumnIndex(Constants.KEY_COL_ID));
-            //date
-            Date date = new Date(res.getLong(res.getColumnIndex(Constants.KEY_COL_DATE)));
-            //integer
-            Integer priority = res.getInt(res.getColumnIndex(Constants.KEY_COL_PRIORITY));
-            //String
-            String state = res.getString(res.getColumnIndex(Constants.KEY_COL_TYPE));
-
-
-            //note = new Note(id, title, description, category, date, priority, state);
-            //listOfNote.add(note);
-            res.moveToNext();
-        }
-        return listOfNote;
-    }
 }

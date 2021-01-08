@@ -1,7 +1,12 @@
 package com.example.task_management_app.Calendar;
 
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.util.CloseGuard;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,8 +55,9 @@ public class MyCalendar extends Fragment {
     CompactCalendarView compactCalendarView;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM- yyyy", Locale.getDefault());
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
-    DBOpenHelper db;
-    Note note;
+
+    SQLiteDatabase sqLiteDatabase;
+    DBOpenHelper dbOpenHelper;
 
 
     @Nullable
@@ -86,9 +92,7 @@ public class MyCalendar extends Fragment {
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
 
-        //loadEvents();
-        //loadEventsForYear(2017);
-        //logEventsByMonth(compactCalendarView);
+        loadEvents();
 
 
         //set initial title
@@ -99,24 +103,22 @@ public class MyCalendar extends Fragment {
             @Override
             public void onDayClick(Date dateClicked) {
 
-
-                Toast.makeText(getActivity(), "Date : " + dateClicked.toString(), Toast.LENGTH_SHORT).show();
                 toolbar.setTitle(dateFormatForMonth.format(dateClicked));
-
                 //load task lists of the day
                 List<Event> tasksFromMap = compactCalendarView.getEvents(dateClicked);
                 Log.d(TAG, "inside onclick " + dateFormatForDisplaying.format(dateClicked));
-
                 if (tasksFromMap != null) {
-
-                    Log.d(TAG, "aaaaaaaa" + tasksFromMap.toString());
                     listOfTasks.clear();
                     for (Event task : tasksFromMap) {
                         listOfTasks.add((String) task.getData());
                     }
                     adapter.notifyDataSetChanged();
-                } else {
+                    if (tasksFromMap.isEmpty()){
+                        imageView.setVisibility(View.VISIBLE);
+                    }else{
 
+                        imageView.setVisibility(View.GONE);
+                    }
                 }
 
 
@@ -137,119 +139,85 @@ public class MyCalendar extends Fragment {
     }
 
 
-//    private void addDummyEvents() {
-//        addEvents(compactCalendarView, Calendar.APRIL);
-//        addEvents(compactCalendarView, Calendar.MAY);
-//        addEvents(compactCalendarView, Calendar.JUNE);
-//        // Refresh calendar to update events
-//        compactCalendarView.invalidate();
-//    }
-//
-//    private void addEvents(int month, int year) {
-//        currentCalender.setTime(new Date());
-//        currentCalender.set(Calendar.DAY_OF_MONTH, 1);
-//        Date firstDayOfMonth = currentCalender.getTime();
-//        for (int i = 0; i < 6; i++) {
-//            currentCalender.setTime(firstDayOfMonth);
-//            if (month > -1) {
-//                currentCalender.set(Calendar.MONTH, month);
-//            }
-//            if (year > -1) {
-//                currentCalender.set(Calendar.ERA, GregorianCalendar.AD);
-//                currentCalender.set(Calendar.YEAR, year);
-//            }
-//            currentCalender.add(Calendar.DATE, i);
-//            setToMidnight(currentCalender);
-//            long timeInMillis = currentCalender.getTimeInMillis();
-//
-//            List<Event> events = getEvents(timeInMillis, i);
-//
-//            compactCalendarView.addEvents(events);
-//        }
-//    }
-
-
-    private void setToMidnight(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-    }
-
-
-//    private void loadEvents() {
-//        addEvents(-1, -1);
-//        addEvents(Calendar.DECEMBER, -1);
-//        addEvents(Calendar.AUGUST, -1);
-//    }
-
-//    private void addEvents(int month, int year) {
-//        currentCalender.setTime(new Date());
-//        currentCalender.set(Calendar.DAY_OF_MONTH, 1);
-//        Date firstDayOfMonth = currentCalender.getTime();
-//        for (int i = 0; i < 30; i++) {
-//            currentCalender.setTime(firstDayOfMonth);
-//            if (month > -1) {
-//                currentCalender.set(Calendar.MONTH, month);
-//            }
-//            if (year > -1) {
-//                currentCalender.set(Calendar.ERA, GregorianCalendar.AD);
-//                currentCalender.set(Calendar.YEAR, year);
-//            }
-//            currentCalender.add(Calendar.DATE, i);
-//            setToMidnight(currentCalender);
-//            long timeInMillis = currentCalender.getTimeInMillis();
-//
-//            List<Event> events = getEvents(timeInMillis, i);
-//
-//            compactCalendarView.addEvents(events);
-//        }
-//    }
-
 
     private void loadEvents() {
-        List<Event> events = getEvents();
+        dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
+                DBOpenHelper.Constants.DATABASE_VERSION);
+
+        openDB();
+        List<Event> events= getEvents();
+        //long i = insertData(1610467994000L,"","","","c'est le 12","","");
         compactCalendarView.addEvents(events);
-        db.insertData("sd","23","VHIHAJA","VHIHAJA","VHIHAJA","VHIHAJA","VHIHAJA");
     }
+
 
     private List<Event> getEvents() {
-        ArrayList<Note> listOfTask ;
-        listOfTask = db.getAllRecord();
+
+        ArrayList<Note> listOfTask = getAllRecord();
         ArrayList<Event> listOfEvent = new ArrayList<Event>();
 
-        for (Note list : listOfTask){
-            Log.d(TAG, "get date from database "+list.getDate());
+        for (Note list : listOfTask) {
+            listOfEvent.add(new Event(Color.argb(255, 169, 68, 65), list.getDate(),  list.getTitle()+" : "+list.getDescription()));
         }
 
-        listOfEvent.add(new Event(Color.argb(255, 169, 68, 65), 1610113527000L, "Task at " + new Date(1610280000000L)));
-        listOfEvent.add(new Event(Color.argb(255, 100, 68, 65), 1610280000000L, "Task 2 at " + new Date(1610280000000L)));
         return listOfEvent;
     }
 
-  /*
-    private void loadEvents() {
-        addEvents(3, 1, 6);
+
+    public void openDB() throws SQLiteException {
+        try {
+            sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+        } catch (SQLiteException ex) {
+            sqLiteDatabase = dbOpenHelper.getReadableDatabase();
+        }
+    }
+
+    public long insertData(Long db_date, String db_category, String db_type, String db_title, String db_details, String db_prority, String db_state) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DATE, db_date);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_CATEGORY, db_category);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TYPE, db_type);
+        //time is deleted
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, db_title);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, db_details);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PRIORITY, db_prority);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE, db_state);
+
+        // Insert the line in the database
+        long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE, null, contentValues);
+        return rowId;
+    }
+
+    /**
+     * this methode for fetching data from the dataBase
+     **/
+    public ArrayList<Note> getAllRecord() {
+
+        ArrayList<Note> listOfNote = new ArrayList<Note>();
+        Note note;
+        Cursor res = sqLiteDatabase.rawQuery("select * from Note", null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Integer id = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID));
+            String title = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TITLE));
+            String description = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_DESCRIPTION));
+            String category = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_CATEGORY));
+            long date = res.getLong(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_DATE));
+            String priority = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PRIORITY));
+            String state = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_STATE));
+            String type = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TYPE));
+
+            note = new Note(id, title, description, category, date, priority, state, type);
+            listOfNote.add(note);
+
+            res.moveToNext();
+        }
+        return listOfNote;
     }
 
 
-
-    private void addEvents(int month, int year, int day) {
-        currentCalender.setTime(new Date());
-        currentCalender.set(Calendar.DAY_OF_MONTH, day);
-
-
-        long timeInMillis = currentCalender.getTimeInMillis();
-        List<Event> events = getEvents(timeInMillis, day);
-        compactCalendarView.addEvents(events);
-    }
-    private List<Event> getEvents(long timeInMillis, int day) {
-        ArrayList<Event> listOfEvent = new ArrayList<Event>();
-        listOfEvent.add(new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Task at " + new Date(timeInMillis)));
-        listOfEvent.add(new Event(Color.argb(255, 100, 68, 65), timeInMillis, "Task 2 at " + new Date(timeInMillis)));
-        return listOfEvent;
-    }
-*/
     public void gotoToday() {
         compactCalendarView.setCurrentDate(Calendar.getInstance(Locale.getDefault()).getTime());
     }
