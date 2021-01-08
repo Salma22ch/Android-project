@@ -39,6 +39,8 @@ import android.app.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
+
 import android.app.DatePickerDialog;
 import com.example.task_management_app.R;
 import com.google.android.material.chip.Chip;
@@ -179,12 +181,14 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 time.set(year, month, day, hour, minute);
                 db_date=time.getTimeInMillis();
                 System.out.println(db_date);
+                Random r = new Random();
+
 
                 if(not_on) {
                     AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
                     Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
                     inte.putExtra("title", db_title);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0, inte, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), r.nextInt(100000), inte, PendingIntent.FLAG_UPDATE_CURRENT);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date, pendingIntent);
                         // getContext().sendBroadcast(intent);
