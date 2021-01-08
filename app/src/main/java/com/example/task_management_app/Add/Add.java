@@ -179,6 +179,16 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 time.set(year, month, day, hour, minute);
                 db_date=time.getTimeInMillis();
                 System.out.println(db_date);
+                if(not_on) {
+                    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                    Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
+                    inte.putExtra("title", db_title);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0, inte, 0);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date, pendingIntent);
+                        // getContext().sendBroadcast(intent);
+                    }
+                }
                 long rowId = insertRecord(contentValues);
                 dismiss();
                 break;
@@ -286,17 +296,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 ImageButton btnnot = v.findViewById(R.id.NotifButton);
                 btnnot.setBackgroundResource(R.drawable.background_blue_light);
                 btnnot.setColorFilter(Color.argb(255, 255, 255, 255));
-                Calendar beginTime = Calendar.getInstance();
-                beginTime.set(year, month, day, hour, minute);
-                System.out.println(year+ ":"+hour+":"+minute);
-                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-                Intent intent = new Intent(getActivity().getApplicationContext() , AlertReceiver.class);
-                intent.putExtra("title", db_title);
-                //getContext().sendBroadcast(intent);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext() , 1, intent, 0);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, beginTime.getTimeInMillis() , pendingIntent);
-                }
+                not_on=true;
+
 
 
             }
