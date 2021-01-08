@@ -66,7 +66,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     //date picker
     DatePickerDialog day_picker;
     EditText text_Day;
-    String db_date;
+    long db_date;
     final Calendar c = Calendar.getInstance();
     int year = c.get(Calendar.YEAR );
     int month = c.get(Calendar.MONTH);
@@ -175,20 +175,10 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 callback.onActionClick("Saved");
                 db_title=title.getText().toString();
                 db_details=details.getText().toString();
-                System.out.println(db_title + "database"+ db_details);
-                if(not_on) {
-                    Calendar beginTime = Calendar.getInstance();
-                    beginTime.set(year, month, day, hour, minute);
-                    System.out.println(year+ ":"+hour+":"+minute);
-                    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-                    Intent intent = new Intent(getActivity().getApplicationContext() , AlertReceiver.class);
-                    intent.putExtra("title", db_title);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext() , 1, intent, 0);
-                    getContext().sendBroadcast( intent );
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, beginTime.getTimeInMillis() -5*60*3600 , pendingIntent);
-                    }
-                }
+                Calendar time = Calendar.getInstance();
+                time.set(year, month, day, hour, minute);
+                db_date=time.getTimeInMillis();
+                System.out.println(db_date);
                 long rowId = insertRecord(contentValues);
                 dismiss();
                 break;
@@ -210,8 +200,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                                 year=Year;
                                 month=monthOfYear;
                                 day=dayOfMonth;
-                                db_date=Year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
-                                System.out.println(db_date);
+                                //db_date=Year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
+                                //System.out.println(db_date);
                                 //String currentDateString = TimeFormat.getTimeInstance(DateFormat.FULL).format(c.getTime());
                             }
                         }
@@ -296,7 +286,17 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 ImageButton btnnot = v.findViewById(R.id.NotifButton);
                 btnnot.setBackgroundResource(R.drawable.background_blue_light);
                 btnnot.setColorFilter(Color.argb(255, 255, 255, 255));
-                not_on=true;
+                Calendar beginTime = Calendar.getInstance();
+                beginTime.set(year, month, day, hour, minute);
+                System.out.println(year+ ":"+hour+":"+minute);
+                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                Intent intent = new Intent(getActivity().getApplicationContext() , AlertReceiver.class);
+                intent.putExtra("title", db_title);
+                //getContext().sendBroadcast(intent);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext() , 1, intent, 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, beginTime.getTimeInMillis() , pendingIntent);
+                }
 
 
             }
