@@ -11,11 +11,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.PersistableBundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,6 +42,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import android.app.TimePickerDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -54,6 +60,7 @@ import android.widget.Toast;
 
 import javax.security.auth.callback.Callback;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.ALARM_SERVICE;
 
 public class Add extends  DialogFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -101,6 +108,11 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     AlarmManager alarmManager;
     int id_not;
 
+    // attachement
+    final int PICKFILE_RESULT_CODE=0;
+    EditText textfile;
+    ImageView imageView;
+
     public static Add newInstance() {
         return new Add();
     }
@@ -133,6 +145,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         ImageButton btntime = view.findViewById(R.id.TimeButton);
         ImageButton btncateg = view.findViewById(R.id.CategoryButton);
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
+        ImageButton btnatt= view.findViewById(R.id.id_attachement);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
         details.setMovementMethod(new ScrollingMovementMethod());
@@ -163,7 +176,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         btntime.setOnClickListener(this);
         btncateg.setOnClickListener(this);
         btnnot.setOnClickListener(this);
-
+        btnatt.setOnClickListener(this);
         return view;
     }
 
@@ -323,11 +336,16 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
 
                 System.out.println(not_on);
 
-
-
-
-
-
+            }
+            case R.id.id_attachement:
+            {
+                ImageButton btnatta = v.findViewById(R.id.id_attachement);
+                btnatta.setBackgroundResource(R.drawable.background_blue_light);
+                btnatta.setColorFilter(Color.argb(255, 255, 255, 255));
+                Intent intent = new Intent();
+                intent.setType("*/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select File"), PICKFILE_RESULT_CODE);
             }
 
 
@@ -335,7 +353,21 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         }
 
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        switch(requestCode){
+            case PICKFILE_RESULT_CODE:
+                if(resultCode==RESULT_OK){
+                    String FilePath = data.getData().getPath();
+                    System.out.println(FilePath);
+                    Bitmap b = BitmapFactory.decodeFile(FilePath);
 
+                }
+                break;
+
+        }
+    }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         db_prority=list_priority[position];
