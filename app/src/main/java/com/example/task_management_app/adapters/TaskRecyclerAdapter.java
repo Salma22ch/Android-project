@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.task_management_app.My_tasks.SingleLineItemViewHolder;
 import com.example.task_management_app.R;
 import com.example.task_management_app.models.Note;
 
@@ -25,7 +24,7 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.material_list_item_single_line, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_task, parent, false);
         return new ViewHolder(view);
     }
 
@@ -41,21 +40,13 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
         return mNotes.size();
     }
 
-
-    // Single Line Item ViewHolder from the Material Design Documentation
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView timestamp, title;
 
-        public final TextView title;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.note_title);
 
-        public ViewHolder(@NonNull View view) {
-            super(view);
-            this.title = itemView.findViewById(R.id.note_title);
-        }
-
-        @NonNull
-        public com.example.task_management_app.My_tasks.SingleLineItemViewHolder create(@NonNull ViewGroup parent) {
-            return new com.example.task_management_app.My_tasks.SingleLineItemViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.material_list_item_single_line, parent, false));
         }
     }
 

@@ -18,6 +18,7 @@
         android:textSize="20sp"
         android:lines="1"
         android:text="Work on the Android App"
+        android:padding="10dp"
         android:textColor="@color/colorPrimaryDark"
         android:background="@color/colorAccentLight"
         />
