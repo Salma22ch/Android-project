@@ -62,7 +62,7 @@
             android:clickable="true"
             android:contentDescription="Date_picker"
             android:src="@drawable/ic_day"
-            app:layout_constraintEnd_toStartOf="@+id/NotifButton"
+            app:layout_constraintEnd_toStartOf="@+id/id_attachement"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -79,34 +79,34 @@
             android:contentDescription="Time_picker"
             android:src="@drawable/ic_time"
             android:state_selected="true"
-            app:layout_constraintEnd_toStartOf="@+id/NotifButton"
+            app:layout_constraintEnd_toStartOf="@+id/id_attachement"
             app:layout_constraintStart_toEndOf="@+id/DayButton"
             app:layout_constraintTop_toTopOf="@+id/DayButton" />
 
         <ImageButton
-            android:id="@+id/NotifButton"
+            android:id="@+id/id_attachement"
             android:layout_width="48dp"
             android:layout_height="39dp"
             android:layout_marginEnd="237dp"
             android:layout_marginRight="237dp"
             android:background="@drawable/background_transparent"
             android:clickable="true"
-            android:src="@drawable/ic_notifications"
+            android:src="@drawable/ic_attachment"
             app:layout_constraintBottom_toBottomOf="@+id/TimeButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/DayButton"
             app:layout_constraintTop_toTopOf="@+id/TimeButton" />
 
         <ImageButton
-            android:id="@+id/imageButton9"
-            android:layout_width="59dp"
+            android:id="@+id/NotifButton"
+            android:layout_width="51dp"
             android:layout_height="43dp"
-            android:layout_marginStart="172dp"
-            android:layout_marginLeft="172dp"
+            android:layout_marginStart="160dp"
+            android:layout_marginLeft="160dp"
             android:background="@drawable/background_transparent"
             android:clickable="true"
-            android:src="@drawable/ic_attachment"
-            app:layout_constraintStart_toEndOf="@+id/NotifButton"
+            android:src="@drawable/ic_notifications"
+            app:layout_constraintStart_toEndOf="@+id/id_attachement"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
@@ -118,8 +118,8 @@
             android:background="@drawable/background_transparent"
             android:clickable="true"
             android:src="@drawable/ic_category"
-            app:layout_constraintBottom_toBottomOf="@+id/NotifButton"
-            app:layout_constraintStart_toEndOf="@+id/NotifButton"
+            app:layout_constraintBottom_toBottomOf="@+id/id_attachement"
+            app:layout_constraintStart_toEndOf="@+id/id_attachement"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 

@@ -97,6 +97,10 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
 
     //set notification
     boolean not_on=false;
+    PendingIntent pendingIntent;
+    AlarmManager alarmManager;
+    int id_not;
+
     public static Add newInstance() {
         return new Add();
     }
@@ -185,13 +189,21 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
 
 
                 if(not_on) {
-                    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                    alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
                     Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
                     inte.putExtra("title", db_title);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), r.nextInt(100000), inte, PendingIntent.FLAG_UPDATE_CURRENT);
+                    id_not= r.nextInt(100000);
+                    pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(),id_not, inte, PendingIntent.FLAG_UPDATE_CURRENT);
+                    if (time.before(Calendar.getInstance())) {
+                        time.add(Calendar.DATE, 1);
+                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date, pendingIntent);
                         // getContext().sendBroadcast(intent);
+                    }
+
+                    if(!not_on){
+                        alarmManager.cancel(pendingIntent);
                     }
                 }
                 long rowId = insertRecord(contentValues);
@@ -299,9 +311,20 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
             case R.id.NotifButton:
             {
                 ImageButton btnnot = v.findViewById(R.id.NotifButton);
-                btnnot.setBackgroundResource(R.drawable.background_blue_light);
-                btnnot.setColorFilter(Color.argb(255, 255, 255, 255));
-                not_on=true;
+                not_on=!not_on;
+                if(not_on){
+                    btnnot.setImageResource(R.drawable.ic_notifications_active);
+                    btnnot.setBackgroundResource(R.drawable.background_blue_light);
+                    btnnot.setColorFilter(Color.argb(255, 255, 255, 255));
+                }else{
+                    btnnot.setImageResource(R.drawable.ic_notifications);
+
+                }
+
+                System.out.println(not_on);
+
+
+
 
 
 
