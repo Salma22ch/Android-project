@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:weightSum="100"
     android:background="@color/colorAccentLight"
     android:gravity="center_vertical"
-    >
+    android:orientation="vertical"
+    android:weightSum="100">
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Task List (Count)"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:fontFamily="@font/poppins"
+        android:padding="10dp"  />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/recyclerView"
         android:padding="10dp">
 
     </androidx.recyclerview.widget.RecyclerView>
-
 
 
 </LinearLayout>
