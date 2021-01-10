@@ -9,6 +9,10 @@
     android:gravity="center_vertical"
     >
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        />
 
     <TextView
         android:layout_width="0dp"
@@ -33,5 +37,7 @@
         android:text="Today"
         android:textSize="20sp"
         android:padding="10dp"/>
+
+
 
 </LinearLayout>
