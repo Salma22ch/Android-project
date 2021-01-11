@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.CloseGuard;
 import android.util.Log;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.net.NoRouteToHostException;
 import java.util.Arrays;
@@ -138,6 +140,12 @@ public class MyCalendar extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    
 
 
     private void loadEvents() {
@@ -146,7 +154,6 @@ public class MyCalendar extends Fragment {
 
         openDB();
         List<Event> events= getEvents();
-        //long i = insertData(1610467994000L,"","","","c'est le 12","","");
         compactCalendarView.addEvents(events);
     }
 
