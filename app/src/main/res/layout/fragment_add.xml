@@ -225,7 +225,7 @@
                 android:scrollbars="vertical"
                 app:boxBackgroundMode="none"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.21"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/id_title" />
 
@@ -252,12 +252,15 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/id_type"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="201dp"
                 app:chipSpacingHorizontal="2dp"
-                app:singleSelection="true"
-                tools:layout_editor_absoluteX="-16dp"
-                tools:layout_editor_absoluteY="-2dp">
+                app:layout_constraintBottom_toTopOf="@+id/imageviewTest"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip6"
@@ -282,6 +285,18 @@
                     android:text="Goal"
                     app:textStartPadding="30dp" />
             </com.google.android.material.chip.ChipGroup>
+
+            <ImageView
+                android:id="@+id/imageviewTest"
+                android:layout_width="190dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="29dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/id_details"
+                app:layout_constraintHorizontal_bias="0.878"
+                app:layout_constraintStart_toStartOf="@+id/id_details"
+                app:layout_constraintTop_toBottomOf="@+id/id_type"
+                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
