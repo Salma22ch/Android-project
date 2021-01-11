@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    >
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@mipmap/ic_launcher"
+        android:id="@+id/goals_row_image"
+        android:layout_gravity="center"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Main Title"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:layout_margin="5dp"
+            android:textSize="20sp"
+            android:id="@+id/goals_row_title"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sub Title"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp"
+            android:textSize="15sp"
+            android:alpha="0.5"
+            android:id="@+id/goals_row_description"
+            android:textFontWeight="100"
+            />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/goals_row_progress"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:max="100"
+            android:progress="45"/>
+
+    </LinearLayout>
+
+</LinearLayout>
