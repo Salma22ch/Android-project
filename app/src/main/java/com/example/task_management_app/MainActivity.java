@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.task_management_app.Add.Add;
@@ -20,7 +23,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private FloatingActionButton fab, fabtask, fabgoal;
+    private Animation fab_open, fab_close, fab_clock, fab_anticlock;
+    TextView add_task, add_goal;
+    Boolean isOpen = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +36,44 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new My_tasks()).commit();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
+        fabtask = findViewById(R.id.fabTask);
+        fabgoal = findViewById(R.id.fabGoals);
+        add_task = (TextView) findViewById(R.id.task_add);
+        add_goal = (TextView) findViewById(R.id.goal_add);
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_clock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_clock);
+        fab_anticlock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_rotate_clock);
         fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (isOpen) {
+
+                    add_goal.setVisibility(View.INVISIBLE);
+                    add_task.setVisibility(View.INVISIBLE);
+                    fabtask.startAnimation(fab_close);
+                    fabgoal.startAnimation(fab_close);
+                    fab.startAnimation(fab_anticlock);
+                    fabtask.setClickable(false);
+                    fabtask.setClickable(false);
+                    isOpen = false;
+                } else {
+                    add_goal.setVisibility(View.VISIBLE);
+                    add_task.setVisibility(View.VISIBLE);
+                    fabtask.startAnimation(fab_open);
+                    fabgoal.startAnimation(fab_open);
+                    fab.startAnimation(fab_clock);
+                    fabtask.setClickable(true);
+                    fabgoal.setClickable(true);
+                    isOpen = true;
+                }
+
+            }
+        });
+
+        fabtask.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
