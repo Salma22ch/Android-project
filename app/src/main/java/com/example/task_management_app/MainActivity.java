@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.task_management_app.Add.Add;
 import com.example.task_management_app.Calendar.MyCalendar;
-import com.example.task_management_app.Completed.Completed;
+import com.example.task_management_app.settings.Settings;
 import com.example.task_management_app.Goals.Goals;
 import com.example.task_management_app.My_tasks.My_tasks;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     SelectedFragement=new Goals();
                     break;
                 case R.id.Completed:
-                    SelectedFragement=new Completed();
+                    SelectedFragement=new Settings();
                     break;
 
             }

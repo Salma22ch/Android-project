@@ -12,7 +12,7 @@ public class Note {
     private Long date;
     private String priority;
     private String state;
-    private String type;
+    private String type; // a supprimer
 
     // Constructors
 
