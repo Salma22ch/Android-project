@@ -1,4 +1,4 @@
-package com.example.task_management_app.Completed;
+package com.example.task_management_app.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.task_management_app.R;
 
-public class Completed extends  Fragment {
+public class Settings extends  Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_completed, container, false);
+        return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 }

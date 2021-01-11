@@ -497,7 +497,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE, "upcoming");
 
         // Insert the line in the database
-        long rowId = db.insert(DBOpenHelper.Constants.MY_TABLE, null, contentValues);
+        long rowId = db.insert(DBOpenHelper.Constants.MY_TABLE_Note, null, contentValues);
         return rowId;
     }
 

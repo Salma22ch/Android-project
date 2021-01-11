@@ -185,7 +185,7 @@ public class MyCalendar extends Fragment {
         contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE, db_state);
 
         // Insert the line in the database
-        long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE, null, contentValues);
+        long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Note, null, contentValues);
         return rowId;
     }
 

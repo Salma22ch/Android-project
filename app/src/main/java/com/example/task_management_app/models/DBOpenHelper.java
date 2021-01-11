@@ -21,7 +21,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         public static final int DATABASE_VERSION = 1;
 
         // The table Name
-        public static final String MY_TABLE = "Note";
+        public static final String MY_TABLE_Note = "Note";
+        public static final String MY_TABLE_Goal = "Note";
 
         public static final String KEY_COL_ID = "id";// Mandatory
 
@@ -55,7 +56,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     // The static string to create the database.
     private static final String DATABASE_CREATE = "create table "
-            + Constants.MY_TABLE + "(" + Constants.KEY_COL_ID
+            + Constants.MY_TABLE_Note + "(" + Constants.KEY_COL_ID
             + " integer primary key autoincrement, "
             + Constants.KEY_COL_DATE + " BIGINT, "
             + Constants.KEY_COL_CATEGORY + " TEXT, "
@@ -91,7 +92,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                 + " vers la version " + newVersion
                 + ", les anciennes données seront détruites ");
         // Drop the old database
-        db.execSQL("DROP TABLE IF EXISTS " + Constants.MY_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + Constants.MY_TABLE_Note);
         // Create the new one
         onCreate(db);
         // or do a smartest stuff

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -13,10 +14,13 @@ import android.widget.Toast;
 import com.example.task_management_app.R;
 import com.ncorti.slidetoact.SlideToActView;
 
-public class MyGoal extends AppCompatActivity {
+public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestureListener {
+    private static final float SWIPE_THRESHOLD = 100 ;
+    private static final float SWIPE_VOLACITY_THRESHOLD = 100;
     SlideToActView sta;
     private Toolbar toolbar;
     private float x1,x2,y1,y2;
+    private GestureDetector gestureDetector;
 
 
     @Override
@@ -47,18 +51,73 @@ public class MyGoal extends AppCompatActivity {
             }
         });
 
+
+        gestureDetector = new GestureDetector(this);
+
     }
 
     public void goback(){
         this.finish();
     }
 
-   
 
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
 
+    @Override
+    public void onShowPress(MotionEvent e) {
 
+    }
 
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
 
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
 
+    @Override
+    public void onLongPress(MotionEvent e) {
 
+    }
+
+    @Override
+    public boolean onFling(MotionEvent downEvent, MotionEvent moveEvent, float velocityX, float velocityY) {
+        float diffX = moveEvent.getX() - downEvent.getX();
+        float diffY = moveEvent.getY() - downEvent.getY();
+        boolean result = false;
+
+        if(Math.abs(diffY) > Math.abs(diffX)){ //vertical
+            if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VOLACITY_THRESHOLD ){
+                if (diffY > 0){
+                    swipeDown();
+                }else
+                    swipeUP();
+
+            }
+            //result = true;
+        }
+        return result;
+    }
+
+    private void swipeDown() {
+        Toast.makeText(this,"swipeDown",Toast.LENGTH_SHORT).show();
+    }
+
+    private void swipeUP() {
+        Toast.makeText(this,"swipeUP",Toast.LENGTH_SHORT).show();
+        Intent myactivity = new Intent(this,MyGoalDetails.class);
+        startActivity(myactivity);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
 }
