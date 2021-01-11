@@ -23,6 +23,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
+import android.speech.RecognizerIntent;
+import android.speech.RecognizerResultsIntent;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -121,6 +123,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     EditText textfile;
     String FilePath;
     ImageView myImage;
+
+    int RECOGNIZER_RESULT;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
 
@@ -157,6 +161,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         ImageButton btncateg = view.findViewById(R.id.CategoryButton);
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
         ImageButton btnatt= view.findViewById(R.id.id_attachement);
+        ImageButton btnmic= view.findViewById(R.id.id_mic);
         myImage = view.findViewById(R.id.imageviewTest);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
@@ -189,7 +194,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         btncateg.setOnClickListener(this);
         btnnot.setOnClickListener(this);
         btnatt.setOnClickListener(this);
-
+        btnmic.setOnClickListener(this);
         return view;
     }
 
@@ -210,7 +215,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 Calendar time = Calendar.getInstance();
                 time.set(year, month, day, hour, minute);
                 db_date=time.getTimeInMillis();
-                System.out.println(db_date);
+                System.out.println(db_details);
                 Random r = new Random();
 
 
@@ -380,7 +385,14 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
 
 
             }
+            case  R.id.id_mic :
+            {
 
+                Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL , RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Speech to text");
+                startActivityForResult(speechIntent,RECOGNIZER_RESULT);
+            }
 
 
         }
@@ -407,30 +419,15 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
-       /* switch(requestCode){
-            case PICKFILE_RESULT_CODE:
-                if(resultCode==RESULT_OK){
-                    FilePath = data.getData().getPath();
-                    System.out.println(FilePath);
-                    File imgFile = new  File("/storage/emulated/0/Download/pic.jpg");
-
-                    if(imgFile.exists()){
-
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-
-
-
-                        myImage.setImageBitmap(myBitmap);
-
-                    }
-
-                }
-                break;
-
-        }*/
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
             //set image to image view
             myImage.setImageURI(data.getData());
+            System.out.println(data.getData());
+            System.out.println(db_details);
+        }
+        if(requestCode == RECOGNIZER_RESULT){
+            ArrayList<String> matches=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            System.out.println(matches.get(0).toString());
         }
     }
     @Override
