@@ -141,7 +141,6 @@
         android:id="@+id/scrollView8"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -288,15 +287,28 @@
 
             <ImageView
                 android:id="@+id/imageviewTest"
-                android:layout_width="190dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="29dp"
+                android:layout_width="231dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/id_details"
-                app:layout_constraintHorizontal_bias="0.878"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/id_details"
-                app:layout_constraintTop_toBottomOf="@+id/id_type"
-                 />
+                app:layout_constraintTop_toBottomOf="@+id/id_type" />
+
+            <ImageButton
+                android:id="@+id/id_mic"
+                android:layout_width="36dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/background_transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/id_title"
+                app:layout_constraintEnd_toEndOf="@+id/id_title"
+                app:layout_constraintTop_toTopOf="@+id/id_title"
+                app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
