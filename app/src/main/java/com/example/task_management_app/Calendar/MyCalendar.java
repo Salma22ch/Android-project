@@ -5,7 +5,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.CloseGuard;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.net.NoRouteToHostException;
 import java.util.Arrays;
@@ -46,7 +51,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MyCalendar extends Fragment {
+public class MyCalendar extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.getDefault());
     private static final String TAG = "MyCalendar";
@@ -59,6 +64,8 @@ public class MyCalendar extends Fragment {
     SQLiteDatabase sqLiteDatabase;
     DBOpenHelper dbOpenHelper;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     @Nullable
     @Override
@@ -70,6 +77,9 @@ public class MyCalendar extends Fragment {
         final ListView TasksListView = view.findViewById(R.id.task_listview);
         compactCalendarView = (CompactCalendarView) view.findViewById(R.id.compactcalendar_view);
         imageView = (ImageView) view.findViewById(R.id.calendar_imageView);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
 
         final List<String> listOfTasks = new ArrayList<>();
@@ -93,6 +103,9 @@ public class MyCalendar extends Fragment {
 
 
         loadEvents();
+
+
+
 
 
         //set initial title
@@ -138,6 +151,12 @@ public class MyCalendar extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+
 
 
     private void loadEvents() {
@@ -146,7 +165,6 @@ public class MyCalendar extends Fragment {
 
         openDB();
         List<Event> events= getEvents();
-        //long i = insertData(1610467994000L,"","","","c'est le 12","","");
         compactCalendarView.addEvents(events);
     }
 
@@ -218,9 +236,17 @@ public class MyCalendar extends Fragment {
     }
 
 
-    public void gotoToday() {
-        compactCalendarView.setCurrentDate(Calendar.getInstance(Locale.getDefault()).getTime());
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                compactCalendarView.removeAllEvents();
+                loadEvents();
+                mSwipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(getContext(), "data refreshed", Toast.LENGTH_SHORT).show();
+            }
+        }, 2000);
     }
-
 
 }

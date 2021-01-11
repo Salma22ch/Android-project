@@ -113,6 +113,7 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
         Toast.makeText(this,"swipeUP",Toast.LENGTH_SHORT).show();
         Intent myactivity = new Intent(this,MyGoalDetails.class);
         startActivity(myactivity);
+        overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
     }
 
     @Override
