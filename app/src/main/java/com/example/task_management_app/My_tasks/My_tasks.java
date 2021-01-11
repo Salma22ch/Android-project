@@ -1,13 +1,10 @@
 package com.example.task_management_app.My_tasks;
 
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +28,8 @@ public class My_tasks extends Fragment{
     private DBOpenHelper dbHelper;
     private RecyclerView recyclerView;
     private TaskRecyclerAdapter taskRecyclerAdapter;
+
+
 
     @Nullable
     @Override
