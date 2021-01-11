@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.task_management_app.R;
 
@@ -14,18 +16,26 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     private static final float SWIPE_THRESHOLD = 100;
     private static final float SWIPE_VOLACITY_THRESHOLD = 100;
     GestureDetector gestureDetector;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_goal_details);
-
+        toolbar = findViewById(R.id.mygoals_details_toolbar);
         gestureDetector = new GestureDetector(this);
+
+
+
+
+        //toolbar.setTitle();
+
+
+
+
+
     }
 
-    public void goback() {
-        this.finish();
-    }
 
     @Override
     public boolean onDown(MotionEvent e) {
@@ -69,6 +79,9 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
             //result = true;
         }
         return result;
+    }
+    public void goback() {
+        this.finish();
     }
 
     private void swipeDown() {
