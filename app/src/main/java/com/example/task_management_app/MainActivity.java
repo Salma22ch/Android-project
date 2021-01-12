@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.task_management_app.Add.Add;
+import com.example.task_management_app.Goals.Add_Goal;
 import com.example.task_management_app.Calendar.MyCalendar;
 import com.example.task_management_app.settings.Settings;
 import com.example.task_management_app.Goals.Goals;
@@ -85,6 +86,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 dialog.show(getSupportFragmentManager(), "tag");
+            }
+
+        });
+
+        fabgoal.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialog_goal = Add_Goal.newInstance();
+                ((Add_Goal) dialog_goal).setCallback(new Add.Callback() {
+                    @Override
+                    public void onActionClick(String name) {
+                        Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog_goal.show(getSupportFragmentManager(), "tag");
             }
 
         });
