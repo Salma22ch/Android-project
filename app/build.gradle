@@ -32,7 +32,7 @@ dependencies {
 
 
 
-
+  //remove conflict
 
 
     implementation 'com.github.sundeepk:compact-calendar-view:3.0.0'
