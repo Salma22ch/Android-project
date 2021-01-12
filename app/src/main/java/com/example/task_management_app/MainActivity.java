@@ -6,10 +6,12 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,10 +30,13 @@ public class MainActivity extends AppCompatActivity {
     private Animation fab_open, fab_close, fab_clock, fab_anticlock;
     TextView add_task, add_goal;
     Boolean isOpen = false;
+    FrameLayout fragment_container;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fragment_container = (FrameLayout) findViewById(R.id.fragment_container);
 
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     fab.startAnimation(fab_anticlock);
                     fabtask.setClickable(false);
                     fabtask.setClickable(false);
+                    fragment_container.setAlpha(1f);
                     isOpen = false;
                 } else {
                     add_goal.setVisibility(View.VISIBLE);
@@ -68,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     fab.startAnimation(fab_clock);
                     fabtask.setClickable(true);
                     fabgoal.setClickable(true);
+                    fragment_container.setAlpha(0.2f);
                     isOpen = true;
                 }
 
