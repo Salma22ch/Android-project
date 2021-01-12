@@ -53,8 +53,10 @@ import androidx.fragment.app.Fragment;
 import android.app.TimePickerDialog;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Random;
 
 import android.app.DatePickerDialog;
@@ -85,6 +87,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     //date picker
     DatePickerDialog day_picker;
     EditText text_Day;
+    TextView tv_date;
     long db_date;
     final Calendar c = Calendar.getInstance();
     int year = c.get(Calendar.YEAR );
@@ -106,8 +109,6 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     EditText details;
     String db_details;
 
-    //type
-     String db_type="Task";
     //priority
     String db_prority;
     Spinner prio_spinner;
@@ -118,15 +119,11 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     AlarmManager alarmManager;
     int id_not;
 
-    // attachement
-    final int PICKFILE_RESULT_CODE=0;
-    EditText textfile;
-    String FilePath;
-    ImageView myImage;
 
     int RECOGNIZER_RESULT;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
+    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.getDefault());
 
     public static Add newInstance() {
         return new Add();
@@ -157,12 +154,9 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         ImageButton close = view.findViewById(R.id.fullscreen_dialog_close);
         TextView action = view.findViewById(R.id.fullscreen_dialog_action);
         ImageButton btnday = view.findViewById(R.id.DayButton);
-        ImageButton btntime = view.findViewById(R.id.TimeButton);
-        ImageButton btncateg = view.findViewById(R.id.CategoryButton);
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
-        ImageButton btnatt= view.findViewById(R.id.id_attachement);
         ImageButton btnmic= view.findViewById(R.id.id_mic);
-        myImage = view.findViewById(R.id.imageviewTest);
+        tv_date=view.findViewById(R.id.textView);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
         details.setMovementMethod(new ScrollingMovementMethod());
@@ -172,17 +166,17 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list_priority);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         prio_spinner.setAdapter(adapter);
-        // set chip type selector
-        ChipGroup chipGroup = view.findViewById(R.id.id_type);
+        // set chip category selector
+        ChipGroup chipGroup = view.findViewById(R.id.id_category);
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup chipGroup, int i) {
 
                 Chip chip = chipGroup.findViewById(i);
                 if (chip != null)
-                    db_type= (String) chip.getChipText();
+                    db_category= (String) chip.getChipText();
 
-                 System.out.println(db_type);
+                 System.out.println(db_category);
 
             }
         });
@@ -190,10 +184,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         close.setOnClickListener(this);
         action.setOnClickListener(this);
         btnday.setOnClickListener(this);
-        btntime.setOnClickListener(this);
-        btncateg.setOnClickListener(this);
         btnnot.setOnClickListener(this);
-        btnatt.setOnClickListener(this);
         btnmic.setOnClickListener(this);
         return view;
     }
@@ -258,7 +249,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                                 year=Year;
                                 month=monthOfYear;
                                 day=dayOfMonth;
-                                //db_date=Year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
+                                //String db_date=Year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
                                 //System.out.println(db_date);
                                 //String currentDateString = TimeFormat.getTimeInstance(DateFormat.FULL).format(c.getTime());
                             }
@@ -266,78 +257,31 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
 
                         , year, month, day);
                 day_picker.show();
-                break;}
-            case R.id.TimeButton:
-            {
-                ImageButton btntime = v.findViewById(R.id.TimeButton);
-                btntime.setBackgroundResource(R.drawable.background_blue_light);
-                btntime.setColorFilter(Color.argb(255, 255, 255, 255));
-
-               time_picker=  new TimePickerDialog(getActivity(),
-                       new TimePickerDialog.OnTimeSetListener() {
-                           @Override
-                           public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                               Calendar c = Calendar.getInstance();
-                               c.set(Calendar.HOUR_OF_DAY,sHour);
-                               c.set(Calendar.MINUTE ,sMinute);
-                               hour=sHour;
-                               minute=sMinute;
-                               db_time=String.format("%02d:%02d", sHour, sMinute);
-                               System.out.println(db_time);
+                time_picker=  new TimePickerDialog(getActivity(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+                                Calendar c = Calendar.getInstance();
+                                c.set(Calendar.HOUR_OF_DAY,sHour);
+                                c.set(Calendar.MINUTE ,sMinute);
+                                hour=sHour;
+                                minute=sMinute;
 
 
-                           }
-                       }, hour, minute, true);
+
+
+                            }
+                        }, hour, minute, true);
                 time_picker.show();
-                break;
-            }
-            case R.id.CategoryButton:
-            {
-                ImageButton btncateg = v.findViewById(R.id.CategoryButton);
-                btncateg.setBackgroundResource(R.drawable.background_blue_light);
-                btncateg.setColorFilter(Color.argb(255, 255, 255, 255));
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Choose a category");
-                final String[] list_category = {"Work", "Health", "Home", "Sport" ,"Others"};
-                builder.setSingleChoiceItems(list_category, 0, null).setPositiveButton("Ok",
-                        new DialogInterface.OnClickListener(){
-                    @Override
-                public void onClick(DialogInterface dialog, int selectedPosition) {
-                        dialog.dismiss();
-                        int which = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                        switch (which) {
-                            case 0:
-                                db_category="Work";
-                                break;
+                db_time=String.format("%02d:%02d", hour, minute);
+                String com=day+"/"+(month+1)+"/"+year+" at "+db_time;
+                tv_date.setText(com);
 
-                            case 1:
-                                db_category="Health";
-                                break;
-
-                            case 2:
-                                db_category="Home";
-                                break;
-
-                            case 3:
-                                db_category="Sport";
-                                break;
-
-                            case 4:
-                                db_category="Others";
-                                break;
-
-                        }
-                        System.out.println(db_category);
-
-                }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-                break;
-            }
+                /*Calendar t = Calendar.getInstance();
+                t.set(year, month, day, hour, minute);
+                db_date=t.getTimeInMillis();
+                dateFormatForDisplaying.format(dateClicked);*/
+                break;}
 
             case R.id.NotifButton:
             {
@@ -345,46 +289,17 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 not_on=!not_on;
                 if(not_on){
                     btnnot.setImageResource(R.drawable.ic_notifications_active);
-                    btnnot.setBackgroundResource(R.drawable.background_blue_light);
-                    btnnot.setColorFilter(Color.argb(255, 255, 255, 255));
+                    Toast.makeText(getActivity(), "notification is on", Toast.LENGTH_SHORT).show();
                 }else{
                     btnnot.setImageResource(R.drawable.ic_notifications);
-
+                    Toast.makeText(getActivity(), "notification is off", Toast.LENGTH_SHORT).show();
                 }
 
                 System.out.println(not_on);
+                break;
 
             }
-            case R.id.id_attachement:
-            {
-                ImageButton btnatta = v.findViewById(R.id.id_attachement);
-                btnatta.setBackgroundResource(R.drawable.background_blue_light);
-                btnatta.setColorFilter(Color.argb(255, 255, 255, 255));
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
-                        //permission not granted, request it.
-                        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                        //show popup for runtime permission
-                        requestPermissions(permissions, PERMISSION_CODE);
-                    }
-                    else {
-                        //permission already granted
-                        Intent intent = new Intent(Intent.ACTION_PICK);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, IMAGE_PICK_CODE);
-                    }
-                }
-                else {
-                    //system os is less then marshmallow
-                    Intent intent = new Intent();
-                    intent.setType("*/*");
-                    intent.setAction(Intent.ACTION_PICK);
-                    startActivityForResult(Intent.createChooser(intent, "Select File"), PICKFILE_RESULT_CODE);
-                }
-
-
-            }
             case  R.id.id_mic :
             {
 
@@ -398,33 +313,9 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         }
 
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case PERMISSION_CODE:{
-                if (grantResults.length >0 && grantResults[0] ==
-                        PackageManager.PERMISSION_GRANTED){
-                    //permission was granted
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, IMAGE_PICK_CODE);
-                }
-                else {
-                    //permission was denied
-                    Toast.makeText(getActivity(), "Permission denied...!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
-        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
-            //set image to image view
-            myImage.setImageURI(data.getData());
-            System.out.println(data.getData());
-            System.out.println(db_details);
-        }
         if(requestCode == RECOGNIZER_RESULT){
             ArrayList<String> matches=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             System.out.println(matches.get(0).toString());
@@ -486,7 +377,6 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         // Assign the values for each column.
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DATE, db_date);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_CATEGORY, db_category);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TYPE, db_type);
         //time is deleted
         contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, db_title);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, db_details);

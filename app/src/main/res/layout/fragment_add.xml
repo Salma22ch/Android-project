@@ -43,7 +43,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayout3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="74dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,86 +52,54 @@
         <ImageButton
             android:id="@+id/DayButton"
             android:layout_width="50dp"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginEnd="55dp"
-            android:layout_marginRight="55dp"
             android:background="@drawable/background_transparent"
             android:clickable="true"
             android:contentDescription="Date_picker"
             android:src="@drawable/ic_day"
-            app:layout_constraintEnd_toStartOf="@+id/id_attachement"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/TimeButton"
-            android:layout_width="45dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/background_transparent"
-            android:clickable="true"
-            android:contentDescription="Time_picker"
-            android:src="@drawable/ic_time"
-            android:state_selected="true"
-            app:layout_constraintEnd_toStartOf="@+id/id_attachement"
-            app:layout_constraintStart_toEndOf="@+id/DayButton"
-            app:layout_constraintTop_toTopOf="@+id/DayButton" />
-
-        <ImageButton
-            android:id="@+id/id_attachement"
-            android:layout_width="48dp"
-            android:layout_height="39dp"
-            android:layout_marginEnd="237dp"
-            android:layout_marginRight="237dp"
-            android:background="@drawable/background_transparent"
-            android:clickable="true"
-            android:src="@drawable/ic_attachment"
-            app:layout_constraintBottom_toBottomOf="@+id/TimeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/DayButton"
-            app:layout_constraintTop_toTopOf="@+id/TimeButton" />
 
         <ImageButton
             android:id="@+id/NotifButton"
             android:layout_width="51dp"
             android:layout_height="43dp"
-            android:layout_marginStart="160dp"
-            android:layout_marginLeft="160dp"
+            android:layout_marginStart="260dp"
+            android:layout_marginLeft="260dp"
             android:background="@drawable/background_transparent"
             android:clickable="true"
             android:src="@drawable/ic_notifications"
-            app:layout_constraintStart_toEndOf="@+id/id_attachement"
+            app:layout_constraintStart_toEndOf="@+id/DayButton"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/CategoryButton"
-            android:layout_width="51dp"
-            android:layout_height="39dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:background="@drawable/background_transparent"
-            android:clickable="true"
-            android:src="@drawable/ic_category"
-            app:layout_constraintBottom_toBottomOf="@+id/id_attachement"
-            app:layout_constraintStart_toEndOf="@+id/id_attachement"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="182dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:text="Choose a date ..."
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/NotifButton"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/DayButton"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
+            android:id="@+id/divider2"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
             android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/CategoryButton" />
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/DayButton"
+            tools:layout_editor_absoluteY="1dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -141,6 +109,7 @@
         android:id="@+id/scrollView8"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -224,7 +193,7 @@
                 android:scrollbars="vertical"
                 app:boxBackgroundMode="none"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.21"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/id_title" />
 
@@ -250,53 +219,63 @@
                 app:layout_constraintStart_toStartOf="@+id/id_repeat" />
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/id_type"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="201dp"
+                android:id="@+id/id_category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:chipSpacingHorizontal="2dp"
-                app:layout_constraintBottom_toTopOf="@+id/imageviewTest"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                tools:layout_editor_absoluteX="-28dp"
+                tools:layout_editor_absoluteY="1dp">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip6"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="100dp"
+                    android:layout_width="70dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Work"
+                    app:checkedIconTint="#00FFFFFF"
+                    app:textStartPadding="15dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip63"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="70dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Home"
+                    app:checkedIconTint="#00FFFFFF"
+                    app:textStartPadding="15dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip62"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="70dp"
+                    android:layout_height="49dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Sport"
+                    app:checkedIconTint="#00FFFFFF"
+                    app:textStartPadding="15dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip61"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="70dp"
                     android:layout_height="49dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="20dp"
-                    android:text="Task"
+                    android:text="Health"
                     app:checkedIconTint="#00FFFFFF"
-                    app:textStartPadding="30dp" />
+                    app:textStartPadding="10dp" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip7"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="100dp"
-                    android:layout_height="47dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Goal"
-                    app:textStartPadding="30dp" />
             </com.google.android.material.chip.ChipGroup>
-
-            <ImageView
-                android:id="@+id/imageviewTest"
-                android:layout_width="231dp"
-                android:layout_height="120dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/id_details"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/id_details"
-                app:layout_constraintTop_toBottomOf="@+id/id_type" />
 
             <ImageButton
                 android:id="@+id/id_mic"
@@ -309,8 +288,17 @@
                 app:layout_constraintEnd_toEndOf="@+id/id_title"
                 app:layout_constraintTop_toTopOf="@+id/id_title"
                 app:srcCompat="@android:drawable/ic_btn_speak_now" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="@+id/relativeLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/scrollView8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
