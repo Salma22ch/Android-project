@@ -5,18 +5,23 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.task_management_app.R;
+import com.example.task_management_app.models.Goal;
 
 public class MyGoalDetails extends AppCompatActivity implements GestureDetector.OnGestureListener {
     private static final float SWIPE_THRESHOLD = 100;
     private static final float SWIPE_VOLACITY_THRESHOLD = 100;
     GestureDetector gestureDetector;
     private Toolbar toolbar;
+
+    Intent i ;
+    Goal goal ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +30,11 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         toolbar = findViewById(R.id.mygoals_details_toolbar);
         gestureDetector = new GestureDetector(this);
 
+        i = getIntent();
+        goal = (Goal) i.getSerializableExtra("GoalObject");
 
 
-
-        //toolbar.setTitle();
+        toolbar.setTitle(goal.getTitle());
 
 
 

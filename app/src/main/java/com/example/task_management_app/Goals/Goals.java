@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.task_management_app.R;
+import com.example.task_management_app.models.Goal;
 
 public class Goals extends Fragment {
 
@@ -60,7 +61,9 @@ public class Goals extends Fragment {
         goals_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Goal goal = new Goal(mTitle[position],mDescription[position]);
                 Intent newActivity = new Intent(getActivity(), MyGoal.class);
+                newActivity.putExtra("GoalObject",goal);
                 startActivity(newActivity);
             }
         });

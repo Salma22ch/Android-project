@@ -12,10 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.task_management_app.R;
+import com.example.task_management_app.models.Goal;
 
 public class Adapter_Goals extends ArrayAdapter<String> {
 
     Context context;
+    Goal goal;
     String rTitle[];
     String rDescription[];
     int rImgs[];
@@ -42,6 +44,7 @@ public class Adapter_Goals extends ArrayAdapter<String> {
         images.setImageResource(rImgs[position]);
         myTitle.setText(rTitle[position]);
         myDescription.setText(rDescription[position]);
+
 
 
         return row;

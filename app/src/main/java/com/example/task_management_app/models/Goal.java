@@ -1,7 +1,9 @@
 package com.example.task_management_app.models;
 
 
-public class Goal {
+import java.io.Serializable;
+
+public class Goal implements Serializable {
     private Integer id;
     private String title;
     private String description;
@@ -14,6 +16,10 @@ public class Goal {
         this.description = description;
         this.icon = icon;
         this.progress = progress;
+    }
+    public Goal(String title,String description){
+        this.title = title;
+        this.description = description;
     }
 
     public Integer getId() {
