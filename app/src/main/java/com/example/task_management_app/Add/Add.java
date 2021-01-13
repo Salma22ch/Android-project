@@ -348,6 +348,21 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         closeDB();
     }
 
+
+    /**
+     * * Sending Intent to indicate that the add page is closed *
+     *
+     * * Code by Abderrahim Tantaoui
+     */
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Intent onDismissIntent = new Intent();
+        onDismissIntent.setAction("com.example.broadcastDismiss");
+        getContext().sendBroadcast(onDismissIntent);
+    }
+
+
     /**
      * * Open the database* *
      *

@@ -1,6 +1,10 @@
 package com.example.task_management_app.My_tasks;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -28,7 +32,7 @@ public class My_tasks extends Fragment{
     private DBOpenHelper dbHelper;
     private RecyclerView recyclerView;
     private TaskRecyclerAdapter taskRecyclerAdapter;
-
+    private BroadcastReceiver monReceiver;
 
 
     @Nullable
@@ -55,6 +59,18 @@ public class My_tasks extends Fragment{
         return view;
 
     }
+
+    public void handleRefresh() {
+        monReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent i)
+            {
+                taskRecyclerAdapter.notifyDataSetChanged();
+            }
+        };
+        getContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss"));
+    }
+
 
     public void open() throws SQLiteException {
         try {
