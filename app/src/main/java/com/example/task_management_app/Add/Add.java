@@ -8,6 +8,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -302,11 +303,17 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
 
             case  R.id.id_mic :
             {
+                try {
+                    Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech to text");
+                    startActivityForResult(speechIntent, RECOGNIZER_RESULT);
+                }catch (ActivityNotFoundException e){
+                    Toast t = Toast.makeText(getContext(), "Ops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT);
+                    t.show();
 
-                Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL , RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Speech to text");
-                startActivityForResult(speechIntent,RECOGNIZER_RESULT);
+                }
             }
 
 
@@ -316,9 +323,10 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == RECOGNIZER_RESULT){
+        if(requestCode == RECOGNIZER_RESULT && null != data){
             ArrayList<String> matches=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             System.out.println(matches.get(0).toString());
+            title.setText(matches.get(0));
         }
     }
     @Override

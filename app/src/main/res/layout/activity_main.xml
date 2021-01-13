@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNavigationView"
-        android:alpha="1"/>
+        android:layout_marginBottom="56dp"
+        android:alpha="1" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
