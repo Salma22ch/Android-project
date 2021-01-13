@@ -50,4 +50,9 @@ public class TaskRecyclerAdapter extends RecyclerView.Adapter<TaskRecyclerAdapte
         }
     }
 
+    public void updateAdapter(ArrayList<Note> mNotes) {
+        this.mNotes = mNotes;
+        notifyDataSetChanged();
+    }
+
 }

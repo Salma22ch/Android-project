@@ -54,7 +54,7 @@ public class My_tasks extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         taskRecyclerAdapter = new TaskRecyclerAdapter(getDatabaseTasks());
         recyclerView.setAdapter(taskRecyclerAdapter);
-        taskRecyclerAdapter.notifyDataSetChanged();
+        handleRefresh();
 
         return view;
 
@@ -65,7 +65,7 @@ public class My_tasks extends Fragment{
             @Override
             public void onReceive(Context context, Intent i)
             {
-                taskRecyclerAdapter.notifyDataSetChanged();
+                taskRecyclerAdapter.updateAdapter(getDatabaseTasks());
             }
         };
         getContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss"));
