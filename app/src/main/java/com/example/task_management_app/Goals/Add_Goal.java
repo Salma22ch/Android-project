@@ -1,12 +1,20 @@
 package com.example.task_management_app.Goals;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,11 +22,13 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.task_management_app.Add.Add;
 import com.example.task_management_app.R;
+import com.example.task_management_app.models.DBOpenHelper;
+import com.example.task_management_app.models.Goal;
 
 import java.util.Calendar;
 import java.util.Random;
 
-public class Add_Goal  extends DialogFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class Add_Goal extends DialogFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private Add.Callback callback;
 
     public static Add_Goal newInstance() {
@@ -28,6 +38,22 @@ public class Add_Goal  extends DialogFragment implements View.OnClickListener, A
     public void setCallback(Add.Callback callback) {
         this.callback = callback;
     }
+
+    int goalIcons[] = {R.drawable.ic_goalicon_bad_habits, R.drawable.ic_goalicon_fitness, R.drawable.ic_goalicon_lotus, R.drawable.ic_goalicon_read, R.drawable.ic_goalicon_suitcase, R.drawable.ic_goalicon_money, R.drawable.ic_goalicon_programmer, R.drawable.ic_goalicon_book};
+    GridView gridView;
+    public int gSelectedIcon;
+    public String gTitle;
+    public String gDescription;
+    public int gProgress;
+    Goal goal;
+
+    EditText titleEditText;
+    EditText descriptionEditText;
+    EditText progressEditText;
+
+    SQLiteDatabase sqLiteDatabase;
+    DBOpenHelper dbOpenHelper;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,10 +67,39 @@ public class Add_Goal  extends DialogFragment implements View.OnClickListener, A
         View view = inflater.inflate(R.layout.goal_add, container, false);
         ImageButton close = view.findViewById(R.id.fullscreen_dialog_close);
         TextView action = view.findViewById(R.id.fullscreen_dialog_action);
+        titleEditText = view.findViewById(R.id.goal_add_edittext_title);
+        descriptionEditText = view.findViewById(R.id.goal_add_edittext_description);
+        progressEditText = view.findViewById(R.id.goal_add_edittext_progress);
+
+        gridView = (GridView) view.findViewById(R.id.gridViewOfIcon); // init GridView
+        // Create an object of CustomAdapter and set Adapter to GirdView
+        Adapter_Add_Goal_of_Gridview customAdapter = new Adapter_Add_Goal_of_Gridview(getContext(), goalIcons);
+        gridView.setAdapter(customAdapter);
+
+        gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+        // implement setOnItemClickListener event on GridView
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Adapter_Add_Goal_of_Gridview myAdapter = (Adapter_Add_Goal_of_Gridview) gridView.getAdapter();
+                myAdapter.selectedImage = position;
+                gSelectedIcon = goalIcons[position];
+                myAdapter.notifyDataSetChanged();
+                Toast.makeText(getContext(), "image is :" + gSelectedIcon, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
 
         // set on click listener
         close.setOnClickListener(this);
         action.setOnClickListener(this);
+
+
         return view;
     }
 
@@ -59,6 +114,20 @@ public class Add_Goal  extends DialogFragment implements View.OnClickListener, A
                 break;
 
             case R.id.fullscreen_dialog_action:
+                gTitle = titleEditText.getText().toString();
+                gDescription = descriptionEditText.getText().toString();
+                String gProgressText = progressEditText.getText().toString();
+                if(gProgressText.isEmpty() == false) {
+                    gProgress = Integer.parseInt(gProgressText);
+                }
+                //create object of Goal class
+                goal =  new Goal(gTitle,gDescription,gSelectedIcon,gProgress);
+                dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
+                        DBOpenHelper.Constants.DATABASE_VERSION);
+
+                openDB();
+                insertData(goal);
+                Log.d("insertGoal", "onClick: "+gTitle);
                 callback.onActionClick("Goal Saved");
                 dismiss();
                 break;
@@ -74,5 +143,25 @@ public class Add_Goal  extends DialogFragment implements View.OnClickListener, A
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public long insertData(Goal goal) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESS, goal.getProgress());
+
+        // Insert the line in the database
+        long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Goal, null, contentValues);
+        return rowId;
+    }
+
+    public void openDB() throws SQLiteException {
+        try {
+            sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+        } catch (SQLiteException ex) {
+            sqLiteDatabase = dbOpenHelper.getReadableDatabase();
+        }
     }
 }

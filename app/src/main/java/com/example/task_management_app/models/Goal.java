@@ -7,11 +7,10 @@ public class Goal implements Serializable {
     private Integer id;
     private String title;
     private String description;
-    private String icon;
+    private Integer icon;
     private Integer progress;
 
-    public Goal(Integer id, String title, String description, String icon, Integer progress) {
-        this.id = id;
+    public Goal( String title, String description, Integer icon, Integer progress) {
         this.title = title;
         this.description = description;
         this.icon = icon;
@@ -46,11 +45,11 @@ public class Goal implements Serializable {
         this.description = description;
     }
 
-    public String getIcon() {
+    public Integer getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon) {
+    public void setIcon(Integer icon) {
         this.icon = icon;
     }
 

@@ -22,7 +22,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
         // The table Name
         public static final String MY_TABLE_Note = "Note";
-        public static final String MY_TABLE_Goal = "Note";
+        public static final String MY_TABLE_Goal = "Goal";
 
         public static final String KEY_COL_ID = "id";// Mandatory
 
@@ -42,6 +42,10 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
         public static final String KEY_COL_STATE = "State";
 
+        public static final String KEY_COL_PROGRESS = "Progress";
+
+        public static final String KEY_COL_ICON = "Icon";
+
 
         // Index des colonnes
         public static final int ID_COLUMN = 1;
@@ -55,6 +59,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
     // The static string to create the database.
+    private static final String DATABASE_CREATE_GOAL = "create table "
+            + Constants.MY_TABLE_Goal + "(" + Constants.KEY_COL_ID
+            + " integer primary key autoincrement, "
+            + Constants.KEY_COL_TITLE + " TEXT, "
+            + Constants.KEY_COL_DESCRIPTION + " TEXT, "
+            + Constants.KEY_COL_ICON + " BIGINT ,"
+            + Constants.KEY_COL_PROGRESS + " INT)";
+
     private static final String DATABASE_CREATE = "create table "
             + Constants.MY_TABLE_Note + "(" + Constants.KEY_COL_ID
             + " integer primary key autoincrement, "
@@ -83,6 +95,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Create the new database using the SQL string Database_create
         db.execSQL(DATABASE_CREATE);
+        db.execSQL(DATABASE_CREATE_GOAL);
 
     }
 
@@ -93,6 +106,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                 + ", les anciennes données seront détruites ");
         // Drop the old database
         db.execSQL("DROP TABLE IF EXISTS " + Constants.MY_TABLE_Note);
+        db.execSQL("DROP TABLE IF EXISTS " + Constants.MY_TABLE_Goal);
         // Create the new one
         onCreate(db);
         // or do a smartest stuff
