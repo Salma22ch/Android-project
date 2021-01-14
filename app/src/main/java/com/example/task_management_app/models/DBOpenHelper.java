@@ -42,7 +42,9 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
         public static final String KEY_COL_STATE = "State";
 
-        public static final String KEY_COL_PROGRESS = "Progress";
+        public static final String KEY_COL_PROGRESSMAX = "ProgressMax";
+
+        public static final String KEY_COL_PROGRESSCURRENT = "ProgressCurrent";
 
         public static final String KEY_COL_ICON = "Icon";
 
@@ -65,7 +67,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             + Constants.KEY_COL_TITLE + " TEXT, "
             + Constants.KEY_COL_DESCRIPTION + " TEXT, "
             + Constants.KEY_COL_ICON + " BIGINT ,"
-            + Constants.KEY_COL_PROGRESS + " INT)";
+            + Constants.KEY_COL_PROGRESSMAX + " INT ,"
+            + Constants.KEY_COL_PROGRESSCURRENT + " INT)";
 
     private static final String DATABASE_CREATE = "create table "
             + Constants.MY_TABLE_Note + "(" + Constants.KEY_COL_ID

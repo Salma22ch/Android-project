@@ -86,12 +86,8 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
                 myAdapter.selectedImage = position;
                 gSelectedIcon = goalIcons[position];
                 myAdapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "image is :" + gSelectedIcon, Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
 
 
 
@@ -116,12 +112,12 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
             case R.id.fullscreen_dialog_action:
                 gTitle = titleEditText.getText().toString();
                 gDescription = descriptionEditText.getText().toString();
-                String gProgressText = progressEditText.getText().toString();
-                if(gProgressText.isEmpty() == false) {
-                    gProgress = Integer.parseInt(gProgressText);
+                String gProgressMaxText = progressEditText.getText().toString();
+                if(gProgressMaxText.isEmpty() == false) {
+                    gProgress = Integer.parseInt(gProgressMaxText);
                 }
                 //create object of Goal class
-                goal =  new Goal(gTitle,gDescription,gSelectedIcon,gProgress);
+                goal =  new Goal(gTitle,gDescription,gSelectedIcon,gProgress,0);
                 dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
                         DBOpenHelper.Constants.DATABASE_VERSION);
 
@@ -150,7 +146,8 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
         contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
         contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESS, goal.getProgress());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent());
 
         // Insert the line in the database
         long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Goal, null, contentValues);

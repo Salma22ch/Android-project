@@ -8,17 +8,40 @@ public class Goal implements Serializable {
     private String title;
     private String description;
     private Integer icon;
-    private Integer progress;
+    private Integer MaxProgress;
+    private Integer progressCurrent;
 
-    public Goal( String title, String description, Integer icon, Integer progress) {
+    public Goal(Integer id, String title, String description, Integer icon, Integer maxProgress, Integer progressCurrent) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.icon = icon;
-        this.progress = progress;
+        MaxProgress = maxProgress;
+        this.progressCurrent = progressCurrent;
     }
-    public Goal(String title,String description){
+
+    public Goal(String title, String description, Integer icon, Integer maxProgress, Integer progressCurrent) {
         this.title = title;
         this.description = description;
+        this.icon = icon;
+        MaxProgress = maxProgress;
+        this.progressCurrent = progressCurrent;
+    }
+
+    public Integer getMaxProgress() {
+        return MaxProgress;
+    }
+
+    public void setMaxProgress(Integer maxProgress) {
+        MaxProgress = maxProgress;
+    }
+
+    public Integer getProgressCurrent() {
+        return progressCurrent;
+    }
+
+    public void setProgressCurrent(Integer progressCurrent) {
+        this.progressCurrent = progressCurrent;
     }
 
     public Integer getId() {
@@ -53,22 +76,4 @@ public class Goal implements Serializable {
         this.icon = icon;
     }
 
-    public Integer getProgress() {
-        return progress;
-    }
-
-    public void setProgress(Integer progress) {
-        this.progress = progress;
-    }
-
-    @Override
-    public String toString() {
-        return "Goal{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", icon='" + icon + '\'' +
-                ", progress=" + progress +
-                '}';
-    }
 }

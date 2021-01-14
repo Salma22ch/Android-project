@@ -1,7 +1,11 @@
 package com.example.task_management_app.Goals;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +20,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.task_management_app.R;
+import com.example.task_management_app.models.DBOpenHelper;
 import com.example.task_management_app.models.Goal;
+import com.example.task_management_app.models.Note;
+
+import java.util.ArrayList;
 
 public class Goals extends Fragment {
 
@@ -25,13 +33,12 @@ public class Goals extends Fragment {
     Adapter_Goals adapter;
     ListView goals_listView;
 
+    SQLiteDatabase sqLiteDatabase;
+    DBOpenHelper dbOpenHelper;
 
-
+    ArrayList<Goal> lisOfGoals;
     ListView listView;
-    String mTitle[] = {"Facebook", "Whatsapp", "Twitter", "Instagram", "Youtube"};
-    String mDescription[] = {"Facebook Description", "Whatsapp Description", "Twitter Description", "Instagram Description", "Youtube Description"};
-    int images[] = {R.drawable.ic_accompli, R.drawable.ic_accompli, R.drawable.ic_accompli, R.drawable.ic_accompli, R.drawable.ic_accompli};
-    // so our images and other things are set in array
+
 
     // now paste some images in drawable
 
@@ -45,7 +52,13 @@ public class Goals extends Fragment {
         toolbar = (Toolbar) view.findViewById(R.id.goals_toolbar);
         goals_listView = (ListView) view.findViewById(R.id.goals_list);
 
-        adapter = new Adapter_Goals(getContext(), mTitle, mDescription, images);
+        dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
+                DBOpenHelper.Constants.DATABASE_VERSION);
+
+        openDB();
+        lisOfGoals = getAllRecord();
+        Log.d("databasegoal", "onCreateView: "+lisOfGoals.get(0).getTitle());
+        adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
         goals_listView.setAdapter(adapter);
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -61,14 +74,41 @@ public class Goals extends Fragment {
         goals_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Goal goal = new Goal(mTitle[position],mDescription[position]);
                 Intent newActivity = new Intent(getActivity(), MyGoal.class);
-                newActivity.putExtra("GoalObject",goal);
+                newActivity.putExtra("GoalObject", lisOfGoals.get(position));
                 startActivity(newActivity);
             }
         });
 
-
         return view;
+    }
+
+    public ArrayList<Goal> getAllRecord() {
+
+        ArrayList<Goal> listOfGoal = new ArrayList<Goal>();
+        Goal goal;
+        Cursor res = sqLiteDatabase.rawQuery("select * from "+DBOpenHelper.Constants.MY_TABLE_Goal, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            Integer id = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID));
+            String title = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TITLE));
+            String description = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_DESCRIPTION));
+            Integer icon = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ICON));
+            Integer progressMax = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX));
+            Integer progressCurrent = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT));
+            goal = new Goal(id, title, description,icon,progressMax,progressCurrent);
+            listOfGoal.add(goal);
+            res.moveToNext();
+        }
+        return listOfGoal;
+    }
+
+    public void openDB() throws SQLiteException {
+        try {
+            sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+        } catch (SQLiteException ex) {
+            sqLiteDatabase = dbOpenHelper.getReadableDatabase();
+        }
     }
 }
