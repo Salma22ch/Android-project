@@ -79,7 +79,10 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
                 openDB();
                 updateData(goal);
                 //closeDB();
-                Toast.makeText(getApplicationContext(), "is finished", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), " +1", Toast.LENGTH_SHORT).show();
+                Intent onDismissIntent = new Intent();
+                onDismissIntent.setAction("com.example.broadcastDismiss.goal");
+                getApplicationContext().sendBroadcast(onDismissIntent);
 
             }
         });
@@ -92,7 +95,7 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
 
     private int updateData(Goal goal) {
         ContentValues contentValues = new ContentValues();
-        String whereClause = DBOpenHelper.Constants.KEY_COL_ID +" = ?";
+        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
         //String whereClause = DBOpenHelper.Constants.KEY_COL_ID +" = "+goal.getId();
 
         contentValues.put(DBOpenHelper.Constants.KEY_COL_ID, goal.getId());
@@ -100,9 +103,9 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
         contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
         contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent()+1);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent() + 1);
 
-        String[] whereArgs = {String.valueOf(goal.getId()) };
+        String[] whereArgs = {String.valueOf(goal.getId())};
         int i = sqLiteDatabase.update(DBOpenHelper.Constants.MY_TABLE_Goal, contentValues, whereClause, whereArgs);
         //long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Goal, null, contentValues);
         return i;
@@ -159,11 +162,9 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
     }
 
     private void swipeDown() {
-        Toast.makeText(this, "swipeDown", Toast.LENGTH_SHORT).show();
     }
 
     private void swipeUP() {
-        Toast.makeText(this, "swipeUP", Toast.LENGTH_SHORT).show();
         Intent myactivity = new Intent(this, MyGoalDetails.class);
         myactivity.putExtra("GoalObject", goal);
         startActivity(myactivity);

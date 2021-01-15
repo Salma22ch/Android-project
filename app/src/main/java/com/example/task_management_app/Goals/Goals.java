@@ -73,9 +73,10 @@ public class Goals extends Fragment {
         final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_mygoals);
         //actionBar.setIcon(R.drawable.ic_mygoals);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_format_calendar);
+        actionBar.setHomeAsUpIndicator(R.drawable.mydailygoals);
+
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("my daily Goals");
+        actionBar.setTitle("My daily Goals");
 
 
 

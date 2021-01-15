@@ -67,7 +67,7 @@ public class MyCalendar extends Fragment  {
 
     SQLiteDatabase sqLiteDatabase;
     DBOpenHelper dbOpenHelper;
-    
+
     private BroadcastReceiver monReceiver;
     private ArrayAdapter adapter;
 

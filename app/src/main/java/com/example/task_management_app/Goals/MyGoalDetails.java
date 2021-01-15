@@ -20,8 +20,8 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     GestureDetector gestureDetector;
     private Toolbar toolbar;
 
-    Intent i ;
-    Goal goal ;
+    Intent i;
+    Goal goal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +35,6 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
 
 
         toolbar.setTitle(goal.getTitle());
-
-
-
 
 
     }
@@ -86,6 +83,7 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         }
         return result;
     }
+
     public void goback() {
         this.finish();
     }
@@ -97,7 +95,7 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     }
 
     private void swipeUP() {
-        Toast.makeText(this, "swipeUP", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
