@@ -111,7 +111,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     String db_details;
 
     //priority
-    String db_prority;
+    String db_prority="None";
     Spinner prio_spinner;
 
     //set notification
@@ -119,7 +119,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
     int id_not;
-
+    //set warning
+    TextView tv_title_warning;
 
     int RECOGNIZER_RESULT;
     private static final int IMAGE_PICK_CODE = 1000;
@@ -158,6 +159,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
         ImageButton btnmic= view.findViewById(R.id.id_mic);
         tv_date=view.findViewById(R.id.textView);
+        tv_title_warning=view.findViewById(R.id.id_warningtitle);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
         details.setMovementMethod(new ScrollingMovementMethod());
@@ -201,16 +203,16 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 break;
 
             case R.id.fullscreen_dialog_action:
-                callback.onActionClick("Saved");
-                db_title=title.getText().toString();
+                if (title.getText().toString().equals("")) {
+                    tv_title_warning.setText("* This field cannot be empty");
+                }
+                db_title = title.getText().toString();
                 db_details=details.getText().toString();
                 Calendar time = Calendar.getInstance();
                 time.set(year, month, day, hour, minute);
                 db_date=time.getTimeInMillis();
                 System.out.println(db_details);
                 Random r = new Random();
-
-
                 if(not_on) {
                     alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
                     Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
@@ -229,8 +231,12 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                         alarmManager.cancel(pendingIntent);
                     }
                 }
-                long rowId = insertRecord(contentValues);
-                dismiss();
+                if (!title.getText().toString().equals("")) {
+                    callback.onActionClick("Saved");
+                    long rowId = insertRecord(contentValues);
+                    dismiss();
+                }
+
                 break;
 
             case R.id.DayButton:
@@ -277,7 +283,6 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 db_time=String.format("%02d:%02d", hour, minute);
                 String com=day+"/"+(month+1)+"/"+year+" at "+db_time;
                 tv_date.setText(com);
-
                 /*Calendar t = Calendar.getInstance();
                 t.set(year, month, day, hour, minute);
                 db_date=t.getTimeInMillis();

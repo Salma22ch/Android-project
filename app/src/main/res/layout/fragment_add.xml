@@ -31,6 +31,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="17dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:padding="8dp"
             android:text="Save"
             android:textColor="@color/colorPrimary"
@@ -70,6 +72,7 @@
             android:layout_marginStart="260dp"
             android:layout_marginLeft="260dp"
             android:background="@drawable/background_transparent"
+            android:focusable="true"
             android:clickable="true"
             android:src="@drawable/ic_notifications"
             app:layout_constraintStart_toEndOf="@+id/DayButton"
@@ -179,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/custom_input"
@@ -193,7 +196,7 @@
                 android:scrollbars="vertical"
                 app:boxBackgroundMode="none"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.21"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/id_title" />
 
@@ -201,6 +204,8 @@
                 android:id="@+id/priority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:text="Priority :"
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/colorPrimary"
@@ -211,6 +216,8 @@
                 android:id="@+id/reapeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginBottom="2dp"
                 android:text="Repeat :"
                 android:textColor="@color/colorPrimary"
@@ -283,11 +290,27 @@
                 android:layout_height="38dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/background_transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground"
                 app:layout_constraintBottom_toBottomOf="@+id/id_title"
                 app:layout_constraintEnd_toEndOf="@+id/id_title"
                 app:layout_constraintTop_toTopOf="@+id/id_title"
                 app:srcCompat="@android:drawable/ic_btn_speak_now" />
+
+            <TextView
+                android:id="@+id/id_warningtitle"
+                android:layout_width="165dp"
+                android:layout_height="13dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="3dp"
+                android:textAllCaps="false"
+                android:textColor="#CF0D0D"
+                android:textColorHint="#C60F0F"
+                android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
