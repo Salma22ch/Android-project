@@ -1,6 +1,9 @@
 package com.example.task_management_app.Goals;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -10,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +44,8 @@ public class Goals extends Fragment {
     ArrayList<Goal> lisOfGoals;
     ListView listView;
 
+    private BroadcastReceiver monReceiver;
+
 
     // now paste some images in drawable
 
@@ -60,6 +67,7 @@ public class Goals extends Fragment {
         Log.d("databasegoal", "onCreateView: "+lisOfGoals.get(0).getTitle());
         adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
         goals_listView.setAdapter(adapter);
+        handleRefresh();
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -111,4 +119,17 @@ public class Goals extends Fragment {
             sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         }
     }
+
+    public void handleRefresh() {
+        monReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent i)
+            {
+                adapter.updateAdapter(getAllRecord());
+            }
+        };
+        getContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss.goal"));
+    }
+
+
 }

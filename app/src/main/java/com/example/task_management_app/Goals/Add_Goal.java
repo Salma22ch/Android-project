@@ -1,6 +1,7 @@
 package com.example.task_management_app.Goals;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -160,5 +161,13 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
         } catch (SQLiteException ex) {
             sqLiteDatabase = dbOpenHelper.getReadableDatabase();
         }
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Intent onDismissIntent = new Intent();
+        onDismissIntent.setAction("com.example.broadcastDismiss.goal");
+        getContext().sendBroadcast(onDismissIntent);
     }
 }

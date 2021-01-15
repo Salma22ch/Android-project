@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.example.task_management_app.R;
 import com.example.task_management_app.models.Goal;
+import com.example.task_management_app.models.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,7 @@ public class Adapter_Goals extends BaseAdapter {
         TextView myTitle = row.findViewById(R.id.goals_row_title);
         TextView myDescription = row.findViewById(R.id.goals_row_description);
         ProgressBar progressBar = row.findViewById(R.id.goals_row_progress);
+        TextView progressBarText = row.findViewById(R.id.goals_row_progress_text);
 
         // now set our resources on views
         images.setImageResource(goal.get(position).getIcon());
@@ -66,7 +68,13 @@ public class Adapter_Goals extends BaseAdapter {
         myDescription.setText(goal.get(position).getDescription());
         progressBar.setMax(goal.get(position).getMaxProgress());
         progressBar.setProgress(goal.get(position).getProgressCurrent());
+        progressBarText.setText(goal.get(position).getProgressCurrent()+"/"+goal.get(position).getMaxProgress());
 
         return row;
+    }
+
+    public void updateAdapter(ArrayList<Goal> goals) {
+        this.goal = goals;
+        notifyDataSetChanged();
     }
 }

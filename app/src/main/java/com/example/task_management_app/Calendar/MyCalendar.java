@@ -1,7 +1,11 @@
 package com.example.task_management_app.Calendar;
 
 
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -51,7 +55,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MyCalendar extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MyCalendar extends Fragment  {
 
     private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.getDefault());
     private static final String TAG = "MyCalendar";
@@ -63,8 +67,9 @@ public class MyCalendar extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     SQLiteDatabase sqLiteDatabase;
     DBOpenHelper dbOpenHelper;
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    
+    private BroadcastReceiver monReceiver;
+    private ArrayAdapter adapter;
 
 
     @Nullable
@@ -78,12 +83,9 @@ public class MyCalendar extends Fragment implements SwipeRefreshLayout.OnRefresh
         compactCalendarView = (CompactCalendarView) view.findViewById(R.id.compactcalendar_view);
         imageView = (ImageView) view.findViewById(R.id.calendar_imageView);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-
 
         final List<String> listOfTasks = new ArrayList<>();
-        final ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listOfTasks);
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, listOfTasks);
         TasksListView.setAdapter(adapter);
 
 
@@ -103,6 +105,7 @@ public class MyCalendar extends Fragment implements SwipeRefreshLayout.OnRefresh
 
 
         loadEvents();
+        handleRefresh();
 
 
 
@@ -144,8 +147,10 @@ public class MyCalendar extends Fragment implements SwipeRefreshLayout.OnRefresh
 
             }
         });
-        //addDummyEvents();
-        //  gotoToday();
+        // addDummyEvents();
+        // gotoToday();
+
+
 
         return view;
 
@@ -236,17 +241,17 @@ public class MyCalendar extends Fragment implements SwipeRefreshLayout.OnRefresh
     }
 
 
-    @Override
-    public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
+
+    public void handleRefresh() {
+        monReceiver = new BroadcastReceiver() {
             @Override
-            public void run() {
+            public void onReceive(Context context, Intent i)
+            {
                 compactCalendarView.removeAllEvents();
                 loadEvents();
-                mSwipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getContext(), "data refreshed", Toast.LENGTH_SHORT).show();
             }
-        }, 2000);
+        };
+        getContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss"));
     }
 
 }
