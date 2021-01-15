@@ -89,6 +89,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     DatePickerDialog day_picker;
     EditText text_Day;
     TextView tv_date;
+    TextView tv_time;
     long db_date;
     final Calendar c = Calendar.getInstance();
     int year = c.get(Calendar.YEAR );
@@ -98,7 +99,6 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     TimePickerDialog time_picker;
     EditText text_time;
     String db_time;
-    //Calendar c = Calendar.getInstance();
     int hour = c.get(Calendar.HOUR_OF_DAY);
     int minute = c.get(Calendar.MINUTE);
     //category_picker
@@ -159,6 +159,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         ImageButton btnnot= view.findViewById(R.id.NotifButton);
         ImageButton btnmic= view.findViewById(R.id.id_mic);
         tv_date=view.findViewById(R.id.textView);
+        tv_time=view.findViewById(R.id.textView2);
         tv_title_warning=view.findViewById(R.id.id_warningtitle);
         title=view.findViewById(R.id.id_title);
         details=view.findViewById(R.id.id_details);
@@ -256,9 +257,10 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                                 year=Year;
                                 month=monthOfYear;
                                 day=dayOfMonth;
-                                //String db_date=Year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
-                                //System.out.println(db_date);
+                                String date=dayOfMonth+"/"+(monthOfYear+1)+"/"+Year;
+                                tv_date.setText(date +"  at");
                                 //String currentDateString = TimeFormat.getTimeInstance(DateFormat.FULL).format(c.getTime());
+
                             }
                         }
 
@@ -273,16 +275,15 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                                 c.set(Calendar.MINUTE ,sMinute);
                                 hour=sHour;
                                 minute=sMinute;
-
-
-
+                                db_time=String.format("%02d:%02d", hour, minute);
+                                tv_time.setText(db_time);
 
                             }
                         }, hour, minute, true);
                 time_picker.show();
-                db_time=String.format("%02d:%02d", hour, minute);
-                String com=day+"/"+(month+1)+"/"+year+" at "+db_time;
-                tv_date.setText(com);
+
+                /*String com=day+"/"+(month+1)+"/"+year+" at "+db_time;
+                tv_date.setText(com);*/
                 /*Calendar t = Calendar.getInstance();
                 t.set(year, month, day, hour, minute);
                 db_date=t.getTimeInMillis();
@@ -410,6 +411,9 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, db_details);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_PRIORITY, db_prority);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE, "upcoming");
+        //contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE_NOT, not_on);
+        //contentValues.put(DBOpenHelper.Constants.KEY_COL_ID_NOT, id_not);
+
 
         // Insert the line in the database
         long rowId = db.insert(DBOpenHelper.Constants.MY_TABLE_Note, null, contentValues);
