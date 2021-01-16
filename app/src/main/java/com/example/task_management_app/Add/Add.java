@@ -411,8 +411,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, db_details);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_PRIORITY, db_prority);
         contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE, "upcoming");
-        //contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE_NOT, not_on);
-        //contentValues.put(DBOpenHelper.Constants.KEY_COL_ID_NOT, id_not);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE_NOT, not_on);
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_ID_NOT, id_not);
 
 
         // Insert the line in the database

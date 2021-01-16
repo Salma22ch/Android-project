@@ -42,11 +42,16 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
         public static final String KEY_COL_STATE = "State";
 
+        public static final String KEY_COL_STATE_NOT = "state_notification";
+
+        public static final String KEY_COL_ID_NOT = "id_notification";
+
         public static final String KEY_COL_PROGRESSMAX = "ProgressMax";
 
         public static final String KEY_COL_PROGRESSCURRENT = "ProgressCurrent";
 
         public static final String KEY_COL_ICON = "Icon";
+
 
 
         // Index des colonnes
@@ -58,6 +63,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         public static final int TITLE_COLUMN = 6;
         public static final int DECRIPTION_COLUMN = 7;
         public static final int PRIORITY_COLUMN = 8;
+        public static final int STATE_NOTIFICATION = 9;
+        public static final int ID_NOTIFICATION = 10;
     }
 
     // The static string to create the database.
@@ -79,7 +86,9 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             + Constants.KEY_COL_TITLE + " TEXT, "
             + Constants.KEY_COL_DESCRIPTION + " TEXT, "
             + Constants.KEY_COL_PRIORITY + " TEXT ,"
-            + Constants.KEY_COL_STATE + " TEXT)";
+            + Constants.KEY_COL_STATE + " TEXT,"
+            + Constants.KEY_COL_STATE_NOT+ " TEXT,"
+            + Constants.KEY_COL_ID_NOT+ " BIGINT)";
 
 
     /**
