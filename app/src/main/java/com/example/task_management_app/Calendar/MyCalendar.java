@@ -126,7 +126,9 @@ public class MyCalendar extends Fragment  {
                 if (tasksFromMap != null) {
                     listOfTasks.clear();
                     for (Event task : tasksFromMap) {
-                        listOfTasks.add((String) task.getData());
+                        Note mynote = (Note) task.getData();
+                        //listOfTasks.add((String) task.getData());
+                        listOfTasks.add(mynote.getTitle()+" : "+mynote.getDescription());
                     }
                     adapter.notifyDataSetChanged();
                     if (tasksFromMap.isEmpty()){
@@ -180,7 +182,7 @@ public class MyCalendar extends Fragment  {
         ArrayList<Event> listOfEvent = new ArrayList<Event>();
 
         for (Note list : listOfTask) {
-            listOfEvent.add(new Event(Color.argb(255, 169, 68, 65), list.getDate(),  list.getTitle()+" : "+list.getDescription()));
+            listOfEvent.add(new Event(Color.argb(255, 169, 68, 65), list.getDate(),  list));
         }
 
         return listOfEvent;

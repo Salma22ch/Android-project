@@ -5,10 +5,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.task_management_app.R;
@@ -33,11 +37,45 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         i = getIntent();
         goal = (Goal) i.getSerializableExtra("GoalObject");
 
+        TextView mygoalDetailsProgressMax = (TextView) findViewById(R.id.mygoal_details_progressMax);
+        TextView mygoalDetailsProgressCurrent = (TextView) findViewById(R.id.mygoal_details_progressCurent);
+
+
 
         toolbar.setTitle(goal.getTitle());
+        toolbar.inflateMenu(R.menu.goal_menu);
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                if(item.getItemId()==R.id.deleteGoal)
+                {
+                    // do something
+                    Toast.makeText(getApplicationContext(),"delete goal",Toast.LENGTH_SHORT).show();
+
+                }
+                else if(item.getItemId()== R.id.editGoal)
+                {
+                    // do something
+                    Toast.makeText(getApplicationContext(),"edit goal",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    // do something
+                }
+
+                return false;
+            }
+        });
+
+        mygoalDetailsProgressCurrent.setText( goal.getProgressCurrent().toString());
+        mygoalDetailsProgressMax.setText(goal.getMaxProgress().toString());
 
 
     }
+
+
 
 
     @Override

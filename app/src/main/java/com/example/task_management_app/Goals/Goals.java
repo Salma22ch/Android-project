@@ -64,7 +64,6 @@ public class Goals extends Fragment {
 
         openDB();
         lisOfGoals = getAllRecord();
-        Log.d("databasegoal", "onCreateView: "+lisOfGoals.get(0).getTitle());
         adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
         goals_listView.setAdapter(adapter);
         handleRefresh();
