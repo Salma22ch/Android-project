@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="settings_list_preference_titles">
+        <item>At task time</item>
+        <item>Before 15 minutes</item>
+        <item>Before 1 hour</item>
+        <item>Before 3 hours</item>
+        <item>Before 6 hours</item>
+    </string-array>
+    <string-array name="settings_list_preference_values">
+        <item>0</item>
+        <item>15</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+    </string-array>
+</resources>

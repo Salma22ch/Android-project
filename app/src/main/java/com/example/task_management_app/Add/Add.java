@@ -224,7 +224,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                         time.add(Calendar.DATE, 1);
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date, pendingIntent);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date -10*1000, pendingIntent);
                         // getContext().sendBroadcast(intent);
                     }
 

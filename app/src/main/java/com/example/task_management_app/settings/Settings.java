@@ -8,13 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.task_management_app.R;
 
-public class Settings extends  Fragment {
-    @Nullable
+public class Settings extends PreferenceFragmentCompat {
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        // Indicate here the XML resource you created above that holds the preferences
+        setPreferencesFromResource(R.xml.preference, rootKey);
     }
 }

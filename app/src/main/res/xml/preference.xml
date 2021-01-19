@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Preferences">
+        <CheckBoxPreference
+            android:key="checkbox"
+            android:summaryOn="Night mode is enabled"
+            android:summaryOff="Tap to enable Night mode"
+            android:title="Night Mode" />
+        <CheckBoxPreference
+            android:key="checkbox2"
+            android:summaryOn="Notification is enabled"
+            android:summaryOff="Tap to enable Notification"
+            android:title="Notification" />
+        <ListPreference
+            android:dialogTitle="Select duration"
+            android:entries="@array/settings_list_preference_titles"
+            android:entryValues="@array/settings_list_preference_values"
+            android:key="list"
+            android:summary="Task time"
+            android:title="Task notification" />
+
+     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Synhronisation">
+
+    </PreferenceCategory>
+    <ListPreference
+        android:dialogTitle="Select duration"
+        android:entries="@array/settings_list_preference_titles"
+        android:entryValues="@array/settings_list_preference_values"
+        android:key="list2"
+        android:summary="Not defined"
+        android:title="Google account" />
+    <SwitchPreference
+        android:key="switch"
+        android:title="Switch Preference"
+        android:summaryOff="Sync deactivated"
+        android:summaryOn="Sync activated"
+        android:defaultValue="true"/>
+</PreferenceScreen>
