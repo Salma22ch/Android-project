@@ -88,7 +88,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
     private SQLiteDatabase db;
     DBOpenHelper dbOpenHelper;
      //retrieve data
-    int re_id;
+    int re_id , re_state_not , re_id_not;
     String re_title, re_description, re_category, re_priority, re_state, re_type;
     long re_date;
     //priority
@@ -101,9 +101,9 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
     TextView tv_time;
     long db_date;
     final Calendar time = Calendar.getInstance();
-    int year = time.get(Calendar.YEAR );
-    int month = time.get(Calendar.MONTH);
-    int day = time.get(Calendar.DAY_OF_MONTH);
+    int year ;
+    int month ;
+    int day ;
     //time picker
     TimePickerDialog time_picker;
     EditText text_time;
@@ -124,7 +124,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
     Spinner prio_spinner;
 
     //set notification
-    boolean not_on=false;
+    boolean not_on , rec_not=false;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
     int id_not;
@@ -166,15 +166,17 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
             re_priority = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PRIORITY));
             re_state = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_STATE));
             re_type = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TYPE));
-
+            re_state_not=res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_STATE_NOT));
+            re_id_not=res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID_NOT));
+            System.out.println("hello"+re_id_not+"/"+re_state_not);
             note = new Note(re_id, re_title, re_description, re_category, re_date, re_priority, re_state, re_type);
             notes.add(note);
 
             res.moveToNext();
         }
-        // rowId = updateRecord(contentValues, rowId);
-        //queryTheDatabase();
-        //deleteRecord(rowId);
+        //initialise notification
+
+
     }
 
     @Nullable
@@ -211,26 +213,34 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
         }
         //initialize time field
         time.setTimeInMillis(re_date);
+        year=time.get(time.YEAR);
+        month=time.get(time.MONTH);
+        day=time.get(time.DAY_OF_MONTH);
+        hour=time.get(time.HOUR);
+        minute=time.get(time.MINUTE);
         String datetext=time.get(time.DAY_OF_MONTH)+"/"+(time.get(time.MONTH)+1)+"/"+time.get(time.YEAR);
         tv_date.setText(datetext +"  at");
         String timetext=String.format("%02d:%02d", time.get(time.HOUR), time.get(time.MINUTE));
         tv_time.setText(timetext);
         // set chip category selector && initialize with database
-        if(re_category.equals("Work")) {
-          Chip ch_sport=view.findViewById(R.id.chip6);
-          ch_sport.setChecked(true);
-        }
-        if(re_category.equals("Home")) {
-            Chip ch_sport=view.findViewById(R.id.chip63);
-            ch_sport.setChecked(true);
-        }
-        if(re_category.equals("Sport")) {
-            Chip ch_sport=view.findViewById(R.id.chip62);
-            ch_sport.setChecked(true);
-        }
-        if(re_category.equals("Health")) {
-            Chip ch_sport=view.findViewById(R.id.chip61);
-            ch_sport.setChecked(true);
+        if(re_category!=null) {
+            db_category=re_category;
+            if (re_category.equals("Work")) {
+                Chip ch_sport = view.findViewById(R.id.chip6);
+                ch_sport.setChecked(true);
+            }
+            if (re_category.equals("Home")) {
+                Chip ch_sport = view.findViewById(R.id.chip63);
+                ch_sport.setChecked(true);
+            }
+            if (re_category.equals("Sport")) {
+                Chip ch_sport = view.findViewById(R.id.chip62);
+                ch_sport.setChecked(true);
+            }
+            if (re_category.equals("Health")) {
+                Chip ch_sport = view.findViewById(R.id.chip61);
+                ch_sport.setChecked(true);
+            }
         }
         ChipGroup chipGroup = view.findViewById(R.id.id_category);
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
@@ -245,6 +255,13 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
 
             }
         });
+        //notification initialisation
+        if(re_state_not!=0) {
+            not_on = true;
+            btnnot.setImageResource(R.drawable.ic_notifications_active);
+        }
+        else
+            not_on=false;
         // set on click listener
         close.setOnClickListener(this);
         action.setOnClickListener(this);
@@ -269,29 +286,29 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                     tv_title_warning.setText("* This field cannot be empty");
                 }
                 db_title = title.getText().toString();
-                db_details=details.getText().toString();
-
-                time.set(year, month, day, hour, minute);
-                db_date=time.getTimeInMillis();
-                System.out.println(db_details);
                 Random r = new Random();
+                alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
+                inte.putExtra("title", db_title);
+                if(re_id_not==0) id_not = r.nextInt(100000);
+                else id_not=re_id_not;
+                pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(),id_not, inte, PendingIntent.FLAG_UPDATE_CURRENT);
+                if (time.before(Calendar.getInstance())) {
+                    time.add(Calendar.DATE, 1);
+                }
+                db_details=details.getText().toString();
+                Calendar c=Calendar.getInstance();;
+                c.set(year, month, day, hour, minute);
+                db_date=c.getTimeInMillis();
+                System.out.println("hey"+db_date);
+                System.out.println(db_details);
                 if(not_on) {
-                    alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-                    Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
-                    inte.putExtra("title", db_title);
-                    id_not= r.nextInt(100000);
-                    pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(),id_not, inte, PendingIntent.FLAG_UPDATE_CURRENT);
-                    if (time.before(Calendar.getInstance())) {
-                        time.add(Calendar.DATE, 1);
-                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date, pendingIntent);
-                        // getContext().sendBroadcast(intent);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis()-10*1000, pendingIntent);
                     }
-
-                    if(!not_on){
-                        alarmManager.cancel(pendingIntent);
-                    }
+                }
+                if(!not_on){
+                    alarmManager.cancel(pendingIntent);
                 }
                 if (!title.getText().toString().equals("")) {
                     callback.onActionClick("Saved");
@@ -311,10 +328,9 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
-                                Calendar c = Calendar.getInstance();
-                                c.set(Calendar.YEAR, Year);
-                                c.set(Calendar.MONTH, monthOfYear);
-                                c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                time.set(Calendar.YEAR, Year);
+                                time.set(Calendar.MONTH, monthOfYear);
+                                time.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                                 year=Year;
                                 month=monthOfYear;
                                 day=dayOfMonth;
@@ -331,9 +347,8 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                Calendar c = Calendar.getInstance();
-                                c.set(Calendar.HOUR_OF_DAY,sHour);
-                                c.set(Calendar.MINUTE ,sMinute);
+                                time.set(Calendar.HOUR_OF_DAY,sHour);
+                                time.set(Calendar.MINUTE ,sMinute);
                                 hour=sHour;
                                 minute=sMinute;
                                 db_time=String.format("%02d:%02d", hour, minute);
@@ -343,17 +358,12 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                         }, hour, minute, true);
                 time_picker.show();
 
-                /*String com=day+"/"+(month+1)+"/"+year+" at "+db_time;
-                tv_date.setText(com);*/
-                /*Calendar t = Calendar.getInstance();
-                t.set(year, month, day, hour, minute);
-                db_date=t.getTimeInMillis();
-                dateFormatForDisplaying.format(dateClicked);*/
                 break;}
 
             case R.id.NotifButton:
             {
                 ImageButton btnnot = v.findViewById(R.id.NotifButton);
+                rec_not=true;
                 not_on=!not_on;
                 if(not_on){
                     btnnot.setImageResource(R.drawable.ic_notifications_active);
@@ -361,6 +371,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                 }else{
                     btnnot.setImageResource(R.drawable.ic_notifications);
                     Toast.makeText(getActivity(), "notification is off", Toast.LENGTH_SHORT).show();
+
                 }
 
                 System.out.println(not_on);
