@@ -20,7 +20,7 @@
         android:title="Goals" />
 
     <item
-        android:id="@+id/Completed"
+        android:id="@+id/setting"
         android:icon="@drawable/ic_baseline_settings"
-        android:title="Completed" />
+        android:title="Setting" />
 </menu>

@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.Goals:
                     SelectedFragement=new Goals();
                     break;
-                case R.id.Completed:
+                case R.id.setting:
                     SelectedFragement=new Settings();
                     break;
 

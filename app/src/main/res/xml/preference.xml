@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Preferences">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="Preferences"
+        app:iconSpaceReserved="false"
+        >
         <CheckBoxPreference
             android:key="checkbox"
-            android:summaryOn="Night mode is enabled"
+            app:iconSpaceReserved="false"
             android:summaryOff="Tap to enable Night mode"
+            android:summaryOn="Night mode is enabled"
             android:title="Night Mode" />
         <CheckBoxPreference
             android:key="checkbox2"
-            android:summaryOn="Notification is enabled"
+            app:iconSpaceReserved="false"
             android:summaryOff="Tap to enable Notification"
+            android:summaryOn="Notification is enabled"
             android:title="Notification" />
         <ListPreference
             android:dialogTitle="Select duration"
+            app:iconSpaceReserved="false"
             android:entries="@array/settings_list_preference_titles"
             android:entryValues="@array/settings_list_preference_values"
             android:key="list"
             android:summary="Task time"
             android:title="Task notification" />
 
-     </PreferenceCategory>
-
-    <PreferenceCategory android:title="Synhronisation">
-
     </PreferenceCategory>
-    <ListPreference
-        android:dialogTitle="Select duration"
-        android:entries="@array/settings_list_preference_titles"
-        android:entryValues="@array/settings_list_preference_values"
-        android:key="list2"
-        android:summary="Not defined"
-        android:title="Google account" />
-    <SwitchPreference
-        android:key="switch"
-        android:title="Switch Preference"
-        android:summaryOff="Sync deactivated"
-        android:summaryOn="Sync activated"
-        android:defaultValue="true"/>
-</PreferenceScreen>
+
+    <PreferenceCategory android:title="Synchronisation"
+        android:textColor="@color/colorPrimaryDark"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:dialogTitle="Select duration"
+            app:iconSpaceReserved="false"
+            android:entries="@array/settings_list_preference_titles"
+            android:entryValues="@array/settings_list_preference_values"
+            android:key="list2"
+            android:summary="Not defined"
+            android:title="Google account" />
+        <SwitchPreference
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"
+            android:key="switch"
+            android:summaryOff="Sync deactivated"
+            android:summaryOn="Sync activated"
+            android:title="Switch Preference" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>
