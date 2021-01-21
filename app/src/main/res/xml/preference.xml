@@ -11,12 +11,10 @@
             android:summaryOff="Tap to enable Night mode"
             android:summaryOn="Night mode is enabled"
             android:title="Night Mode" />
-        <CheckBoxPreference
+        <Preference
             android:key="checkbox2"
             app:iconSpaceReserved="false"
-            android:summaryOff="Tap to enable Notification"
-            android:summaryOn="Notification is enabled"
-            android:title="Notification" />
+            android:title="Notification settings" />
         <ListPreference
             android:dialogTitle="Select duration"
             app:iconSpaceReserved="false"

@@ -2,6 +2,7 @@ package com.example.task_management_app;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,SelectedFragement).commit();
+            getSupportFragmentManager().executePendingTransactions();
             return true;
         }
     };
