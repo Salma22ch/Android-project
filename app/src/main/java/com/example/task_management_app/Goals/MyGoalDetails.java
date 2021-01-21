@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -12,10 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.R;
+import com.example.task_management_app.models.DBOpenHelper;
 import com.example.task_management_app.models.Goal;
 
 public class MyGoalDetails extends AppCompatActivity implements GestureDetector.OnGestureListener {
@@ -23,9 +28,14 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     private static final float SWIPE_VOLACITY_THRESHOLD = 100;
     GestureDetector gestureDetector;
     private Toolbar toolbar;
+    private ProgressBar progressBar;
 
     Intent i;
     Goal goal;
+
+    DBOpenHelper dbOpenHelper;
+    SQLiteDatabase sqLiteDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +43,23 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         setContentView(R.layout.activity_my_goal_details);
         toolbar = findViewById(R.id.mygoals_details_toolbar);
         gestureDetector = new GestureDetector(this);
+        progressBar = (ProgressBar) findViewById(R.id.mygoal_details_progressBar);
 
         i = getIntent();
         goal = (Goal) i.getSerializableExtra("GoalObject");
 
         TextView mygoalDetailsProgressMax = (TextView) findViewById(R.id.mygoal_details_progressMax);
         TextView mygoalDetailsProgressCurrent = (TextView) findViewById(R.id.mygoal_details_progressCurent);
+        TextView mygoalDetailsDescription = (TextView) findViewById(R.id.mygoal_details_description);
 
+
+
+        dbOpenHelper = new DBOpenHelper(this, DBOpenHelper.Constants.DATABASE_NAME, null,
+                DBOpenHelper.Constants.DATABASE_VERSION);
 
 
         toolbar.setTitle(goal.getTitle());
-        toolbar.inflateMenu(R.menu.goal_menu);
+        //toolbar.inflateMenu(R.menu.goal_menu);
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 
@@ -52,8 +68,12 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
 
                 if(item.getItemId()==R.id.deleteGoal)
                 {
-                    // do something
+                    openDB();
+                    dbOpenHelper.deleteGoal(goal,sqLiteDatabase);
                     Toast.makeText(getApplicationContext(),"delete goal",Toast.LENGTH_SHORT).show();
+                    closeDB();
+                    goToGoals();
+
 
                 }
                 else if(item.getItemId()== R.id.editGoal)
@@ -71,6 +91,11 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
 
         mygoalDetailsProgressCurrent.setText( goal.getProgressCurrent().toString());
         mygoalDetailsProgressMax.setText(goal.getMaxProgress().toString());
+        progressBar.setMax(goal.getMaxProgress());
+        progressBar.setProgress(goal.getProgressCurrent());
+        mygoalDetailsDescription.setText(goal.getDescription());
+
+
 
 
     }
@@ -126,6 +151,11 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         this.finish();
     }
 
+    public void goToGoals(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     private void swipeDown() {
         Toast.makeText(this, "swipeDown", Toast.LENGTH_SHORT).show();
         goback();
@@ -140,5 +170,17 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+
+    public void openDB() throws SQLiteException {
+        try {
+            sqLiteDatabase = dbOpenHelper.getWritableDatabase();
+        } catch (SQLiteException ex) {
+            sqLiteDatabase = dbOpenHelper.getReadableDatabase();
+        }
+    }
+
+    public void closeDB() {
+        sqLiteDatabase.close();
     }
 }

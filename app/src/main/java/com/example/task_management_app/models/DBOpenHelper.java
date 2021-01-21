@@ -1,17 +1,15 @@
 package com.example.task_management_app.models;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 public class DBOpenHelper extends SQLiteOpenHelper {
+    SQLiteDatabase sqLiteDatabase;
+    DBOpenHelper dbOpenHelper;
+
 
     public static class Constants implements BaseColumns {
         // The database name
@@ -53,7 +51,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         public static final String KEY_COL_ICON = "Icon";
 
 
-
         // Index des colonnes
         public static final int ID_COLUMN = 1;
         public static final int DATE_COLUMN = 2;
@@ -87,8 +84,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             + Constants.KEY_COL_DESCRIPTION + " TEXT, "
             + Constants.KEY_COL_PRIORITY + " TEXT ,"
             + Constants.KEY_COL_STATE + " TEXT,"
-            + Constants.KEY_COL_STATE_NOT+ " TEXT,"
-            + Constants.KEY_COL_ID_NOT+ " BIGINT)";
+            + Constants.KEY_COL_STATE_NOT + " TEXT,"
+            + Constants.KEY_COL_ID_NOT + " BIGINT)";
 
 
     /**
@@ -124,5 +121,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         // or do a smartest stuff
     }
 
+
+    public int deleteGoal(Goal goal, SQLiteDatabase sqLiteDatabase) {
+
+        String table = Constants.MY_TABLE_Goal;
+        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
+        String[] whereArgs = {String.valueOf(goal.getId())};
+        return sqLiteDatabase.delete(table, whereClause, whereArgs);
+
+    }
 
 }

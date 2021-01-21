@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,15 +59,25 @@ public class Goals extends Fragment {
         //find the view
         toolbar = (Toolbar) view.findViewById(R.id.goals_toolbar);
         goals_listView = (ListView) view.findViewById(R.id.goals_list);
+        ImageView imageView = view.findViewById(R.id.goals_icon);
 
         dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
                 DBOpenHelper.Constants.DATABASE_VERSION);
 
         openDB();
         lisOfGoals = getAllRecord();
-        adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
-        goals_listView.setAdapter(adapter);
+
+
+        //Log.d("lisOfGoals", lisOfGoals.toString());
+        if (!lisOfGoals.isEmpty() ){
+            adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
+            goals_listView.setAdapter(adapter);
+            imageView.setVisibility(View.GONE);
+        }else {
+            imageView.setVisibility(View.VISIBLE);
+        }
         handleRefresh();
+
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
