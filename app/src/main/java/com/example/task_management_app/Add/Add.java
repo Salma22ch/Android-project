@@ -13,6 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -86,6 +87,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     DBOpenHelper dbOpenHelper;
 
     //date picker
+    SharedPreferences shpref;
+    Boolean for_mode;
     DatePickerDialog day_picker;
     EditText text_Day;
     TextView tv_date;
@@ -125,7 +128,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     int RECOGNIZER_RESULT;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
-    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.getDefault());
+
 
     public static Add newInstance() {
         return new Add();
@@ -144,6 +147,8 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         dbOpenHelper = new DBOpenHelper(getContext() , DBOpenHelper.Constants.DATABASE_NAME, null,
                 DBOpenHelper.Constants.DATABASE_VERSION);
         openDB();
+        shpref=getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
+        for_mode = shpref.getBoolean("for_mode",false);
         // rowId = updateRecord(contentValues, rowId);
         //queryTheDatabase();
         //deleteRecord(rowId);
@@ -258,7 +263,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                                 month=monthOfYear;
                                 day=dayOfMonth;
                                 String date=dayOfMonth+"/"+(monthOfYear+1)+"/"+Year;
-                                tv_date.setText(date +"  at");
+                                tv_date.setText(date+" at ");
                                 //String currentDateString = TimeFormat.getTimeInstance(DateFormat.FULL).format(c.getTime());
 
                             }
@@ -275,19 +280,14 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                                 c.set(Calendar.MINUTE ,sMinute);
                                 hour=sHour;
                                 minute=sMinute;
-                                db_time=String.format("%02d:%02d", hour, minute);
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
+                                if(for_mode) db_time=String.format("%02d:%02d", hour, minute);
+                                else db_time=dateFormat.format(c.getTime());
                                 tv_time.setText(db_time);
 
                             }
-                        }, hour, minute, true);
+                        }, hour, minute, for_mode);
                 time_picker.show();
-
-                /*String com=day+"/"+(month+1)+"/"+year+" at "+db_time;
-                tv_date.setText(com);*/
-                /*Calendar t = Calendar.getInstance();
-                t.set(year, month, day, hour, minute);
-                db_date=t.getTimeInMillis();
-                dateFormatForDisplaying.format(dateClicked);*/
                 break;}
 
             case R.id.NotifButton:

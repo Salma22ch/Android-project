@@ -13,6 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -105,6 +106,8 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
     int month ;
     int day ;
     //time picker
+    SharedPreferences shpref;
+    Boolean for_mode;
     TimePickerDialog time_picker;
     EditText text_time;
     String db_time;
@@ -174,7 +177,8 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
 
             res.moveToNext();
         }
-        //initialise notification
+        shpref=getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
+        for_mode = shpref.getBoolean("for_mode",false);
 
 
     }
@@ -220,7 +224,8 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
         minute=time.get(time.MINUTE);
         String datetext=time.get(time.DAY_OF_MONTH)+"/"+(time.get(time.MONTH)+1)+"/"+time.get(time.YEAR);
         tv_date.setText(datetext +"  at");
-        String timetext=String.format("%02d:%02d", time.get(time.HOUR), time.get(time.MINUTE));
+        String timetext =String.format("hh:mma", time.get(time.HOUR), time.get(time.MINUTE));;
+        if(for_mode)timetext=String.format("%02d:%02d", time.get(time.HOUR), time.get(time.MINUTE));
         tv_time.setText(timetext);
         // set chip category selector && initialize with database
         if(re_category!=null) {
@@ -351,7 +356,9 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                                 time.set(Calendar.MINUTE ,sMinute);
                                 hour=sHour;
                                 minute=sMinute;
-                                db_time=String.format("%02d:%02d", hour, minute);
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
+                                if(for_mode) db_time=String.format("%02d:%02d", hour, minute);
+                                else db_time=dateFormat.format(time.getTime());
                                 tv_time.setText(db_time);
 
                             }

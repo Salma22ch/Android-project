@@ -2,7 +2,7 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
-        android:title="Preferences"
+        android:title="Customise"
         app:iconSpaceReserved="false"
         >
         <CheckBoxPreference
@@ -11,39 +11,51 @@
             android:summaryOff="Tap to enable Night mode"
             android:summaryOn="Night mode is enabled"
             android:title="Night Mode" />
-        <Preference
-            android:key="checkbox2"
+        <CheckBoxPreference
+            android:key="time_format"
             app:iconSpaceReserved="false"
-            android:title="Notification settings" />
-        <ListPreference
-            android:dialogTitle="Select duration"
-            app:iconSpaceReserved="false"
-            android:entries="@array/settings_list_preference_titles"
-            android:entryValues="@array/settings_list_preference_values"
-            android:key="list"
-            android:summary="Task time"
-            android:title="Task notification" />
+            android:summaryOff="1:00 pm"
+            android:summaryOn="13:00"
+            android:title="Use 24-hour format" />
+
 
     </PreferenceCategory>
-
-    <PreferenceCategory android:title="Synchronisation"
-        android:textColor="@color/colorPrimaryDark"
-        app:iconSpaceReserved="false">
-
+    <PreferenceCategory
+        android:title="Reminder"
+        app:iconSpaceReserved="false"
+        >
         <ListPreference
-            android:dialogTitle="Select duration"
+            android:dialogTitle="Select time"
             app:iconSpaceReserved="false"
             android:entries="@array/settings_list_preference_titles"
             android:entryValues="@array/settings_list_preference_values"
-            android:key="list2"
-            android:summary="Not defined"
-            android:title="Google account" />
-        <SwitchPreference
-            android:defaultValue="true"
+            android:key="not_time"
+            android:summary="Notifications will appear at task time "
+            android:title="Default reminder" />
+        <ListPreference
+            android:key="ringtone"
             app:iconSpaceReserved="false"
-            android:key="switch"
-            android:summaryOff="Sync deactivated"
-            android:summaryOn="Sync activated"
-            android:title="Switch Preference" />
+            android:summary="Tap to choose a ringtone "
+            android:title="Notification ringtone" />
+        <ListPreference
+            android:key="not_duration"
+            app:iconSpaceReserved="false"
+            android:summary="Tap to select duration "
+            android:title="Notification duration " />
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Other"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:key="About"
+            app:iconSpaceReserved="false"
+            android:title="About us " />
+        <Preference
+            android:key="About"
+            app:iconSpaceReserved="false"
+            android:summary="1.1.7 "
+            android:title="App version" />
+
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,7 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
-
+    SharedPreferences shpref;
     private FloatingActionButton fab, fabtask, fabgoal;
     private Animation fab_open, fab_close, fab_clock, fab_anticlock;
     TextView add_task, add_goal;
@@ -36,9 +38,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         fragment_container = (FrameLayout) findViewById(R.id.fragment_container);
-
+        shpref=getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
+        Boolean dark_mode = shpref.getBoolean("dark_mode",false);
+        System.out.println("salma"+dark_mode);
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new My_tasks()).commit();
