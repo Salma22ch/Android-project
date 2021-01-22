@@ -118,6 +118,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     Spinner prio_spinner;
 
     //set notification
+    int not_delay;
     boolean not_on=false;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
@@ -149,6 +150,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
         openDB();
         shpref=getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
         for_mode = shpref.getBoolean("for_mode",false);
+        not_delay=shpref.getInt("time_reminder",0);
         // rowId = updateRecord(contentValues, rowId);
         //queryTheDatabase();
         //deleteRecord(rowId);
@@ -229,7 +231,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                         time.add(Calendar.DATE, 1);
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date -10*1000, pendingIntent);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date -10*1000 -not_delay*60000, pendingIntent);
                         // getContext().sendBroadcast(intent);
                     }
 

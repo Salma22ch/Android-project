@@ -32,16 +32,26 @@
             android:key="not_time"
             android:summary="Notifications will appear at task time "
             android:title="Default reminder" />
+        <CheckBoxPreference
+            android:key="vibrate"
+            app:iconSpaceReserved="false"
+            android:summaryOff="Off"
+            android:summaryOn="On"
+            android:title="Enable Vibration" />
         <ListPreference
             android:key="ringtone"
             app:iconSpaceReserved="false"
+            android:entries="@array/settings_list_preference_titles"
+            android:entryValues="@array/settings_list_preference_values"
             android:summary="Tap to choose a ringtone "
-            android:title="Notification ringtone" />
+            android:title="Ringtone" />
         <ListPreference
             android:key="not_duration"
             app:iconSpaceReserved="false"
+            android:entries="@array/settings_duration_entry"
+            android:entryValues="@array/settings_duration_values"
             android:summary="Tap to select duration "
-            android:title="Notification duration " />
+            android:title="Duration " />
 
     </PreferenceCategory>
     <PreferenceCategory

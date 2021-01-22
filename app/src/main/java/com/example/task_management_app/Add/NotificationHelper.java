@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
@@ -13,7 +14,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.task_management_app.R;
 
 public class NotificationHelper extends ContextWrapper {
-
+    Boolean vib_mode;
     public static final String channelID = "channelID";
     public static final String channelName = "Channel Name";
     private NotificationManager mManager;
@@ -26,6 +27,10 @@ public class NotificationHelper extends ContextWrapper {
     @TargetApi(Build.VERSION_CODES.O)
     private void createChannel() {
         NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
+        SharedPreferences shpref=getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
+        vib_mode = shpref.getBoolean("vib_mode",false);
+        channel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+        channel.enableVibration(vib_mode);
         getManager().createNotificationChannel(channel);
     }
     public NotificationManager getManager() {

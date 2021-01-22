@@ -127,6 +127,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
     Spinner prio_spinner;
 
     //set notification
+    int not_delay;
     boolean not_on , rec_not=false;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
@@ -179,6 +180,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
         }
         shpref=getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
         for_mode = shpref.getBoolean("for_mode",false);
+        not_delay=shpref.getInt("time_reminder",0);
 
 
     }
@@ -309,7 +311,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                 System.out.println(db_details);
                 if(not_on) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis()-10*1000, pendingIntent);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis()-10*1000 -not_delay*60000, pendingIntent);
                     }
                 }
                 if(!not_on){
