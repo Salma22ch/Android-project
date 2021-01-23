@@ -75,6 +75,10 @@ public class Adapter_Goals extends BaseAdapter {
 
     public void updateAdapter(ArrayList<Goal> goals) {
         this.goal = goals;
+//        if (goal != null){
+//            notifyDataSetChanged();
+//        }
         notifyDataSetChanged();
+
     }
 }

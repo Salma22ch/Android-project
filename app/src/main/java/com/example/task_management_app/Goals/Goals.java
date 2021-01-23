@@ -69,13 +69,17 @@ public class Goals extends Fragment {
 
 
         //Log.d("lisOfGoals", lisOfGoals.toString());
-        if (!lisOfGoals.isEmpty() ){
-            adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
-            goals_listView.setAdapter(adapter);
-            imageView.setVisibility(View.GONE);
-        }else {
-            imageView.setVisibility(View.VISIBLE);
-        }
+//        if (!lisOfGoals.isEmpty() ){
+//            adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
+//            goals_listView.setAdapter(adapter);
+//            imageView.setVisibility(View.GONE);
+//        }else {
+//            imageView.setVisibility(View.VISIBLE);
+//        }
+
+        imageView.setVisibility(View.GONE);
+        adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
+        goals_listView.setAdapter(adapter);
         handleRefresh();
 
 
@@ -136,11 +140,7 @@ public class Goals extends Fragment {
             @Override
             public void onReceive(Context context, Intent i)
             {
-
-                if (getAllRecord() != null) {
-                    adapter.updateAdapter(getAllRecord());
-                }
-
+                adapter.updateAdapter(getAllRecord());
             }
         };
         getContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss.goal"));

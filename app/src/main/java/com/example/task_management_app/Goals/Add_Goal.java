@@ -126,6 +126,10 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
                 insertData(goal);
                 Log.d("insertGoal", "onClick: "+gTitle);
                 callback.onActionClick("Goal Saved");
+
+                Intent onDismissIntent = new Intent();
+                onDismissIntent.setAction("com.example.broadcastDismiss.goal");
+                getContext().sendBroadcast(onDismissIntent);
                 dismiss();
                 break;
 
@@ -166,8 +170,5 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        Intent onDismissIntent = new Intent();
-        onDismissIntent.setAction("com.example.broadcastDismiss.goal");
-        getContext().sendBroadcast(onDismissIntent);
     }
 }
