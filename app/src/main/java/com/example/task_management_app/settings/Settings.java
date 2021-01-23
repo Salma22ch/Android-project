@@ -54,7 +54,7 @@ public class Settings extends Fragment {
                     if (newValue.toString().equals("true")) {
                         myedit.putBoolean("dark_mode",true);
                         myedit.apply();
-                        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         //saveNightModeState(true);
                         //recreate();
                         Toast.makeText(getContext(), "dark mode on",
@@ -62,7 +62,7 @@ public class Settings extends Fragment {
                     } else {
                         myedit.putBoolean("dark_mode",false);
                         myedit.apply();
-                        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                         //saveNightModeState(false);
                         //recreate();
                         Toast.makeText(getContext(), "dark mode off",
@@ -117,7 +117,6 @@ public class Settings extends Fragment {
             if(listPreference.getValue()==null) {
                 listPreference.setValueIndex(0);
             }
-            listPreference3.setSummary(listPreference3.getEntry().toString());
             listPreference3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -126,7 +125,6 @@ public class Settings extends Fragment {
                     return true;
                 }
             });
-
             ring_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
