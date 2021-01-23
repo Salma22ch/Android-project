@@ -38,11 +38,9 @@
             android:summaryOff="Off"
             android:summaryOn="On"
             android:title="Enable Vibration" />
-        <ListPreference
+        <Preference
             android:key="ringtone"
             app:iconSpaceReserved="false"
-            android:entries="@array/settings_list_preference_titles"
-            android:entryValues="@array/settings_list_preference_values"
             android:summary="Tap to choose a ringtone "
             android:title="Ringtone" />
         <ListPreference

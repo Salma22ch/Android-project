@@ -3,12 +3,14 @@ package com.example.task_management_app.settings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
+import android.provider.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -34,6 +36,8 @@ public class Settings extends Fragment {
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         SharedPreferences shpref;
+        SharedPreferences.Editor myedit;
+        int REQUEST_CODE_ALERT_RINGTONE;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -41,8 +45,9 @@ public class Settings extends Fragment {
             Preference dark_pref = findPreference("checkbox");
             Preference for_pref = findPreference("time_format");
             Preference vib_pref = findPreference("vibrate");
+            Preference ring_pref = findPreference("ringtone");
             shpref=getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
-            final SharedPreferences.Editor myedit = shpref.edit();
+            myedit = shpref.edit();
             dark_pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -122,6 +127,56 @@ public class Settings extends Fragment {
                 }
             });
 
+            ring_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,android.provider.Settings.System.DEFAULT_NOTIFICATION_URI);
+
+                    String existingValue =getRingtonePreferenceValue(); // TODO
+                    if (existingValue != null) {
+                        if (existingValue.length() == 0) {
+                            // Select "Silent"
+                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
+                        } else {
+                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(existingValue));
+                        }
+                    } else {
+                        // No ringtone has been selected, set to the default
+                        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,android.provider.Settings.System.DEFAULT_NOTIFICATION_URI);
+                    }
+
+                    startActivityForResult(intent, REQUEST_CODE_ALERT_RINGTONE);
+                    return true;
+                }
+            });
+
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == REQUEST_CODE_ALERT_RINGTONE && data != null) {
+                Uri ringtone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (ringtone != null) {
+                    setRingtonPreferenceValue(ringtone.toString()); // TODO
+                } else {
+                    // "Silent" was selected
+                    setRingtonPreferenceValue(""); // TODO
+                }
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        }
+
+        private void setRingtonPreferenceValue(String ringtone) {
+            myedit.putString("sel_ringtone" ,ringtone );
+            myedit.apply();
+        }
+        private String getRingtonePreferenceValue() {
+           return shpref.getString("sel_ringtone","content://settings/system/notification_sound");
         }
     }
 
