@@ -136,7 +136,11 @@ public class Goals extends Fragment {
             @Override
             public void onReceive(Context context, Intent i)
             {
-                adapter.updateAdapter(getAllRecord());
+
+                if (getAllRecord() != null) {
+                    adapter.updateAdapter(getAllRecord());
+                }
+
             }
         };
         getContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss.goal"));
