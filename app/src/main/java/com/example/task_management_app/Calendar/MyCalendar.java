@@ -239,6 +239,7 @@ public class MyCalendar extends Fragment  {
 
             res.moveToNext();
         }
+        res.close();
         return listOfNote;
     }
 

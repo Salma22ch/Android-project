@@ -245,6 +245,9 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                     dismiss();
                 }
 
+                //added by mostapha
+                sendBroadcast();
+
                 break;
 
             case R.id.DayButton:
@@ -379,6 +382,13 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
+    }
+
+    /**
+     * send brodcast
+     * added by mostapha
+     */
+    public void sendBroadcast(){
         Intent onDismissIntent = new Intent();
         onDismissIntent.setAction("com.example.broadcastDismiss");
         getContext().sendBroadcast(onDismissIntent);
