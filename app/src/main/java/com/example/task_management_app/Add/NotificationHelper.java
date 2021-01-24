@@ -18,7 +18,7 @@ import com.example.task_management_app.R;
 public class NotificationHelper extends ContextWrapper {
     Boolean vib_mode;
     public static final String channelID = "channelID";
-    public static final String channelName = "Channel Name";
+    public static final String channelName = "Task notification";
     private NotificationManager mManager;
     public NotificationHelper(Context base) {
         super(base);
@@ -29,12 +29,6 @@ public class NotificationHelper extends ContextWrapper {
     @TargetApi(Build.VERSION_CODES.O)
     private void createChannel() {
         NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
-        SharedPreferences shpref=getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
-        vib_mode = shpref.getBoolean("vib_mode",false);
-        if(vib_mode) channel.setVibrationPattern(new long[] { 0 , 500 });
-        else channel.setVibrationPattern(new long[] {0});
-        channel.enableVibration(true);
-        //channel.setSound(null, null);
         getManager().createNotificationChannel(channel);
     }
     public NotificationManager getManager() {

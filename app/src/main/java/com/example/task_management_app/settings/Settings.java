@@ -44,8 +44,7 @@ public class Settings extends Fragment {
             addPreferencesFromResource(R.xml.preference);
             Preference dark_pref = findPreference("checkbox");
             Preference for_pref = findPreference("time_format");
-            Preference vib_pref = findPreference("vibrate");
-            Preference ring_pref = findPreference("ringtone");
+            Preference sett_pref = findPreference("settings");
             shpref=getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
             myedit = shpref.edit();
             dark_pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -84,19 +83,6 @@ public class Settings extends Fragment {
                     return true;
                 }
             });
-            vib_pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (newValue.toString().equals("true")) {
-                        myedit.putBoolean("vib_mode",true);
-                        myedit.apply();
-                    } else {
-                        myedit.putBoolean("vib_mode",false);
-                        myedit.apply();
-                    }
-                    return true;
-                }
-            });
             final ListPreference listPreference = (ListPreference) findPreference("not_time");
             if(listPreference.getValue()==null) {
                 listPreference.setValueIndex(0);
@@ -113,69 +99,21 @@ public class Settings extends Fragment {
                     return true;
                 }
             });
-            final ListPreference listPreference3 = (ListPreference) findPreference("not_duration");
-            if(listPreference.getValue()==null) {
-                listPreference.setValueIndex(0);
-            }
-            listPreference3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    listPreference3.setValue(newValue.toString());
-                    preference.setSummary(listPreference3.getEntry());
-                    return true;
-                }
-            });
-            ring_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            sett_pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,android.provider.Settings.System.DEFAULT_NOTIFICATION_URI);
-
-                    String existingValue =getRingtonePreferenceValue(); // TODO
-                    if (existingValue != null) {
-                        if (existingValue.length() == 0) {
-                            // Select "Silent"
-                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
-                        } else {
-                            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(existingValue));
-                        }
-                    } else {
-                        // No ringtone has been selected, set to the default
-                        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,android.provider.Settings.System.DEFAULT_NOTIFICATION_URI);
-                    }
-
-                    startActivityForResult(intent, REQUEST_CODE_ALERT_RINGTONE);
-                    return true;
+                    Intent intent = new Intent();
+                    intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+                    intent.putExtra("android.provider.extra.APP_PACKAGE", "com.example.task_management_app");
+                    startActivity(intent);
+                   return true;
                 }
             });
 
         }
 
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (requestCode == REQUEST_CODE_ALERT_RINGTONE && data != null) {
-                Uri ringtone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                if (ringtone != null) {
-                    setRingtonPreferenceValue(ringtone.toString()); // TODO
-                } else {
-                    // "Silent" was selected
-                    setRingtonPreferenceValue(""); // TODO
-                }
-            } else {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
-        }
 
-        private void setRingtonPreferenceValue(String ringtone) {
-            myedit.putString("sel_ringtone" ,ringtone );
-            myedit.apply();
-        }
-        private String getRingtonePreferenceValue() {
-           return shpref.getString("sel_ringtone","content://settings/system/notification_sound");
-        }
+
     }
 
 }
