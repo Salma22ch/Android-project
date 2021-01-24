@@ -224,14 +224,14 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 if(not_on) {
                     alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
                     Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
-                    inte.putExtra("title", db_title);
+                    inte.putExtra("title", db_title+" due to "+db_time);
                     id_not= r.nextInt(100000);
                     pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(),id_not, inte, PendingIntent.FLAG_UPDATE_CURRENT);
                     if (time.before(Calendar.getInstance())) {
                         time.add(Calendar.DATE, 1);
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date -10*1000 -not_delay*60000, pendingIntent);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, db_date -40*1000 -not_delay*60000, pendingIntent);
                         // getContext().sendBroadcast(intent);
                     }
 

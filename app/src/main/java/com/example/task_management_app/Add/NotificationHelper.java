@@ -1,6 +1,7 @@
 package com.example.task_management_app.Add;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -30,10 +31,10 @@ public class NotificationHelper extends ContextWrapper {
         NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
         SharedPreferences shpref=getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
         vib_mode = shpref.getBoolean("vib_mode",false);
-        if(vib_mode) channel.setVibrationPattern(new long[] {2000});
+        if(vib_mode) channel.setVibrationPattern(new long[] { 0 , 500 });
         else channel.setVibrationPattern(new long[] {0});
         channel.enableVibration(true);
-       // channel.setSound();
+        //channel.setSound(null, null);
         getManager().createNotificationChannel(channel);
     }
     public NotificationManager getManager() {
@@ -46,7 +47,6 @@ public class NotificationHelper extends ContextWrapper {
         SharedPreferences shpref=getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
         String ring=shpref.getString("sel_ringtone","content://settings/system/notification_sound");
         Uri ring_uri= Uri.parse(ring);
-        System.out.println(ring_uri);
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setSmallIcon(R.drawable.ic_notifications).setSound(ring_uri);
     }

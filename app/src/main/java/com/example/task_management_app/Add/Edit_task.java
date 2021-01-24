@@ -296,7 +296,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                 Random r = new Random();
                 alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
                 Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
-                inte.putExtra("title", db_title);
+                inte.putExtra("title", db_title+" due to "+db_time);
                 if(re_id_not==0) id_not = r.nextInt(100000);
                 else id_not=re_id_not;
                 pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(),id_not, inte, PendingIntent.FLAG_UPDATE_CURRENT);
