@@ -388,20 +388,29 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
 
             }
 
-            case  R.id.id_mic :
-            {
-                try {
-                    Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                    speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                    speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech to text");
-                    startActivityForResult(speechIntent, RECOGNIZER_RESULT);
-                }catch (ActivityNotFoundException e){
-                    Toast t = Toast.makeText(getContext(), "Ops! Your device doesn't support Speech to Text",
-                            Toast.LENGTH_SHORT);
-                    t.show();
+            case  R.id.id_mic : {
+                int REQUEST_MICROPHONE = 0;
+                if (ContextCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        Intent speechIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                        speechIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                        speechIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech to text");
+                        startActivityForResult(speechIntent, RECOGNIZER_RESULT);
+                    } catch (ActivityNotFoundException e) {
+                        Toast t = Toast.makeText(getContext(), "Ops! Your device doesn't support Speech to Text",
+                                Toast.LENGTH_SHORT);
+                        t.show();
 
+                    }
+                }else{
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.RECORD_AUDIO},
+                            REQUEST_MICROPHONE);
                 }
+
             }
+        }
 
 
         }
