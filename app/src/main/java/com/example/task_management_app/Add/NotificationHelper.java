@@ -44,10 +44,8 @@ public class NotificationHelper extends ContextWrapper {
         return mManager;
     }
     public NotificationCompat.Builder getChannelNotification() {
-        SharedPreferences shpref=getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
-        String ring=shpref.getString("sel_ringtone","content://settings/system/notification_sound");
-        Uri ring_uri= Uri.parse(ring);
+
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
-                .setSmallIcon(R.drawable.ic_notifications).setSound(ring_uri);
+                .setSmallIcon(R.drawable.ic_notifications);
     }
 }
