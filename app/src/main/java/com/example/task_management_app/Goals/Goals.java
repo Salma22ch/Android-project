@@ -81,7 +81,7 @@ public class Goals extends Fragment {
 
         adapter = new Adapter_Goals(this.getContext(), lisOfGoals);
         goals_listView.setAdapter(adapter);
-        handleRefresh();
+        //handleRefresh();
 
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -124,17 +124,19 @@ public class Goals extends Fragment {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
+            /**
+             * deleting goal
+             */
             case R.id.deleteGoal:
-                /**
-                 * deleting goal
-                 */
                 int goalPosition = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
                 deleteGoal(lisOfGoals.get(goalPosition));
+                adapter.remove(goalPosition);
                 return true;
+            /**
+             * edit the goal
+             */
             case R.id.editGoal:
-                /**
-                 * edit the goal
-                 */
+                //do some stuff
                 return true;
             default:
                 return super.onContextItemSelected(item);

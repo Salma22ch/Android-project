@@ -81,4 +81,9 @@ public class Adapter_Goals extends BaseAdapter {
         notifyDataSetChanged();
 
     }
+
+    public void remove(int goalPosition) {
+        goal.remove(goalPosition);
+        notifyDataSetChanged();
+    }
 }

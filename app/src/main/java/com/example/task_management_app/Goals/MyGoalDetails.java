@@ -72,9 +72,8 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
                     dbOpenHelper.deleteGoal(goal,sqLiteDatabase);
                     Toast.makeText(getApplicationContext(),"delete goal",Toast.LENGTH_SHORT).show();
                     closeDB();
+                    //goback();
                     goToGoals();
-
-
                 }
                 else if(item.getItemId()== R.id.editGoal)
                 {
