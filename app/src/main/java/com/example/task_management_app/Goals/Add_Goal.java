@@ -25,6 +25,8 @@ import com.example.task_management_app.Add.Add;
 import com.example.task_management_app.R;
 import com.example.task_management_app.models.DBOpenHelper;
 import com.example.task_management_app.models.Goal;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.Random;
@@ -48,9 +50,9 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
     public int gProgress;
     Goal goal;
 
-    EditText titleEditText;
+    TextInputLayout titleEditText;
     EditText descriptionEditText;
-    EditText progressEditText;
+    TextInputLayout progressEditText;
 
     SQLiteDatabase sqLiteDatabase;
     DBOpenHelper dbOpenHelper;
@@ -91,7 +93,6 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
         });
 
 
-
         // set on click listener
         close.setOnClickListener(this);
         action.setOnClickListener(this);
@@ -111,30 +112,58 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
                 break;
 
             case R.id.fullscreen_dialog_action:
-                gTitle = titleEditText.getText().toString();
-                gDescription = descriptionEditText.getText().toString();
-                String gProgressMaxText = progressEditText.getText().toString();
-                if(gProgressMaxText.isEmpty() == false) {
-                    gProgress = Integer.parseInt(gProgressMaxText);
+                if (!validateTitle() | !validateProgress()) {
+                    return;
+                }else {
+                    gTitle = titleEditText.getEditText().getText().toString().trim();
+                    gDescription = descriptionEditText.getText().toString();
+                    String gProgressMaxText = progressEditText.getEditText().getText().toString().trim();
+                    if (gProgressMaxText.isEmpty() == false) {
+                        gProgress = Integer.parseInt(gProgressMaxText);
+                    }
+                    //create object of Goal class
+                    goal = new Goal(gTitle, gDescription, gSelectedIcon, gProgress, 0);
+                    dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
+                            DBOpenHelper.Constants.DATABASE_VERSION);
+
+                    openDB();
+                    insertData(goal);
+                    Log.d("insertGoal", "onClick: " + gTitle);
+                    callback.onActionClick("Goal Saved");
+                    Intent onDismissIntent = new Intent();
+                    onDismissIntent.setAction("com.example.broadcastDismiss.goal");
+                    getContext().sendBroadcast(onDismissIntent);
+                    dismiss();
+                    break;
                 }
-                //create object of Goal class
-                goal =  new Goal(gTitle,gDescription,gSelectedIcon,gProgress,0);
-                dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
-                        DBOpenHelper.Constants.DATABASE_VERSION);
-
-                openDB();
-                insertData(goal);
-                Log.d("insertGoal", "onClick: "+gTitle);
-                callback.onActionClick("Goal Saved");
-
-                Intent onDismissIntent = new Intent();
-                onDismissIntent.setAction("com.example.broadcastDismiss.goal");
-                getContext().sendBroadcast(onDismissIntent);
-                dismiss();
-                break;
 
         }
     }
+
+    public boolean validateTitle() {
+        String title = titleEditText.getEditText().getText().toString().trim();
+        if (title.isEmpty()) {
+            titleEditText.setError("Field can't be Empty");
+            return false;
+        } else {
+            titleEditText.setError(null);
+            titleEditText.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    public boolean validateProgress() {
+        String progress = progressEditText.getEditText().getText().toString().trim();
+        if (progress.isEmpty()) {
+            progressEditText.setError("Field can't be Empty");
+            return false;
+        } else {
+            progressEditText.setError(null);
+            progressEditText.setErrorEnabled(false);
+            return true;
+        }
+    }
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

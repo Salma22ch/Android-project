@@ -45,35 +45,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="Title"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20dp" />
 
-        <EditText
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/goal_add_edittext_title"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:errorEnabled="true"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/custom_input"
-            android:hint="add the goal title"
-            android:inputType="textMultiLine"
-            android:lines="2"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+            android:layout_marginRight="15dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Title"
+                android:inputType="textMultiLine"
+
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:background="@drawable/background_transparent"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Description"
+            android:text="Description :"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            style="@style/myText"/>
 
         <EditText
             android:id="@+id/goal_add_edittext_description"
@@ -84,20 +86,19 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/custom_input"
             android:gravity="start|top"
-            android:hint="add the goal title"
+            android:hint="add your description of the goal"
             android:inputType="textMultiLine"
             android:lines="10"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp" />
+            android:padding="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Icon"
+            android:text="Icon :"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            style="@style/myText"/>
 
         <GridView
             android:id="@+id/gridViewOfIcon"
@@ -111,9 +112,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="Progress"
+            android:text="Progress :"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            style="@style/myText"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,29 +128,35 @@
                 android:layout_gravity="start"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="10dp"
-                android:text="put a the number of pieces which you see that your goal will be devided to it "
                 android:layout_weight="2"
                 android:gravity="center"
-                android:textAlignment="textStart"
-                />
+                android:textColor="#000000"
+                style="@style/myText"
+                android:text="put the number of pieces which you see that your goal will be devided to it "
+                android:textAlignment="textStart" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/goal_add_edittext_progress"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="0dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/custom_input"
-                android:hint="add the progress number"
-                android:inputType="number"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="10dp"
-                android:layout_weight="1"/>
+                app:errorEnabled="true"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Progress"
+                    android:inputType="number"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:background="@drawable/background_transparent"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+
     </LinearLayout>
 
 

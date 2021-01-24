@@ -1,5 +1,6 @@
 package com.example.task_management_app.Goals;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +10,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,6 +28,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.task_management_app.R;
 import com.example.task_management_app.models.DBOpenHelper;
@@ -59,6 +64,7 @@ public class Goals extends Fragment {
         //find the view
         toolbar = (Toolbar) view.findViewById(R.id.goals_toolbar);
         goals_listView = (ListView) view.findViewById(R.id.goals_list);
+        registerForContextMenu(goals_listView);
         ImageView imageView = view.findViewById(R.id.goals_icon);
 
         dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
@@ -66,19 +72,14 @@ public class Goals extends Fragment {
 
         openDB();
         lisOfGoals = getAllRecord();
-
-
-        //Log.d("lisOfGoals", lisOfGoals.toString());
-//        if (!lisOfGoals.isEmpty() ){
-//            adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
-//            goals_listView.setAdapter(adapter);
-//            imageView.setVisibility(View.GONE);
-//        }else {
-//            imageView.setVisibility(View.VISIBLE);
-//        }
-
+/*        if (lisOfGoals.isEmpty()) {
+            imageView.setVisibility(View.VISIBLE);
+        } else {
+            imageView.setVisibility(View.GONE);
+        }*/
         imageView.setVisibility(View.GONE);
-        adapter = new Adapter_Goals(this.getContext(),lisOfGoals);
+
+        adapter = new Adapter_Goals(this.getContext(), lisOfGoals);
         goals_listView.setAdapter(adapter);
         handleRefresh();
 
@@ -93,7 +94,6 @@ public class Goals extends Fragment {
         actionBar.setTitle("My daily Goals");
 
 
-
         goals_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -103,15 +103,71 @@ public class Goals extends Fragment {
             }
         });
 
+
         return view;
     }
 
+    /**
+     * adding the menu for delete or edit iteams in listView
+     **/
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.goals_list) {
+            MenuInflater inflater = getActivity().getMenuInflater();
+            inflater.inflate(R.menu.goal_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.deleteGoal:
+                /**
+                 * deleting goal
+                 */
+                int goalPosition = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
+                deleteGoal(lisOfGoals.get(goalPosition));
+                return true;
+            case R.id.editGoal:
+                /**
+                 * edit the goal
+                 */
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    /**
+     * function for deleting goal
+     * @param goal
+     */
+
+    private void deleteGoal(Goal goal) {
+        openDB();
+        dbOpenHelper.deleteGoal(goal, sqLiteDatabase);
+        Toast.makeText(getContext(), "goal deleted", Toast.LENGTH_SHORT).show();
+        //closeDB();
+    }
+
+
+
+    /**
+     * get all record from database of table Goal
+     * @return
+     */
     public ArrayList<Goal> getAllRecord() {
 
         ArrayList<Goal> listOfGoal = new ArrayList<Goal>();
         Goal goal;
-        Cursor res = sqLiteDatabase.rawQuery("select * from "+DBOpenHelper.Constants.MY_TABLE_Goal, null);
+        Cursor res = sqLiteDatabase.rawQuery("select * from " + DBOpenHelper.Constants.MY_TABLE_Goal, null);
         res.moveToFirst();
+        if (res.isAfterLast() == true){
+            return listOfGoal;
+        }
 
         while (res.isAfterLast() == false) {
             Integer id = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID));
@@ -120,13 +176,18 @@ public class Goals extends Fragment {
             Integer icon = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ICON));
             Integer progressMax = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX));
             Integer progressCurrent = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT));
-            goal = new Goal(id, title, description,icon,progressMax,progressCurrent);
+            goal = new Goal(id, title, description, icon, progressMax, progressCurrent);
             listOfGoal.add(goal);
             res.moveToNext();
         }
+        res.close();
         return listOfGoal;
     }
 
+    /**
+     * open database
+     * @throws SQLiteException
+     */
     public void openDB() throws SQLiteException {
         try {
             sqLiteDatabase = dbOpenHelper.getWritableDatabase();
@@ -135,11 +196,22 @@ public class Goals extends Fragment {
         }
     }
 
+    /**
+     * closing database
+     */
+
+    public void closeDB() {
+        sqLiteDatabase.close();
+    }
+
+    /**
+     * handle refresh when adding or deleting a new goal
+     */
+
     public void handleRefresh() {
         monReceiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent i)
-            {
+            public void onReceive(Context context, Intent i) {
                 adapter.updateAdapter(getAllRecord());
             }
         };

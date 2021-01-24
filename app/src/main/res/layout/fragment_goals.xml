@@ -14,19 +14,25 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:titleTextColor="@color/colorPrimaryDark" />
+
     <ListView
         android:id="@+id/goals_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="wrap_content"></ListView>
 
-    <ImageView
-        android:id="@+id/goals_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:alpha="0.5"
-        android:src="@drawable/ic_mygoals"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
+        <ImageView
+            android:id="@+id/goals_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha="0.3"
+            android:src="@drawable/ic_target" />
 
+    </LinearLayout>
 </LinearLayout>
