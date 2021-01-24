@@ -410,7 +410,6 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                 }
 
             }
-        }
 
 
         }
