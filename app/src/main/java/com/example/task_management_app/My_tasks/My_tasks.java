@@ -12,21 +12,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.R;
 import com.example.task_management_app.adapters.TaskRecyclerAdapter;
 import com.example.task_management_app.models.DBOpenHelper;
 import com.example.task_management_app.models.Note;
 
+import com.example.task_management_app.Add.Edit_task;
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 
-public class My_tasks extends Fragment{
+public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskListener {
 
     private SQLiteDatabase db;
     private DBOpenHelper dbHelper;
@@ -34,11 +40,17 @@ public class My_tasks extends Fragment{
     private TaskRecyclerAdapter taskRecyclerAdapter;
     private BroadcastReceiver monReceiver;
 
+    private SharedPreferences shpref;
+    private SharedPreferences.Editor myedit;
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        shpref = getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
+        myedit = shpref.edit();
 
         // Create or retrieve the database
         dbHelper = new DBOpenHelper(this.getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
@@ -52,7 +64,7 @@ public class My_tasks extends Fragment{
         //creating the recyclerview
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        taskRecyclerAdapter = new TaskRecyclerAdapter(getDatabaseTasks());
+        taskRecyclerAdapter = new TaskRecyclerAdapter(getDatabaseTasks(), this);
         recyclerView.setAdapter(taskRecyclerAdapter);
         handleRefresh();
 
@@ -109,5 +121,12 @@ public class My_tasks extends Fragment{
     }
 
 
+    @Override
+    public void onTaskClick(int position) {
+        myedit.putInt("id_task" , getDatabaseTasks().get(position).getId());
+        myedit.apply();
+        DialogFragment dialog = Edit_task.newInstance();
+        dialog.show(getFragmentManager(), "tag");
+    }
 }
 
