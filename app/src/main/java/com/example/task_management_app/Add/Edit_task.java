@@ -151,6 +151,11 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.Animation_Design_BottomSheetDialog);
 
+        shpref=getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
+        for_mode = shpref.getBoolean("for_mode",false);
+        not_delay=shpref.getInt("time_reminder",0);
+        id=shpref.getInt("id_task",1);
+
         // Create  database
         dbOpenHelper = new DBOpenHelper(getContext() , DBOpenHelper.Constants.DATABASE_NAME, null,
                 DBOpenHelper.Constants.DATABASE_VERSION);
@@ -178,9 +183,6 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
 
             res.moveToNext();
         }
-        shpref=getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
-        for_mode = shpref.getBoolean("for_mode",false);
-        not_delay=shpref.getInt("time_reminder",0);
 
 
     }
@@ -319,7 +321,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                 }
                 if (!title.getText().toString().equals("")) {
                     callback.onActionClick("Saved");
-                    long rowId = updateRecord(1 , contentValues);
+                    long rowId = updateRecord(id , contentValues);
                     dismiss();
                 }
 
