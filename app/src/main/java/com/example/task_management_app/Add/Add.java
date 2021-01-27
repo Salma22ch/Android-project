@@ -255,7 +255,23 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 ImageButton btnday= v.findViewById(R.id.DayButton);
                 btnday.setBackgroundResource(R.drawable.background_blue_light);
                 btnday.setColorFilter(Color.argb(255, 255, 255, 255));
+                time_picker=  new TimePickerDialog(getActivity(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+                                Calendar c = Calendar.getInstance();
+                                c.set(Calendar.HOUR_OF_DAY,sHour);
+                                c.set(Calendar.MINUTE ,sMinute);
+                                hour=sHour;
+                                minute=sMinute;
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
+                                if(for_mode) db_time=String.format("%02d:%02d", hour, minute);
+                                else db_time=dateFormat.format(c.getTime());
+                                tv_time.setText(db_time);
 
+                            }
+                        }, hour, minute, for_mode);
+                time_picker.show();
                 day_picker=new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -276,23 +292,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
 
                         , year, month, day);
                 day_picker.show();
-                time_picker=  new TimePickerDialog(getActivity(),
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                Calendar c = Calendar.getInstance();
-                                c.set(Calendar.HOUR_OF_DAY,sHour);
-                                c.set(Calendar.MINUTE ,sMinute);
-                                hour=sHour;
-                                minute=sMinute;
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
-                                if(for_mode) db_time=String.format("%02d:%02d", hour, minute);
-                                else db_time=dateFormat.format(c.getTime());
-                                tv_time.setText(db_time);
 
-                            }
-                        }, hour, minute, for_mode);
-                time_picker.show();
                 break;}
 
             case R.id.NotifButton:

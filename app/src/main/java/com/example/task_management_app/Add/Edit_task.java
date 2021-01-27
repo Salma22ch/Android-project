@@ -136,7 +136,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
     TextView tv_title_warning;
 
     int RECOGNIZER_RESULT;
-    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy hh:mm:ss a", Locale.getDefault());
+
 
     public static Edit_task newInstance() {
         return new Edit_task();
@@ -227,10 +227,14 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
         hour=time.get(time.HOUR);
         minute=time.get(time.MINUTE);
         String datetext=time.get(time.DAY_OF_MONTH)+"/"+(time.get(time.MONTH)+1)+"/"+time.get(time.YEAR);
-        tv_date.setText(datetext +"  at");
-        String timetext =String.format("hh:mma", time.get(time.HOUR), time.get(time.MINUTE));;
+        tv_date.setText(datetext +"  at ");
+        /*SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
+                                if(for_mode) db_time=String.format("%02d:%02d", hour, minute);
+                                else db_time=dateFormat.format(time.getTime());*/
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
+        String timetext =dateFormat.format(time.getTime());
         if(for_mode)timetext=String.format("%02d:%02d", time.get(time.HOUR), time.get(time.MINUTE));
-        tv_time.setText(timetext);
+        tv_time.setText("  "+timetext);
         // set chip category selector && initialize with database
         if(re_category!=null) {
             db_category=re_category;
@@ -306,7 +310,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                     time.add(Calendar.DATE, 1);
                 }
                 db_details=details.getText().toString();
-                Calendar c=Calendar.getInstance();;
+                Calendar c=Calendar.getInstance();
                 c.set(year, month, day, hour, minute);
                 db_date=c.getTimeInMillis();
                 System.out.println("hey"+db_date);
@@ -320,8 +324,8 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                     alarmManager.cancel(pendingIntent);
                 }
                 if (!title.getText().toString().equals("")) {
-                    callback.onActionClick("Saved");
-                    long rowId = updateRecord(id , contentValues);
+                    int id_update=shpref.getInt("id_task",1);
+                    long rowId = updateRecord(id_update , contentValues);
                     dismiss();
                 }
 
@@ -332,26 +336,6 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                 ImageButton btnday= v.findViewById(R.id.DayButton);
                 btnday.setBackgroundResource(R.drawable.background_blue_light);
                 btnday.setColorFilter(Color.argb(255, 255, 255, 255));
-
-                day_picker=new DatePickerDialog(getActivity(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
-                                time.set(Calendar.YEAR, Year);
-                                time.set(Calendar.MONTH, monthOfYear);
-                                time.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                year=Year;
-                                month=monthOfYear;
-                                day=dayOfMonth;
-                                String date=dayOfMonth+"/"+(monthOfYear+1)+"/"+Year;
-                                tv_date.setText(date +"  at");
-                                //String currentDateString = TimeFormat.getTimeInstance(DateFormat.FULL).format(c.getTime());
-
-                            }
-                        }
-
-                        , year, month, day);
-                day_picker.show();
                 time_picker=  new TimePickerDialog(getActivity(),
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
@@ -363,11 +347,31 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
                                 if(for_mode) db_time=String.format("%02d:%02d", hour, minute);
                                 else db_time=dateFormat.format(time.getTime());
-                                tv_time.setText(db_time);
+                                tv_time.setText("  "+db_time);
 
                             }
                         }, hour, minute, true);
                 time_picker.show();
+                day_picker=new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int Year, int monthOfYear, int dayOfMonth) {
+                                time.set(Calendar.YEAR, Year);
+                                time.set(Calendar.MONTH, monthOfYear);
+                                time.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                year=Year;
+                                month=monthOfYear;
+                                day=dayOfMonth;
+                                String date=dayOfMonth+"/"+(monthOfYear+1)+"/"+Year;
+                                tv_date.setText(date +"  at   ");
+                                //String currentDateString = TimeFormat.getTimeInstance(DateFormat.FULL).format(c.getTime());
+
+                            }
+                        }
+
+                        , year, month, day);
+                day_picker.show();
+
 
                 break;}
 
