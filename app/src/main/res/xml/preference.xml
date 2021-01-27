@@ -54,7 +54,7 @@
             app:iconSpaceReserved="false"
             android:title="About us " />
         <Preference
-            android:key="About"
+            android:key="About_version"
             app:iconSpaceReserved="false"
             android:summary="1.1.7 "
             android:title="App version" />

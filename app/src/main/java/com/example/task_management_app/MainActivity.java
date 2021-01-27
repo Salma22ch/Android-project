@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         fragment_container = (FrameLayout) findViewById(R.id.fragment_container);
         shpref=getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
         Boolean dark_mode = shpref.getBoolean("dark_mode",false);
-        System.out.println("salma"+dark_mode);
+        if(dark_mode) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new My_tasks()).commit();
