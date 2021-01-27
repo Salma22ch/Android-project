@@ -27,9 +27,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.task_management_app.Add.Add;
 import com.example.task_management_app.R;
 import com.example.task_management_app.models.DBOpenHelper;
 import com.example.task_management_app.models.Goal;
@@ -52,8 +54,14 @@ public class Goals extends Fragment {
 
     private BroadcastReceiver monReceiver;
 
+    public static Goals newInstance() {
+        return new Goals();
+    }
 
-    // now paste some images in drawable
+//    public void setCallback(Add.Callback callback) {
+//        this.callback = callback;
+//    }
+
 
     @Nullable
     @Override
@@ -134,7 +142,8 @@ public class Goals extends Fragment {
              * edit the goal
              */
             case R.id.editGoal:
-                //do some stuff
+                DialogFragment dialog_goal = Edit_Goal.newInstance();
+                dialog_goal.show(getActivity().getSupportFragmentManager(), "tag");
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -143,6 +152,7 @@ public class Goals extends Fragment {
 
     /**
      * function for deleting goal
+     *
      * @param goal
      */
 
@@ -154,11 +164,9 @@ public class Goals extends Fragment {
     }
 
 
-
-
-
     /**
      * open database
+     *
      * @throws SQLiteException
      */
     public void openDB() throws SQLiteException {

@@ -100,7 +100,7 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
                 intent.setAction("com.example.broadcastDismiss.goaldetails");
                 getApplicationContext().sendBroadcast(intent);
 
-                
+
 
             }
         });

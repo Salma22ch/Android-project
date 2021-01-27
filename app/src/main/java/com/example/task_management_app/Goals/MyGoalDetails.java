@@ -2,6 +2,8 @@ package com.example.task_management_app.Goals;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.task_management_app.Add.Add;
 import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.R;
 import com.example.task_management_app.models.DBOpenHelper;
@@ -87,7 +90,14 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
                 }
                 else if(item.getItemId()== R.id.editGoal)
                 {
-                    // do something
+                    DialogFragment dialog_goal = Edit_Goal.newInstance();
+//                    ((Edit_Goal) dialog_goal).setCallback(new Add.Callback() {
+//                        @Override
+//                        public void onActionClick(String name) {
+//                            Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+                    dialog_goal.show(getSupportFragmentManager(), "tag");
                     Toast.makeText(getApplicationContext(),"edit goal",Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -163,6 +173,12 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     public void goToGoals(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+//        Fragment fragment =  new Goals();
+//        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,fragment).commit();
+//        getSupportFragmentManager().executePendingTransactions();
+
+
+        Toast.makeText(getApplicationContext(),"edit goal",Toast.LENGTH_SHORT).show();
     }
 
     private void swipeDown() {
