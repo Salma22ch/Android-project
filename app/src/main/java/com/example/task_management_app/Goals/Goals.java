@@ -71,7 +71,7 @@ public class Goals extends Fragment {
                 DBOpenHelper.Constants.DATABASE_VERSION);
 
         openDB();
-        lisOfGoals = getAllRecord();
+        lisOfGoals = dbOpenHelper.getAllRecord(sqLiteDatabase);
 /*        if (lisOfGoals.isEmpty()) {
             imageView.setVisibility(View.VISIBLE);
         } else {
@@ -81,13 +81,11 @@ public class Goals extends Fragment {
 
         adapter = new Adapter_Goals(this.getContext(), lisOfGoals);
         goals_listView.setAdapter(adapter);
-        //handleRefresh();
+        handleRefresh();
 
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        //actionBar.setHomeAsUpIndicator(R.drawable.ic_mygoals);
-        //actionBar.setIcon(R.drawable.ic_mygoals);
         actionBar.setHomeAsUpIndicator(R.drawable.mydailygoals);
 
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -157,34 +155,7 @@ public class Goals extends Fragment {
 
 
 
-    /**
-     * get all record from database of table Goal
-     * @return
-     */
-    public ArrayList<Goal> getAllRecord() {
 
-        ArrayList<Goal> listOfGoal = new ArrayList<Goal>();
-        Goal goal;
-        Cursor res = sqLiteDatabase.rawQuery("select * from " + DBOpenHelper.Constants.MY_TABLE_Goal, null);
-        res.moveToFirst();
-        if (res.isAfterLast() == true){
-            return listOfGoal;
-        }
-
-        while (res.isAfterLast() == false) {
-            Integer id = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID));
-            String title = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TITLE));
-            String description = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_DESCRIPTION));
-            Integer icon = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ICON));
-            Integer progressMax = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX));
-            Integer progressCurrent = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT));
-            goal = new Goal(id, title, description, icon, progressMax, progressCurrent);
-            listOfGoal.add(goal);
-            res.moveToNext();
-        }
-        res.close();
-        return listOfGoal;
-    }
 
     /**
      * open database
@@ -214,7 +185,7 @@ public class Goals extends Fragment {
         monReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent i) {
-                adapter.updateAdapter(getAllRecord());
+                adapter.updateAdapter(dbOpenHelper.getAllRecord(sqLiteDatabase));
             }
         };
         getContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss.goal"));

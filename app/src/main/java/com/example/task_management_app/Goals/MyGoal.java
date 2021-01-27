@@ -37,6 +37,18 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
     DBOpenHelper dbOpenHelper;
 
 
+    public MyGoal(){
+
+    }
+
+//    new Thread(new Runnable(){
+//        public void run(){
+//            // some calculation
+//            ic.callback(myObject)
+//        }
+//    }).start();
+
+
     Intent i;
     Goal goal;
 
@@ -77,12 +89,18 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
             @Override
             public void onSlideComplete(SlideToActView slideToActView) {
                 openDB();
-                updateData(goal);
+                dbOpenHelper.updateData(goal,sqLiteDatabase);
                 //closeDB();
-                Toast.makeText(getApplicationContext(), " +1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "+1", Toast.LENGTH_SHORT).show();
                 Intent onDismissIntent = new Intent();
                 onDismissIntent.setAction("com.example.broadcastDismiss.goal");
                 getApplicationContext().sendBroadcast(onDismissIntent);
+
+                Intent intent = new Intent();
+                intent.setAction("com.example.broadcastDismiss.goaldetails");
+                getApplicationContext().sendBroadcast(intent);
+
+                
 
             }
         });
@@ -93,23 +111,7 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
 
     }
 
-    private int updateData(Goal goal) {
-        ContentValues contentValues = new ContentValues();
-        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
-        //String whereClause = DBOpenHelper.Constants.KEY_COL_ID +" = "+goal.getId();
 
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_ID, goal.getId());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent() + 1);
-
-        String[] whereArgs = {String.valueOf(goal.getId())};
-        int i = sqLiteDatabase.update(DBOpenHelper.Constants.MY_TABLE_Goal, contentValues, whereClause, whereArgs);
-        //long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Goal, null, contentValues);
-        return i;
-    }
 
 
     public void goback() {

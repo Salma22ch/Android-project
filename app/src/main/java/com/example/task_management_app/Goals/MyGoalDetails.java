@@ -3,7 +3,10 @@ package com.example.task_management_app.Goals;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
@@ -36,6 +39,8 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     DBOpenHelper dbOpenHelper;
     SQLiteDatabase sqLiteDatabase;
 
+    private BroadcastReceiver monReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +58,18 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         TextView mygoalDetailsDescription = (TextView) findViewById(R.id.mygoal_details_description);
 
 
-
         dbOpenHelper = new DBOpenHelper(this, DBOpenHelper.Constants.DATABASE_NAME, null,
                 DBOpenHelper.Constants.DATABASE_VERSION);
 
 
         toolbar.setTitle(goal.getTitle());
-        //toolbar.inflateMenu(R.menu.goal_menu);
+
+
+        /**
+         * handle the refresh
+         */
+        handleRefresh();
+
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 
@@ -156,7 +166,6 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     }
 
     private void swipeDown() {
-        Toast.makeText(this, "swipeDown", Toast.LENGTH_SHORT).show();
         goback();
         overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
     }
@@ -182,4 +191,16 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     public void closeDB() {
         sqLiteDatabase.close();
     }
+
+    public void handleRefresh() {
+        monReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent i) {
+                // i = getIntent();
+                goal = (Goal) i.getSerializableExtra("GoalObject");
+            }
+        };
+        getApplicationContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss.goaldetails"));
+    }
+
 }

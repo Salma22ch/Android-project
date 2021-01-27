@@ -1,10 +1,14 @@
 package com.example.task_management_app.models;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 public class DBOpenHelper extends SQLiteOpenHelper {
     SQLiteDatabase sqLiteDatabase;
@@ -129,6 +133,50 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         String[] whereArgs = {String.valueOf(goal.getId())};
         return sqLiteDatabase.delete(table, whereClause, whereArgs);
 
+    }
+
+    public int updateData(Goal goal,SQLiteDatabase sqLiteDatabase) {
+        ContentValues contentValues = new ContentValues();
+        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_ID, goal.getId());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent() + 1);
+
+        String[] whereArgs = {String.valueOf(goal.getId())};
+        int i = sqLiteDatabase.update(DBOpenHelper.Constants.MY_TABLE_Goal, contentValues, whereClause, whereArgs);
+        return i;
+    }
+
+    /**
+     * get all record from database of table Goal
+     * @return
+     */
+    public ArrayList<Goal> getAllRecord(SQLiteDatabase sqLiteDatabase) {
+
+        ArrayList<Goal> listOfGoal = new ArrayList<Goal>();
+        Goal goal;
+        Cursor res = sqLiteDatabase.rawQuery("select * from " + DBOpenHelper.Constants.MY_TABLE_Goal, null);
+        res.moveToFirst();
+        if (res.isAfterLast() == true){
+            return listOfGoal;
+        }
+
+        while (res.isAfterLast() == false) {
+            Integer id = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID));
+            String title = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TITLE));
+            String description = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_DESCRIPTION));
+            Integer icon = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ICON));
+            Integer progressMax = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX));
+            Integer progressCurrent = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT));
+            goal = new Goal(id, title, description, icon, progressMax, progressCurrent);
+            listOfGoal.add(goal);
+            res.moveToNext();
+        }
+        res.close();
+        return listOfGoal;
     }
 
 }
