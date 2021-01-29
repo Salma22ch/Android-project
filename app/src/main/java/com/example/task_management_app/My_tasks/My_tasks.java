@@ -1,8 +1,10 @@
 package com.example.task_management_app.My_tasks;
 
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -18,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,6 +67,7 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
         //creating the recyclerview
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
         taskRecyclerAdapter = new TaskRecyclerAdapter(getDatabaseTasks(), this);
         recyclerView.setAdapter(taskRecyclerAdapter);
         handleRefresh();
@@ -128,5 +132,35 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
         DialogFragment dialog = Edit_task.newInstance();
         dialog.show(getFragmentManager(), "tag");
     }
+
+
+    // Setting swipe action, needs undo action.
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Do you confirm deleting the task?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // this is where the delete action should be executed
+                            taskRecyclerAdapter.updateAdapter(getDatabaseTasks());
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                taskRecyclerAdapter.updateAdapter(getDatabaseTasks());
+                            }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    };
 }
 
