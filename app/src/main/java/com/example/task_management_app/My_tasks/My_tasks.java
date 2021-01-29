@@ -28,6 +28,7 @@ import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.R;
 import com.example.task_management_app.adapters.TaskRecyclerAdapter;
 import com.example.task_management_app.models.DBOpenHelper;
+import com.example.task_management_app.models.Goal;
 import com.example.task_management_app.models.Note;
 
 import com.example.task_management_app.Add.Edit_task;
@@ -37,12 +38,18 @@ import java.util.ArrayList;
 
 public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskListener {
 
-    private SQLiteDatabase db;
-    private DBOpenHelper dbHelper;
-    private RecyclerView recyclerView;
-    private TaskRecyclerAdapter taskRecyclerAdapter;
+    // Misc vars
     private BroadcastReceiver monReceiver;
 
+    // DB vars
+    private SQLiteDatabase db;
+    private DBOpenHelper dbHelper;
+
+    // UI vars
+    private RecyclerView recyclerView;
+    private TaskRecyclerAdapter taskRecyclerAdapter;
+
+    // onClick vars
     private SharedPreferences shpref;
     private SharedPreferences.Editor myedit;
 
@@ -52,6 +59,7 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        // onClick necessary stuff
         shpref = getActivity().getApplicationContext().getSharedPreferences("Myprefs" , Context.MODE_PRIVATE);
         myedit = shpref.edit();
 
@@ -68,6 +76,7 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+        // we pass our task array to the adapter, they should be filtered already
         taskRecyclerAdapter = new TaskRecyclerAdapter(getDatabaseTasks(), this);
         recyclerView.setAdapter(taskRecyclerAdapter);
         handleRefresh();
@@ -76,6 +85,7 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
 
     }
 
+    // refreshing the task list
     public void handleRefresh() {
         monReceiver = new BroadcastReceiver() {
             @Override
@@ -88,6 +98,7 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
     }
 
 
+    // open the database
     public void open() throws SQLiteException {
         try {
             db = dbHelper.getWritableDatabase();
@@ -96,10 +107,13 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
         }
     }
 
+    // close the database
     public void close() {
         db.close();
     }
 
+
+    // fetching tasks from database
     public ArrayList<Note> getDatabaseTasks() {
         ArrayList<Note> notes = new ArrayList<Note>();
         Note note;
@@ -125,6 +139,7 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
     }
 
 
+    // clicking the task opens edit page
     @Override
     public void onTaskClick(int position) {
         myedit.putInt("id_task" , getDatabaseTasks().get(position).getId());
@@ -134,7 +149,7 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
     }
 
 
-    // Setting swipe action, needs undo action.
+    // Setting task swipe action
     private ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -142,13 +157,14 @@ public class My_tasks extends Fragment implements TaskRecyclerAdapter.OnTaskList
         }
 
         @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Do you confirm deleting the task?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // this is where the delete action should be executed
+                            dbHelper.deleteTask(getDatabaseTasks().get(viewHolder.getAdapterPosition()), db);
                             taskRecyclerAdapter.updateAdapter(getDatabaseTasks());
                         }
                     })

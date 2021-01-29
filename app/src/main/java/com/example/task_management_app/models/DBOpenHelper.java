@@ -135,6 +135,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     }
 
+    // Deleting a task. (TODO: Check for bugs in case of different list order)
+    public int deleteTask(Note note, SQLiteDatabase sqLiteDatabase) {
+        String table = Constants.MY_TABLE_Note;
+        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
+        String[] whereArgs = {String.valueOf(note.getId())};
+        return sqLiteDatabase.delete(table, whereClause, whereArgs);
+    }
+
     public int updateData(Goal goal,SQLiteDatabase sqLiteDatabase) {
         ContentValues contentValues = new ContentValues();
         String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
