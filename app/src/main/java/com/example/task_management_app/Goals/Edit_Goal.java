@@ -149,16 +149,17 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
                     if (gProgressMaxText.isEmpty() == false) {
                         gProgress = Integer.parseInt(gProgressMaxText);
                     }
-                    //create object of Goal class
-                    Goal newGoal = new Goal(gTitle, gDescription, gSelectedIcon, gProgress, goal.getProgressCurrent());
+                    //update value og goal object
+                    goal.setIcon(gSelectedIcon);
+                    goal.setDescription(gDescription);
+                    goal.setMaxProgress(gProgress);
+                    goal.setTitle(gTitle);
+
                     dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
                             DBOpenHelper.Constants.DATABASE_VERSION);
 
+                    updateGoal(goal);
 
-                    Toast.makeText(getActivity(), "goal max = " + gProgress, Toast.LENGTH_SHORT).show();
-                    deleteGoal(newGoal);
-                    //int i = dbOpenHelper.updateData(goal,sqLiteDatabase);
-                    //callback.onActionClick("Goal Saved");
                     Intent onDismissIntent = new Intent();
                     onDismissIntent.setAction("com.example.broadcastDismiss.goal");
                     getContext().sendBroadcast(onDismissIntent);
@@ -169,11 +170,11 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
         }
     }
 
-    private void deleteGoal(Goal goal) {
+    private void updateGoal(Goal goal) {
         openDB();
-        dbOpenHelper.deleteGoal(goal, sqLiteDatabase);
-        Toast.makeText(getContext(), "goal deleted ", Toast.LENGTH_SHORT).show();
-        closeDB();
+        dbOpenHelper.updateData(goal, sqLiteDatabase);
+        Toast.makeText(getContext(), "goal updated ", Toast.LENGTH_SHORT).show();
+        //closeDB();
     }
 
     public boolean validateTitle() {

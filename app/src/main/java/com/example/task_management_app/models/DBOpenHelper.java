@@ -126,14 +126,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    public int deleteGoal(Goal goal, SQLiteDatabase sqLiteDatabase) {
 
-        String table = Constants.MY_TABLE_Goal;
-        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
-        String[] whereArgs = {String.valueOf(goal.getId())};
-        return sqLiteDatabase.delete(table, whereClause, whereArgs);
-
-    }
 
     // Deleting a task. (TODO: Check for bugs in case of different list order)
     public int deleteTask(Note note, SQLiteDatabase sqLiteDatabase) {
@@ -143,20 +136,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.delete(table, whereClause, whereArgs);
     }
 
-    public int updateData(Goal goal,SQLiteDatabase sqLiteDatabase) {
-        ContentValues contentValues = new ContentValues();
-        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_ID, goal.getId());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent() + 1);
 
-        String[] whereArgs = {String.valueOf(goal.getId())};
-        int i = sqLiteDatabase.update(DBOpenHelper.Constants.MY_TABLE_Goal, contentValues, whereClause, whereArgs);
-        return i;
-    }
 
     /**
      * get all record from database of table Goal
@@ -198,6 +178,30 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         // Insert the line in the database
         long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Goal, null, contentValues);
         return rowId;
+    }
+
+    public int updateData(Goal goal,SQLiteDatabase sqLiteDatabase) {
+        ContentValues contentValues = new ContentValues();
+        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_ID, goal.getId());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent());
+
+        String[] whereArgs = {String.valueOf(goal.getId())};
+        int i = sqLiteDatabase.update(DBOpenHelper.Constants.MY_TABLE_Goal, contentValues, whereClause, whereArgs);
+        return i;
+    }
+
+    public int deleteGoal(Goal goal, SQLiteDatabase sqLiteDatabase) {
+
+        String table = Constants.MY_TABLE_Goal;
+        String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
+        String[] whereArgs = {String.valueOf(goal.getId())};
+        return sqLiteDatabase.delete(table, whereClause, whereArgs);
+
     }
 
 }

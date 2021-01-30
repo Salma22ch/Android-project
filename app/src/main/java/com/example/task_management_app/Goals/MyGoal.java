@@ -89,16 +89,17 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
             @Override
             public void onSlideComplete(SlideToActView slideToActView) {
                 openDB();
+                //adding +1 to progress current
+                goal.setProgressCurrent(goal.getProgressCurrent()+1);
                 dbOpenHelper.updateData(goal,sqLiteDatabase);
-                //closeDB();
                 Toast.makeText(getApplicationContext(), "+1", Toast.LENGTH_SHORT).show();
                 Intent onDismissIntent = new Intent();
                 onDismissIntent.setAction("com.example.broadcastDismiss.goal");
                 getApplicationContext().sendBroadcast(onDismissIntent);
 
-                Intent intent = new Intent();
-                intent.setAction("com.example.broadcastDismiss.goaldetails");
-                getApplicationContext().sendBroadcast(intent);
+//                Intent intent = new Intent();
+//                intent.setAction("com.example.broadcastDismiss.goaldetails");
+//                getApplicationContext().sendBroadcast(intent);
 
 
 

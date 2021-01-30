@@ -91,14 +91,7 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
                 else if(item.getItemId()== R.id.editGoal)
                 {
                     DialogFragment dialog_goal = Edit_Goal.newInstance(goal);
-//                    ((Edit_Goal) dialog_goal).setCallback(new Add.Callback() {
-//                        @Override
-//                        public void onActionClick(String name) {
-//                            Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
                     dialog_goal.show(getSupportFragmentManager(), "tag");
-                    Toast.makeText(getApplicationContext(),"edit goal",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     // do something
