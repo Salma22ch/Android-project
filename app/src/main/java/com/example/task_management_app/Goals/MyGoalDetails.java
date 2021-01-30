@@ -90,7 +90,7 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
                 }
                 else if(item.getItemId()== R.id.editGoal)
                 {
-                    DialogFragment dialog_goal = Edit_Goal.newInstance();
+                    DialogFragment dialog_goal = Edit_Goal.newInstance(goal);
 //                    ((Edit_Goal) dialog_goal).setCallback(new Add.Callback() {
 //                        @Override
 //                        public void onActionClick(String name) {

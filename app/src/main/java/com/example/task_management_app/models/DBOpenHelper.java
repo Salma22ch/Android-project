@@ -187,4 +187,17 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         return listOfGoal;
     }
 
+    public long insertData(Goal goal,SQLiteDatabase sqLiteDatabase) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
+        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent());
+
+        // Insert the line in the database
+        long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Goal, null, contentValues);
+        return rowId;
+    }
+
 }

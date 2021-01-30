@@ -127,7 +127,7 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
                             DBOpenHelper.Constants.DATABASE_VERSION);
 
                     openDB();
-                    insertData(goal);
+                    dbOpenHelper.insertData(goal,sqLiteDatabase);
                     Log.d("insertGoal", "onClick: " + gTitle);
                     callback.onActionClick("Goal Saved");
                     Intent onDismissIntent = new Intent();
@@ -175,18 +175,6 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
 
     }
 
-    public long insertData(Goal goal) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent());
-
-        // Insert the line in the database
-        long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Goal, null, contentValues);
-        return rowId;
-    }
 
     public void openDB() throws SQLiteException {
         try {

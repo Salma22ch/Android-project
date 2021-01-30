@@ -18,19 +18,30 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.task_management_app.R;
 import com.example.task_management_app.models.DBOpenHelper;
 import com.example.task_management_app.models.Goal;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Edit_Goal extends DialogFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    public static Edit_Goal newInstance() {
-        return new Edit_Goal();
+    public Edit_Goal(Goal goal) {
+        this.goal = goal;
     }
 
-    int goalIcons[] = {R.drawable.ic_goalicon_bad_habits, R.drawable.ic_goalicon_fitness, R.drawable.ic_goalicon_lotus, R.drawable.ic_goalicon_read, R.drawable.ic_goalicon_suitcase, R.drawable.ic_goalicon_money, R.drawable.ic_goalicon_programmer, R.drawable.ic_goalicon_book};
+    public static Edit_Goal newInstance(Goal goal) {
+        return new Edit_Goal(goal);
+    }
+
+
+    int[] goalIcons = {R.drawable.ic_goalicon_bad_habits, R.drawable.ic_goalicon_fitness, R.drawable.ic_goalicon_lotus, R.drawable.ic_goalicon_read, R.drawable.ic_goalicon_suitcase, R.drawable.ic_goalicon_money, R.drawable.ic_goalicon_programmer, R.drawable.ic_goalicon_book};
     GridView gridView;
     public int gSelectedIcon;
     public String gTitle;
@@ -41,6 +52,10 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
     TextInputLayout titleEditText;
     EditText descriptionEditText;
     TextInputLayout progressEditText;
+
+    TextInputEditText titleEditTextInput;
+    TextInputEditText progressEditTextInput;
+
 
     SQLiteDatabase sqLiteDatabase;
     DBOpenHelper dbOpenHelper;
@@ -58,8 +73,11 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
         ImageButton close = view.findViewById(R.id.fullscreen_dialog_close_edit_goal);
         TextView action = view.findViewById(R.id.fullscreen_dialog_action_edit_goal);
         titleEditText = view.findViewById(R.id.goal_edit_edittext_title);
+        titleEditTextInput = view.findViewById(R.id.goal_edit_edittext_title_input);
         descriptionEditText = view.findViewById(R.id.goal_edit_edittext_description);
         progressEditText = view.findViewById(R.id.goal_edit_edittext_progress);
+        progressEditTextInput = view.findViewById(R.id.goal_edit_edittext_progress_Input);
+
 
         gridView = (GridView) view.findViewById(R.id.edit_goal_gridViewOfIcon); // init GridView
         // Create an object of CustomAdapter and set Adapter to GirdView
@@ -80,10 +98,33 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
         });
 
 
+
+        /**
+         * icon
+         */
+        int myicon = goal.getIcon();
+        int myposition = indexOf(goalIcons, myicon);
+        Adapter_Add_Goal_of_Gridview myAdapter = (Adapter_Add_Goal_of_Gridview) gridView.getAdapter();
+        myAdapter.selectedImage = myposition;
+        gSelectedIcon = myicon;
+        myAdapter.notifyDataSetChanged();
+        /**
+         * description
+         */
+        descriptionEditText.setText(goal.getDescription(), TextView.BufferType.EDITABLE);
+        /**
+         * title
+         */
+        titleEditTextInput.setText(goal.getTitle(), TextView.BufferType.EDITABLE);
+        /**
+         * progress
+         */
+        progressEditTextInput.setText(goal.getMaxProgress().toString(), TextView.BufferType.EDITABLE);
+
+
         // set on click listener
         close.setOnClickListener(this);
         action.setOnClickListener(this);
-
 
         return view;
     }
@@ -109,13 +150,14 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
                         gProgress = Integer.parseInt(gProgressMaxText);
                     }
                     //create object of Goal class
-                    goal = new Goal(gTitle, gDescription, gSelectedIcon, gProgress, 0);
+                    Goal newGoal = new Goal(gTitle, gDescription, gSelectedIcon, gProgress, goal.getProgressCurrent());
                     dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
                             DBOpenHelper.Constants.DATABASE_VERSION);
 
-                    openDB();
-                    dbOpenHelper.updateData(goal,sqLiteDatabase);
-                    Log.d("insertGoal", "onClick: " + gTitle);
+
+                    Toast.makeText(getActivity(), "goal max = " + gProgress, Toast.LENGTH_SHORT).show();
+                    deleteGoal(newGoal);
+                    //int i = dbOpenHelper.updateData(goal,sqLiteDatabase);
                     //callback.onActionClick("Goal Saved");
                     Intent onDismissIntent = new Intent();
                     onDismissIntent.setAction("com.example.broadcastDismiss.goal");
@@ -125,6 +167,13 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
                 }
 
         }
+    }
+
+    private void deleteGoal(Goal goal) {
+        openDB();
+        dbOpenHelper.deleteGoal(goal, sqLiteDatabase);
+        Toast.makeText(getContext(), "goal deleted ", Toast.LENGTH_SHORT).show();
+        closeDB();
     }
 
     public boolean validateTitle() {
@@ -172,6 +221,19 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
+    }
+
+    public int indexOf(int[] array, int value) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == value) {
+                return i;
+            }
+        }
+        return 11111111;
+    }
+
+    public void closeDB() {
+        sqLiteDatabase.close();
     }
 
 }

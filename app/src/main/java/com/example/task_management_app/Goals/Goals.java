@@ -142,7 +142,9 @@ public class Goals extends Fragment {
              * edit the goal
              */
             case R.id.editGoal:
-                DialogFragment dialog_goal = Edit_Goal.newInstance();
+                int goalPosition1 = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
+                Goal goal = lisOfGoals.get(goalPosition1);
+                DialogFragment dialog_goal = Edit_Goal.newInstance(goal);
                 dialog_goal.show(getActivity().getSupportFragmentManager(), "tag");
                 return true;
             default:
