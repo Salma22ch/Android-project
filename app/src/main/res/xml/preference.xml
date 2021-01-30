@@ -37,13 +37,6 @@
             app:iconSpaceReserved="false"
             android:summary="Tap to access notification setting "
             android:title="Advanced setting" />
-        <ListPreference
-            android:key="not_duration"
-            app:iconSpaceReserved="false"
-            android:entries="@array/settings_duration_entry"
-            android:entryValues="@array/settings_duration_values"
-            android:summary="Tap to select duration "
-            android:title="Duration " />
 
     </PreferenceCategory>
     <PreferenceCategory

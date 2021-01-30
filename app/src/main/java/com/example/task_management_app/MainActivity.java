@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     TextView add_task, add_goal;
     Boolean isOpen = false;
     FrameLayout fragment_container;
+    Fragment mainFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
         else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new My_tasks()).commit();
-
+        if (savedInstanceState == null) {
+            mainFragment = new My_tasks();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
+        }
+        else mainFragment=new Settings();
         fab = findViewById(R.id.fab);
         fabtask = findViewById(R.id.fabTask);
         fabgoal = findViewById(R.id.fabGoals);
