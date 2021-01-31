@@ -13,9 +13,9 @@
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:menu="@menu/goal_menu"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@color/colorPrimaryDark"
-        app:menu="@menu/goal_menu" />
+        app:titleTextColor="@color/colorPrimaryDark" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,12 +38,12 @@
                 android:textSize="30dp" />
 
             <TextView
+                style="@style/myText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Progress Current"
-                android:textSize = "20dp"
-                style="@style/myText"/>
+                android:textSize="20dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -59,17 +59,16 @@
                 android:layout_gravity="center"
                 android:text="50"
                 android:textColor="@color/colorPrimary"
-                android:textSize="30dp"
-                />
+                android:textSize="30dp" />
 
             <TextView
+                style="@style/myText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Progress Max"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="20dp"
-                style="@style/myText"/>
+                android:textSize="20dp" />
         </LinearLayout>
 
 
@@ -93,19 +92,27 @@
         android:layout_marginRight="15dp"
         android:max="100"
         android:progress="45" />
+
     <View
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="10dp"
         android:background="?android:attr/listDivider" />
-    <TextView
-        android:id="@+id/mygoal_details_description"
-        android:layout_width="wrap_content"
+
+
+
+
+    <org.naishadhparmar.zcustomcalendar.CustomCalendar
+        android:id="@+id/custom_calendar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        style="@style/myText"
-        />
+        app:day_of_week_length="1"
+        app:day_of_week_start_from="monday"
+        app:left_button_src="@drawable/ic_keyboard_arrow_left_black_24dp"
+        app:month_year_format="full_month__with_year"
+        app:right_button_src="@drawable/ic_keyboard_arrow_right_black_24dp"
+        app:row_height="50dp" />
     <View
         android:id="@+id/divider3"
         android:layout_width="match_parent"
@@ -113,7 +120,12 @@
         android:layout_margin="10dp"
         android:background="?android:attr/listDivider" />
 
-
+    <TextView
+        android:id="@+id/mygoal_details_description"
+        style="@style/myText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp" />
 
 
 </LinearLayout>

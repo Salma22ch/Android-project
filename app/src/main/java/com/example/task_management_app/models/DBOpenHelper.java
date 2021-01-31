@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class DBOpenHelper extends SQLiteOpenHelper {
@@ -54,6 +58,9 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
         public static final String KEY_COL_ICON = "Icon";
 
+        public static final String KEY_COL_ARRAYOFDAYS = "ArrayOfDays" ;
+        public static final String KEY_COL_DATECREATED = "dateOfCreation" ;
+
 
         // Index des colonnes
         public static final int ID_COLUMN = 1;
@@ -66,6 +73,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         public static final int PRIORITY_COLUMN = 8;
         public static final int STATE_NOTIFICATION = 9;
         public static final int ID_NOTIFICATION = 10;
+
+
     }
 
     // The static string to create the database.
@@ -76,7 +85,9 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             + Constants.KEY_COL_DESCRIPTION + " TEXT, "
             + Constants.KEY_COL_ICON + " BIGINT ,"
             + Constants.KEY_COL_PROGRESSMAX + " INT ,"
-            + Constants.KEY_COL_PROGRESSCURRENT + " INT)";
+            + Constants.KEY_COL_PROGRESSCURRENT + " INT ,"
+            + Constants.KEY_COL_DATECREATED + " BIGINT ,"
+            + Constants.KEY_COL_ARRAYOFDAYS + " TEXT )";
 
     private static final String DATABASE_CREATE = "create table "
             + Constants.MY_TABLE_Note + "(" + Constants.KEY_COL_ID
@@ -126,8 +137,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
 
-
-
     // Deleting a task. (TODO: Check for bugs in case of different list order)
     public int deleteTask(Note note, SQLiteDatabase sqLiteDatabase) {
         String table = Constants.MY_TABLE_Note;
@@ -137,9 +146,9 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
 
-
     /**
      * get all record from database of table Goal
+     *
      * @return
      */
     public ArrayList<Goal> getAllRecord(SQLiteDatabase sqLiteDatabase) {
@@ -148,18 +157,27 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         Goal goal;
         Cursor res = sqLiteDatabase.rawQuery("select * from " + DBOpenHelper.Constants.MY_TABLE_Goal, null);
         res.moveToFirst();
-        if (res.isAfterLast() == true){
+        if (res.isAfterLast() == true) {
             return listOfGoal;
         }
 
         while (res.isAfterLast() == false) {
-            Integer id = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID));
-            String title = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TITLE));
-            String description = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_DESCRIPTION));
-            Integer icon = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ICON));
-            Integer progressMax = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX));
-            Integer progressCurrent = res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT));
-            goal = new Goal(id, title, description, icon, progressMax, progressCurrent);
+            Integer id = res.getInt(res.getColumnIndex(Constants.KEY_COL_ID));
+            String title = res.getString(res.getColumnIndex(Constants.KEY_COL_TITLE));
+            String description = res.getString(res.getColumnIndex(Constants.KEY_COL_DESCRIPTION));
+            Integer icon = res.getInt(res.getColumnIndex(Constants.KEY_COL_ICON));
+            Integer progressMax = res.getInt(res.getColumnIndex(Constants.KEY_COL_PROGRESSMAX));
+            Integer progressCurrent = res.getInt(res.getColumnIndex(Constants.KEY_COL_PROGRESSCURRENT));
+            String ArrayOfdaysString = res.getString(res.getColumnIndex(Constants.KEY_COL_ARRAYOFDAYS));
+            Long dateCreated = res.getLong(res.getColumnIndex(Constants.KEY_COL_DATECREATED));
+
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<Long>>() {}.getType();
+            ArrayList<Long> finalOutputString = gson.fromJson(ArrayOfdaysString, type);
+
+            //Log.d("aaaaaaaaaassd", "getAllRecord: "+ finalOutputString.get(0).toString());
+
+            goal = new Goal(id, title, description, icon, progressMax, progressCurrent,dateCreated,finalOutputString);
             listOfGoal.add(goal);
             res.moveToNext();
         }
@@ -167,20 +185,29 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         return listOfGoal;
     }
 
-    public long insertData(Goal goal,SQLiteDatabase sqLiteDatabase) {
+    public long insertData(Goal goal, SQLiteDatabase sqLiteDatabase) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, goal.getTitle());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent());
+        contentValues.put(Constants.KEY_COL_TITLE, goal.getTitle());
+        contentValues.put(Constants.KEY_COL_DESCRIPTION, goal.getDescription());
+        contentValues.put(Constants.KEY_COL_ICON, goal.getIcon());
+        contentValues.put(Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
+        contentValues.put(Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent());
+
+        ArrayList<Long> inputArray ;
+        inputArray = goal.getArrayListOfDays();
+        Gson gson = new Gson();
+        String inputString= gson.toJson(inputArray);
+
+        contentValues.put(Constants.KEY_COL_ARRAYOFDAYS, inputString);
+        contentValues.put(Constants.KEY_COL_DATECREATED, goal.getDateCreated());
+
 
         // Insert the line in the database
         long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Goal, null, contentValues);
         return rowId;
     }
 
-    public int updateData(Goal goal,SQLiteDatabase sqLiteDatabase) {
+    public int updateData(Goal goal, SQLiteDatabase sqLiteDatabase) {
         ContentValues contentValues = new ContentValues();
         String whereClause = DBOpenHelper.Constants.KEY_COL_ID + " = ?";
         contentValues.put(DBOpenHelper.Constants.KEY_COL_ID, goal.getId());
@@ -188,10 +215,19 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, goal.getDescription());
         contentValues.put(DBOpenHelper.Constants.KEY_COL_ICON, goal.getIcon());
         contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSMAX, goal.getMaxProgress());
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent());
+        contentValues.put(Constants.KEY_COL_PROGRESSCURRENT, goal.getProgressCurrent());
+
+
+        ArrayList<Long> inputArray ;
+        inputArray = goal.getArrayListOfDays();
+        Gson gson = new Gson();
+        String inputString= gson.toJson(inputArray);
+
+        contentValues.put(Constants.KEY_COL_ARRAYOFDAYS, inputString);
+        contentValues.put(Constants.KEY_COL_DATECREATED, goal.getDateCreated());
 
         String[] whereArgs = {String.valueOf(goal.getId())};
-        int i = sqLiteDatabase.update(DBOpenHelper.Constants.MY_TABLE_Goal, contentValues, whereClause, whereArgs);
+        int i = sqLiteDatabase.update(Constants.MY_TABLE_Goal, contentValues, whereClause, whereArgs);
         return i;
     }
 

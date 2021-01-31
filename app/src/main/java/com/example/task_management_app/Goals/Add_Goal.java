@@ -28,7 +28,9 @@ import com.example.task_management_app.models.Goal;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 public class Add_Goal extends DialogFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -121,8 +123,13 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
                     if (gProgressMaxText.isEmpty() == false) {
                         gProgress = Integer.parseInt(gProgressMaxText);
                     }
+
+                    ArrayList<Long> arrayList = new ArrayList<Long>();
+                    Date date = java.util.Calendar.getInstance().getTime();
+                    Long dateCreated = date.getTime();
+
                     //create object of Goal class
-                    goal = new Goal(gTitle, gDescription, gSelectedIcon, gProgress, 0);
+                    goal = new Goal(gTitle, gDescription, gSelectedIcon, gProgress, 0,dateCreated,arrayList);
                     dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
                             DBOpenHelper.Constants.DATABASE_VERSION);
 

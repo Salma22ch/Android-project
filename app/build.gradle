@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.example.task_management_app"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -37,6 +37,8 @@ dependencies {
   //remove conflict
 
 
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.naishadhparmar.zcustomcalendar:zcustomcalendar:1.0.1'
     implementation 'com.github.sundeepk:compact-calendar-view:3.0.0'
     implementation "com.ncorti:slidetoact:0.9.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"

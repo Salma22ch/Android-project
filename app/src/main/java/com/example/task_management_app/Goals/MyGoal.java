@@ -21,6 +21,10 @@ import com.example.task_management_app.models.DBOpenHelper;
 import com.example.task_management_app.models.Goal;
 import com.ncorti.slidetoact.SlideToActView;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestureListener {
     private static final float SWIPE_THRESHOLD = 100;
     private static final float SWIPE_VOLACITY_THRESHOLD = 100;
@@ -37,16 +41,8 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
     DBOpenHelper dbOpenHelper;
 
 
-    public MyGoal(){
-
+    public MyGoal() {
     }
-
-//    new Thread(new Runnable(){
-//        public void run(){
-//            // some calculation
-//            ic.callback(myObject)
-//        }
-//    }).start();
 
 
     Intent i;
@@ -75,8 +71,6 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("cek", "home selected");
-                Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
                 goback();
 
             }
@@ -88,11 +82,18 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
         sta.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
             public void onSlideComplete(SlideToActView slideToActView) {
-                openDB();
+
                 //adding +1 to progress current
-                goal.setProgressCurrent(goal.getProgressCurrent()+1);
-                dbOpenHelper.updateData(goal,sqLiteDatabase);
+                goal.setProgressCurrent(goal.getProgressCurrent() + 1);
+                openDB();
+
+                int i = dbOpenHelper.updateData(goal, sqLiteDatabase);
+
+
                 Toast.makeText(getApplicationContext(), "+1", Toast.LENGTH_SHORT).show();
+
+                addDateTocompleted();
+
                 Intent onDismissIntent = new Intent();
                 onDismissIntent.setAction("com.example.broadcastDismiss.goal");
                 getApplicationContext().sendBroadcast(onDismissIntent);
@@ -100,7 +101,6 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
 //                Intent intent = new Intent();
 //                intent.setAction("com.example.broadcastDismiss.goaldetails");
 //                getApplicationContext().sendBroadcast(intent);
-
 
 
             }
@@ -113,6 +113,31 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
     }
 
 
+    boolean isTodaychecked = false;
+
+    public void addDateTocompleted() {
+
+        Calendar calendar2 = Calendar.getInstance();
+        ArrayList<Long> arrayListOfDays = goal.getArrayListOfDays();
+        Date date = java.util.Calendar.getInstance().getTime();
+        int today = date.getDay();
+
+        for (Long time : arrayListOfDays) {
+            calendar2.setTimeInMillis(time);
+            int mDay = calendar2.get(Calendar.DAY_OF_MONTH);
+            if (mDay == today) {
+                isTodaychecked = true;
+            }
+        }
+
+        if (isTodaychecked == false) {
+            arrayListOfDays.add(date.getTime());
+            goal.setArrayListOfDays(arrayListOfDays);
+            dbOpenHelper.updateData(goal,sqLiteDatabase);
+        }
+
+
+    }
 
 
     public void goback() {
