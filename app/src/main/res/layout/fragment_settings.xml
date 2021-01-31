@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.44"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/ic_accompli" />
+        app:srcCompat="@mipmap/ic_launcher" />
 
     <FrameLayout
         android:id="@+id/frameLayout"
