@@ -7,4 +7,12 @@
     android:layout_margin="2dp"
     android:background="@drawable/unavailable_normal">
 
+    <TextView
+        android:id="@+id/unavailable_datetextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/unavailable_datetextview_selector"
+        android:textColor="@color/default_text_selector"/>
 </RelativeLayout>

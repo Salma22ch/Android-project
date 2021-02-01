@@ -21,6 +21,6 @@
         android:layout_height="1dp"
         android:layout_below="@id/default_datetextview"
         android:background="@color/colorPrimary"
-        android:alpha="0.5"/>
+        android:alpha="0"/>
 
 </RelativeLayout>

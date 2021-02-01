@@ -15,7 +15,45 @@
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         app:menu="@menu/goal_menu"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@color/colorPrimaryDark" />
+        app:titleTextColor="@color/colorPrimaryDark">
+
+<!--            <ImageView-->
+<!--                android:id="@+id/mygoal_details_icon"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/ic_success" />-->
+
+    </androidx.appcompat.widget.Toolbar>
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="?android:attr/listDivider" />
+    <TextView
+        android:id="@+id/mygoal_details_title"
+        style="@style/myText"
+        android:text="Title"
+        android:textSize="30dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_gravity="center"
+        android:gravity="start"/>
+    <View
+        android:id="@+id/divider0"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
+        android:background="?android:attr/listDivider" />
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,10 +68,11 @@
 
             <TextView
                 android:id="@+id/mygoal_details_progressCurent"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="50"
+                android:gravity="center"
+                android:text="00"
                 android:textColor="@color/colorPrimary"
                 android:textSize="30dp" />
 
@@ -54,10 +93,11 @@
 
             <TextView
                 android:id="@+id/mygoal_details_progressMax"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="50"
+                android:gravity="center"
+                android:text="00"
                 android:textColor="@color/colorPrimary"
                 android:textSize="30dp" />
 
@@ -78,7 +118,10 @@
         android:id="@+id/divider1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
         android:background="?android:attr/listDivider" />
 
     <ProgressBar
@@ -97,27 +140,34 @@
         android:id="@+id/divider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
         android:background="?android:attr/listDivider" />
-
-
 
 
     <org.naishadhparmar.zcustomcalendar.CustomCalendar
         android:id="@+id/custom_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:day_of_week_length="1"
         app:day_of_week_start_from="monday"
         app:left_button_src="@drawable/ic_keyboard_arrow_left_black_24dp"
         app:month_year_format="full_month__with_year"
         app:right_button_src="@drawable/ic_keyboard_arrow_right_black_24dp"
         app:row_height="50dp" />
+
     <View
         android:id="@+id/divider3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
         android:background="?android:attr/listDivider" />
 
     <TextView

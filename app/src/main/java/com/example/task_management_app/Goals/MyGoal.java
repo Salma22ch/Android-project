@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -40,6 +41,8 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
     SQLiteDatabase sqLiteDatabase;
     DBOpenHelper dbOpenHelper;
 
+    MediaPlayer mp ;
+
 
     public MyGoal() {
     }
@@ -56,6 +59,7 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
         i = getIntent();
         goal = (Goal) i.getSerializableExtra("GoalObject");
 
+        mp = MediaPlayer.create(this, R.raw.check_mark_sound_effect);
         sta = (SlideToActView) findViewById(R.id.example);
         toolbar = findViewById(R.id.mygoals_toolbar);
         mygoals_title = (TextView) findViewById(R.id.mygoals_title);
@@ -87,16 +91,18 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
                 goal.setProgressCurrent(goal.getProgressCurrent() + 1);
                 openDB();
 
-                int i = dbOpenHelper.updateData(goal, sqLiteDatabase);
+                dbOpenHelper.updateData(goal, sqLiteDatabase);
 
-
-                Toast.makeText(getApplicationContext(), "+1", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getApplicationContext(), " +1", Toast.LENGTH_SHORT).show();
                 addDateTocompleted();
+
 
                 Intent onDismissIntent = new Intent();
                 onDismissIntent.setAction("com.example.broadcastDismiss.goal");
                 getApplicationContext().sendBroadcast(onDismissIntent);
+
+                makeSoundWhenCheked();
+                goDetailsAvtivity();
 
 //                Intent intent = new Intent();
 //                intent.setAction("com.example.broadcastDismiss.goaldetails");
@@ -193,10 +199,18 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
     }
 
     private void swipeUP() {
+        goDetailsAvtivity();
+    }
+
+    public void goDetailsAvtivity(){
         Intent myactivity = new Intent(this, MyGoalDetails.class);
         myactivity.putExtra("GoalObject", goal);
         startActivity(myactivity);
         overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+    }
+
+    public void makeSoundWhenCheked(){
+        mp.start();
     }
 
     @Override

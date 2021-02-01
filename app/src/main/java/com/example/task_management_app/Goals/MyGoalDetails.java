@@ -3,7 +3,6 @@ package com.example.task_management_app.Goals;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,23 +11,20 @@ import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.task_management_app.Add.Add;
 import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.R;
 import com.example.task_management_app.models.DBOpenHelper;
 import com.example.task_management_app.models.Goal;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.naishadhparmar.zcustomcalendar.CustomCalendar;
 import org.naishadhparmar.zcustomcalendar.OnDateSelectedListener;
@@ -60,6 +56,8 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
 
     boolean isTodaychecked = false;
 
+    HashMap<Integer, Object> mapDateToDesc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +73,8 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         TextView mygoalDetailsProgressMax = (TextView) findViewById(R.id.mygoal_details_progressMax);
         TextView mygoalDetailsProgressCurrent = (TextView) findViewById(R.id.mygoal_details_progressCurent);
         TextView mygoalDetailsDescription = (TextView) findViewById(R.id.mygoal_details_description);
+        TextView mygoalDetailsTitle = (TextView) findViewById(R.id.mygoal_details_title);
+
 
         customCalendar = (CustomCalendar) findViewById(R.id.custom_calendar);
 
@@ -97,21 +97,17 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
-                if(item.getItemId()==R.id.deleteGoal)
-                {
+                if (item.getItemId() == R.id.deleteGoal) {
                     openDB();
-                    dbOpenHelper.deleteGoal(goal,sqLiteDatabase);
-                    Toast.makeText(getApplicationContext(),"delete goal",Toast.LENGTH_SHORT).show();
+                    dbOpenHelper.deleteGoal(goal, sqLiteDatabase);
+                    Toast.makeText(getApplicationContext(), "delete goal", Toast.LENGTH_SHORT).show();
                     closeDB();
                     //goback();
                     goToGoals();
-                }
-                else if(item.getItemId()== R.id.editGoal)
-                {
+                } else if (item.getItemId() == R.id.editGoal) {
                     DialogFragment dialog_goal = Edit_Goal.newInstance(goal);
                     dialog_goal.show(getSupportFragmentManager(), "tag");
-                }
-                else{
+                } else {
                     // do something
                 }
 
@@ -119,11 +115,17 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
             }
         });
 
-        mygoalDetailsProgressCurrent.setText( goal.getProgressCurrent().toString());
+        toolbar.setTitle(goal.getTitle());
+        toolbar.setLogo(goal.getIcon());
+
+
+        mygoalDetailsProgressCurrent.setText(goal.getProgressCurrent().toString());
         mygoalDetailsProgressMax.setText(goal.getMaxProgress().toString());
         progressBar.setMax(goal.getMaxProgress());
         progressBar.setProgress(goal.getProgressCurrent());
         mygoalDetailsDescription.setText(goal.getDescription());
+        //mygoalsDetailsicon.setImageResource(goal.getIcon());
+        mygoalDetailsTitle.setText(goal.getTitle());
 
 
         /**
@@ -138,8 +140,8 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
 
         Property propUnavailable = new Property();
         propUnavailable.layoutResource = R.layout.unavailable_view;
-        //You can leave the text view field blank. Custom calendar won't try to set a date on such views
-        propUnavailable.enable = false;
+        //propUnavailable.enable = false;
+        propUnavailable.dateTextViewResource = R.id.unavailable_datetextview;
         mapDescToProp.put("unavailable", propUnavailable);
 
         Property propHoliday = new Property();
@@ -157,60 +159,22 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
          * add the days with their descriptions
          */
 
-        ArrayList<Long> arrayListOfDaysFromDB =  goal.getArrayListOfDays();
-
-        HashMap<Integer, Object> mapDateToDesc = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-        //put the day cheked
-        for (Long time : arrayListOfDaysFromDB){
-            calendar2.setTimeInMillis(time);
-            int mDay = calendar2.get(Calendar.DAY_OF_MONTH);
-            mapDateToDesc.put(mDay, "holiday");
-        }
+        mapDateToDesc = new HashMap<>();
 
 
-      /*  //put the day unchecked
+        /**
+         * put the cheked days
+         */
+        mapDateToDesc.put(getToday(), "default");
+        mapDateToDesc.putAll(addchekedDays(getThisMounth()));
 
-        long daycreated = goal.getDateCreated();
-        Date date = java.util.Calendar.getInstance().getTime();
-        Long today = date.getTime();
+        /**
+         * put the uncheked days
+         */
+        mapDateToDesc.putAll(addUnchekedDays(getThisMounth()));
 
 
-//
-//        for (Long time : arrayList) {
-//            calendar2.setTimeInMillis(time);
-//            int mDay = calendar2.get(Calendar.DAY_OF_MONTH);
-//            if (mDay == today) {
-//                isTodaychecked = true;
-//            }
-//        }
-
-        while (daycreated<today){
-            calendar2.setTimeInMillis(daycreated);
-            int createdDayConverted = calendar2.get(Calendar.DAY_OF_MONTH);
-
-            for (Long time : arrayListOfDaysFromDB) {
-                calendar2.setTimeInMillis(time);
-                int mDay = calendar2.get(Calendar.DAY_OF_MONTH);
-                if (mDay == createdDayConverted) {
-                    isTodaychecked = true;
-                }
-            }
-            if (mDay == ){
-
-            }
-            daycreated+=24*60*60;
-        }
-*/
-
-//        mapDateToDesc.put(2, "default");
-//        mapDateToDesc.put(5, "holiday");
-//        mapDateToDesc.put(10, "default"); //You don't need to explicitly mention "default" description dates.
-//        mapDateToDesc.put(11, "unavailable");
-//        mapDateToDesc.put(19, "holiday");
-//        mapDateToDesc.put(20, "holiday");
-//        mapDateToDesc.put(24, "unavailable");
         customCalendar.setDate(calendar, mapDateToDesc);
         /**
          * -------------------------------------------------------------------------
@@ -228,16 +192,12 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         customCalendar.setOnDateSelectedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(View view, Calendar selectedDate, Object desc) {
-                Snackbar.make(customCalendar, selectedDate.get(Calendar.DAY_OF_MONTH) + " selected", Snackbar.LENGTH_LONG).show();
+                //Snackbar.make(customCalendar, selectedDate.get(Calendar.DAY_OF_MONTH) + " selected", Snackbar.LENGTH_LONG).show();
             }
         });
 
 
-
-
     }
-
-
 
 
     @Override
@@ -288,7 +248,7 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
         this.finish();
     }
 
-    public void goToGoals(){
+    public void goToGoals() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 //        Fragment fragment =  new Goals();
@@ -296,7 +256,7 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
 //        getSupportFragmentManager().executePendingTransactions();
 
 
-        Toast.makeText(getApplicationContext(),"edit goal",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "edit goal", Toast.LENGTH_SHORT).show();
     }
 
     private void swipeDown() {
@@ -340,21 +300,165 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
     @Override
     public Map<Integer, Object>[] onNavigationButtonClicked(int whichButton, Calendar newMonth) {
         Map<Integer, Object>[] arr = new Map[2];
-        switch(newMonth.get(Calendar.MONTH)) {
-            case Calendar.AUGUST:
-                arr[0] = new HashMap<>(); //This is the map linking a date to its description
-                arr[0].put(3, "unavailable");
-                arr[0].put(6, "holiday");
-                arr[0].put(21, "unavailable");
-                arr[0].put(24, "holiday");
-                arr[1] = null; //Optional: This is the map linking a date to its tag.
+        HashMap<Integer, Object> hashMap;
+        switch (newMonth.get(Calendar.MONTH)) {
+            case Calendar.JANUARY:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.JANUARY);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.JANUARY));
+                break;
+            case Calendar.FEBRUARY:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.FEBRUARY);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.FEBRUARY));
+                break;
+            case Calendar.MARCH:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.MARCH);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.MARCH));
+                break;
+            case Calendar.APRIL:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.APRIL);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.APRIL));
+                break;
+            case Calendar.MAY:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.MAY);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.MAY));
                 break;
             case Calendar.JUNE:
                 arr[0] = new HashMap<>();
-                arr[0].put(5, "unavailable");
-                arr[0].put(10, "holiday");
-                arr[0].put(19, "holiday");
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.JUNE);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.JUNE));
                 break;
+            case Calendar.JULY:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.JULY);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.JULY));
+                break;
+            case Calendar.AUGUST:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.AUGUST);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.AUGUST));
+                break;
+            case Calendar.SEPTEMBER:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.SEPTEMBER);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.SEPTEMBER));
+                break;
+            case Calendar.OCTOBER:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.OCTOBER);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.OCTOBER));
+                break;
+            case Calendar.NOVEMBER:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.NOVEMBER);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.NOVEMBER));
+                break;
+            case Calendar.DECEMBER:
+                arr[0] = new HashMap<>();
+                arr[0].put(getToday(), "default");
+                hashMap = addchekedDays(Calendar.DECEMBER);
+                arr[0].putAll(hashMap);
+                arr[0].putAll(addUnchekedDays(Calendar.DECEMBER));
+                break;
+        }
+        return arr;
+    }
+
+    private int getToday() {
+        Calendar date = Calendar.getInstance();
+        int today = date.get(Calendar.DAY_OF_MONTH);
+        return today;
+    }
+
+    private int getThisMounth() {
+        Calendar date = Calendar.getInstance();
+        int thisMounth = date.get(Calendar.MONTH);
+        return thisMounth;
+    }
+
+
+    public HashMap<Integer, Object> addUnchekedDays(int mounth) {
+        ArrayList<Long> arrayListOfDaysFromDB = goal.getArrayListOfDays();
+
+        HashMap<Integer, Object> arr = new HashMap<Integer, Object>();
+        //get the date when the goal was created
+        long daycreated = goal.getDateCreated();
+        //day of today
+        Date date = java.util.Calendar.getInstance().getTime();
+        Long todayByMilli = date.getTime();
+        //------------------
+
+        Calendar calendar3 = Calendar.getInstance();
+        Calendar calendar4 = Calendar.getInstance();
+
+        while (daycreated < todayByMilli) {
+            isTodaychecked = false;
+            calendar3.setTimeInMillis(daycreated);
+            int createdDayConvertedOfyear = calendar3.get(Calendar.DAY_OF_YEAR);
+            int createdDayConvertedOfmounth = calendar3.get(Calendar.DAY_OF_MONTH);
+            int createdMounth = calendar3.get(Calendar.MONTH);
+            //Log.d("aaaaaqqqqq", "createdDayConverted: " + createdDayConvertedOfyear);
+
+            for (Long time : arrayListOfDaysFromDB) {
+                calendar4.setTimeInMillis(time);
+                int mDay = calendar4.get(Calendar.DAY_OF_YEAR);
+                Log.d("aaaaaqqqqq", "mday: " + calendar3.get(Calendar.DATE));
+                if (createdDayConvertedOfyear == mDay) {
+                    isTodaychecked = true;
+                }
+            }
+            Log.d("aaaaaqqqqq", "===== getToday() ======= " + getToday());
+            Log.d("aaaaaqqqqq", "=====createdDayConvertedOfmounth==== " + createdDayConvertedOfmounth);
+            if (isTodaychecked == false && createdMounth == mounth && getToday() != createdDayConvertedOfmounth) {
+                Log.d("aaaaaqqqqq", "ha li galna ");
+                arr.put(createdDayConvertedOfmounth, "unavailable");
+            }
+
+            daycreated += 86400000l;
+        }
+        return arr;
+    }
+
+
+    public HashMap<Integer, Object> addchekedDays(int mounth) {
+        ArrayList<Long> arrayListOfDaysFromDB = goal.getArrayListOfDays();
+        HashMap<Integer, Object> arr = new HashMap<Integer, Object>();
+        Calendar calendar2 = Calendar.getInstance();
+        //put the day cheked
+        for (Long time : arrayListOfDaysFromDB) {
+            calendar2.setTimeInMillis(time);
+            int getMounth = calendar2.get(Calendar.MONTH);
+            if (getMounth == mounth) {
+                int mDay = calendar2.get(Calendar.DAY_OF_MONTH);
+                arr.put(mDay, "holiday");
+            }
+
         }
         return arr;
     }
