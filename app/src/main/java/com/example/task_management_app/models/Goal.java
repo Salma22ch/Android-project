@@ -14,9 +14,17 @@ public class Goal implements Serializable {
     private Integer progressCurrent;
     private ArrayList<Long> arrayListOfDays;
     private Long dateCreated;
+    boolean isAchieved ;
 
+    public boolean isAchieved() {
+        return isAchieved;
+    }
 
-    public Goal(Integer id, String title, String description, Integer icon, Integer maxProgress, Integer progressCurrent,Long dateCreated,ArrayList<Long> arrayListOfDays) {
+    public void setAchieved(boolean achieved) {
+        isAchieved = achieved;
+    }
+
+    public Goal(Integer id, String title, String description, Integer icon, Integer maxProgress, Integer progressCurrent, Long dateCreated, ArrayList<Long> arrayListOfDays,Boolean isAchieved) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -25,9 +33,10 @@ public class Goal implements Serializable {
         this.progressCurrent = progressCurrent;
         this.dateCreated = dateCreated;
         this.arrayListOfDays = arrayListOfDays;
+        this.isAchieved=isAchieved;
     }
 
-    public Goal(String title, String description, Integer icon, Integer maxProgress, Integer progressCurrent,Long dateCreated,ArrayList<Long> arrayListOfDays) {
+    public Goal(String title, String description, Integer icon, Integer maxProgress, Integer progressCurrent,Long dateCreated,ArrayList<Long> arrayListOfDays,Boolean isAchieved) {
         this.title = title;
         this.description = description;
         this.icon = icon;
@@ -35,6 +44,8 @@ public class Goal implements Serializable {
         this.progressCurrent = progressCurrent;
         this.dateCreated = dateCreated;
         this.arrayListOfDays = arrayListOfDays;
+        isAchieved=false;
+        this.isAchieved=isAchieved;
     }
 
     public Integer getMaxProgress() {

@@ -129,7 +129,7 @@ public class Add_Goal extends DialogFragment implements View.OnClickListener, Ad
                     Long dateCreated = date.getTime();
 
                     //create object of Goal class
-                    goal = new Goal(gTitle, gDescription, gSelectedIcon, gProgress, 0,dateCreated,arrayList);
+                    goal = new Goal(gTitle, gDescription, gSelectedIcon, gProgress, 0,dateCreated,arrayList,false);
                     dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
                             DBOpenHelper.Constants.DATABASE_VERSION);
 

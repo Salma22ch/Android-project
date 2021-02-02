@@ -93,7 +93,7 @@ public class MyGoal extends AppCompatActivity implements GestureDetector.OnGestu
 
                 dbOpenHelper.updateData(goal, sqLiteDatabase);
 
-                Toast.makeText(getApplicationContext(), " +1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "+1", Toast.LENGTH_SHORT).show();
                 addDateTocompleted();
 
 

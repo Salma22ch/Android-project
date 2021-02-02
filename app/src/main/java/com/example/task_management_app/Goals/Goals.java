@@ -110,6 +110,7 @@ public class Goals extends Fragment {
         });
 
 
+
         return view;
     }
 
@@ -201,5 +202,14 @@ public class Goals extends Fragment {
         getContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss.goal"));
     }
 
+    /**
+     * change the goal statut to achieved
+     * @param goal
+     */
+    public void changeToCompleted(Goal goal){
+        if (goal.getProgressCurrent() == goal.getMaxProgress()){
+            goal.setAchieved(true);
+        }
+    }
 
 }

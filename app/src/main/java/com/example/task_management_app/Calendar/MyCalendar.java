@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.CloseGuard;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,6 +106,8 @@ public class MyCalendar extends Fragment  {
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
 
+        dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
+                DBOpenHelper.Constants.DATABASE_VERSION);
         loadEvents();
         handleRefresh();
 
@@ -167,8 +171,6 @@ public class MyCalendar extends Fragment  {
 
 
     private void loadEvents() {
-        dbOpenHelper = new DBOpenHelper(getContext(), DBOpenHelper.Constants.DATABASE_NAME, null,
-                DBOpenHelper.Constants.DATABASE_VERSION);
 
         openDB();
         List<Event> events= getEvents();
@@ -182,7 +184,7 @@ public class MyCalendar extends Fragment  {
         ArrayList<Event> listOfEvent = new ArrayList<Event>();
 
         for (Note list : listOfTask) {
-            listOfEvent.add(new Event(Color.argb(255, 169, 68, 65), list.getDate(),  list));
+            listOfEvent.add(new Event(Color.parseColor("#0779e4"), list.getDate(),  list));
         }
 
         return listOfEvent;
@@ -197,22 +199,6 @@ public class MyCalendar extends Fragment  {
         }
     }
 
-    public long insertData(Long db_date, String db_category, String db_type, String db_title, String db_details, String db_prority, String db_state) {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DATE, db_date);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_CATEGORY, db_category);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TYPE, db_type);
-        //time is deleted
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_TITLE, db_title);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_DESCRIPTION, db_details);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_PRIORITY, db_prority);
-        contentValues.put(DBOpenHelper.Constants.KEY_COL_STATE, db_state);
-
-        // Insert the line in the database
-        long rowId = sqLiteDatabase.insert(DBOpenHelper.Constants.MY_TABLE_Note, null, contentValues);
-        return rowId;
-    }
 
     /**
      * this methode for fetching data from the dataBase
