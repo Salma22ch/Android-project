@@ -102,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 dialog.show(getSupportFragmentManager(), "tag");
+                add_goal.setVisibility(View.INVISIBLE);
+                add_task.setVisibility(View.INVISIBLE);
+                fabtask.startAnimation(fab_close);
+                fabgoal.startAnimation(fab_close);
+                fab.startAnimation(fab_anticlock);
+                fabtask.setClickable(false);
+                fabtask.setClickable(false);
+                fragment_container.setAlpha(1f);
+                isOpen = false;
             }
 
         });
@@ -118,6 +127,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 dialog_goal.show(getSupportFragmentManager(), "tag");
+                add_goal.setVisibility(View.INVISIBLE);
+                add_task.setVisibility(View.INVISIBLE);
+                fabtask.startAnimation(fab_close);
+                fabgoal.startAnimation(fab_close);
+                fab.startAnimation(fab_anticlock);
+                fabtask.setClickable(false);
+                fabtask.setClickable(false);
+                fragment_container.setAlpha(1f);
+                isOpen = false;
             }
 
         });
@@ -144,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,SelectedFragement).commit();
-            getSupportFragmentManager().executePendingTransactions();
+            //getSupportFragmentManager().executePendingTransactions();
             return true;
         }
     };
