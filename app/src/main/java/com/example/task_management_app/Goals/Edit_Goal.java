@@ -163,6 +163,10 @@ public class Edit_Goal extends DialogFragment implements View.OnClickListener, A
                     Intent onDismissIntent = new Intent();
                     onDismissIntent.setAction("com.example.broadcastDismiss.goal");
                     getContext().sendBroadcast(onDismissIntent);
+
+//                    Intent onDismissIntent2 = new Intent();
+//                    onDismissIntent2.setAction("com.example.broadcastDismiss.goaldetails");
+//                    getContext().sendBroadcast(onDismissIntent2);
                     dismiss();
                     break;
                 }

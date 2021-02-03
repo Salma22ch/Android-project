@@ -28,9 +28,6 @@ public class Adapter_Goals extends BaseAdapter {
 
 
     Adapter_Goals (Context c, ArrayList<Goal> goal) {
-        //super(c,R.layout.custom_row_goals,R.id.goals_row_title);
-        //super(c,R.layout.custom_row_goals,goal);
-        //super(c, R.layout.custom_row_goals, R.id.goals_row_title, title);
         this.context = c;
         this.goal = goal;
         layoutInflater = (LayoutInflater.from(c));

@@ -293,6 +293,7 @@ public class MyGoalDetails extends AppCompatActivity implements GestureDetector.
             public void onReceive(Context context, Intent i) {
                 // i = getIntent();
                 goal = (Goal) i.getSerializableExtra("GoalObject");
+                Toast.makeText(getApplicationContext(),"handle refresh",Toast.LENGTH_SHORT).show();
             }
         };
         getApplicationContext().registerReceiver(monReceiver, new IntentFilter("com.example.broadcastDismiss.goaldetails"));

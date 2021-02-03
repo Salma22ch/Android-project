@@ -1,8 +1,10 @@
 package com.example.task_management_app.Goals;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -136,8 +138,7 @@ public class Goals extends Fragment {
              */
             case R.id.deleteGoal:
                 int goalPosition = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
-                deleteGoal(lisOfGoals.get(goalPosition));
-                adapter.remove(goalPosition);
+                deletingGoal(goalPosition,lisOfGoals.get(goalPosition));
                 return true;
             /**
              * edit the goal
@@ -154,16 +155,35 @@ public class Goals extends Fragment {
     }
 
     /**
-     * function for deleting goal
+     * function for deleting goal from data base used in deletingGoal function
      *
      * @param goal
      */
 
-    private void deleteGoal(Goal goal) {
+    private void deleteGoalFromDB(Goal goal) {
         openDB();
         dbOpenHelper.deleteGoal(goal, sqLiteDatabase);
-        Toast.makeText(getContext(), "goal deleted", Toast.LENGTH_SHORT).show();
-        //closeDB();
+    }
+
+    private void deletingGoal(final int Goalposition, final Goal mygoal){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Do you confirm deleting the task?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteGoalFromDB(mygoal);
+                        adapter.remove(Goalposition);
+                        showToast("Goal deleted");
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
@@ -210,6 +230,10 @@ public class Goals extends Fragment {
         if (goal.getProgressCurrent() == goal.getMaxProgress()){
             goal.setAchieved(true);
         }
+    }
+
+    public void showToast(String text){
+        Toast.makeText(getContext(),text,Toast.LENGTH_SHORT).show();
     }
 
 }
