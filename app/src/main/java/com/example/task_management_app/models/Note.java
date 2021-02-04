@@ -13,7 +13,7 @@ public class Note {
     private String priority;
     private String state;
     private String type; // a supprimer
-
+    private Integer id_notification;
     // Constructors
 
 
@@ -26,6 +26,18 @@ public class Note {
         this.priority = priority;
         this.state = state;
         this.type = type;
+    }
+
+    public Note(Integer id, String title, String description, String category, Long date, String priority, String state, String type , Integer id_notification) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.date = date;
+        this.priority = priority;
+        this.state = state;
+        this.type = type;
+        this.id_notification=id_notification;
     }
 
     public Note() {
@@ -110,5 +122,13 @@ public class Note {
                 ", state='" + state + '\'' +
                 ", type='" + type + '\'' +
                 '}';
+    }
+
+    public Integer getId_notification() {
+        return id_notification;
+    }
+
+    public void setId_notification(Integer id_notification) {
+        this.id_notification = id_notification;
     }
 }

@@ -228,12 +228,10 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
         minute=time.get(time.MINUTE);
         String datetext=time.get(time.DAY_OF_MONTH)+"/"+(time.get(time.MONTH)+1)+"/"+time.get(time.YEAR);
         tv_date.setText(datetext +"  at ");
-        /*SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
-                                if(for_mode) db_time=String.format("%02d:%02d", hour, minute);
-                                else db_time=dateFormat.format(time.getTime());*/
+        String timetext;
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
-        String timetext =dateFormat.format(time.getTime());
-        if(for_mode)timetext=String.format("%02d:%02d", time.get(time.HOUR), time.get(time.MINUTE));
+        if(for_mode) timetext=String.format("%02d:%02d", time.get(time.HOUR), time.get(time.MINUTE));
+        else  timetext =dateFormat.format(time.getTime());
         tv_time.setText("  "+timetext);
         // set chip category selector && initialize with database
         if(re_category!=null) {
@@ -350,7 +348,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
                                 tv_time.setText("  "+db_time);
 
                             }
-                        }, hour, minute, true);
+                        }, hour, minute, for_mode);
                 time_picker.show();
                 day_picker=new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
