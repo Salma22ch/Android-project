@@ -4,6 +4,7 @@ import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.models.DBOpenHelper;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -177,7 +178,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
             re_type = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TYPE));
             re_state_not=res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_STATE_NOT));
             re_id_not=res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID_NOT));
-            System.out.println("hello"+re_id_not+"/"+re_state_not);
+            System.out.println(re_date);
             note = new Note(re_id, re_title, re_description, re_category, re_date, re_priority, re_state, re_type);
             notes.add(note);
 
@@ -187,6 +188,7 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -224,13 +226,14 @@ public class Edit_task extends  DialogFragment implements View.OnClickListener, 
         year=time.get(time.YEAR);
         month=time.get(time.MONTH);
         day=time.get(time.DAY_OF_MONTH);
-        hour=time.get(time.HOUR);
+        hour=time.get(time.HOUR_OF_DAY);
         minute=time.get(time.MINUTE);
         String datetext=time.get(time.DAY_OF_MONTH)+"/"+(time.get(time.MONTH)+1)+"/"+time.get(time.YEAR);
         tv_date.setText(datetext +"  at ");
         String timetext;
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mma");
-        if(for_mode) timetext=String.format("%02d:%02d", time.get(time.HOUR), time.get(time.MINUTE));
+        SimpleDateFormat dateFormat24 = new SimpleDateFormat("HH:mm");
+        if(for_mode) timetext=dateFormat24.format(time.getTime());
         else  timetext =dateFormat.format(time.getTime());
         tv_time.setText("  "+timetext);
         // set chip category selector && initialize with database

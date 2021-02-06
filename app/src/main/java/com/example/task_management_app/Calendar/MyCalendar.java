@@ -1,7 +1,9 @@
 package com.example.task_management_app.Calendar;
 
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -43,6 +45,7 @@ import java.net.NoRouteToHostException;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import com.example.task_management_app.Add.AlertReceiver;
 import com.example.task_management_app.Add.Edit_task;
 import com.example.task_management_app.MainActivity;
 import com.example.task_management_app.R;
@@ -68,6 +71,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import static android.content.Context.ALARM_SERVICE;
 
 public class MyCalendar extends Fragment implements TaskRecyclerAdapter.OnTaskListener {
 
@@ -259,8 +264,8 @@ public class MyCalendar extends Fragment implements TaskRecyclerAdapter.OnTaskLi
             String priority = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_PRIORITY));
             String state = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_STATE));
             String type = res.getString(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_TYPE));
-
-            note = new Note(id, title, description, category, date, priority, state, type);
+            Integer id_not=res.getInt(res.getColumnIndex(DBOpenHelper.Constants.KEY_COL_ID_NOT));
+            note = new Note(id, title, description, category, date, priority, state, type , id_not);
             listOfNote.add(note);
 
             res.moveToNext();
@@ -320,6 +325,10 @@ public class MyCalendar extends Fragment implements TaskRecyclerAdapter.OnTaskLi
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // code by salma
+                            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                            Intent inte = new Intent(getActivity().getApplicationContext(), AlertReceiver.class);
+                            alarmManager.cancel(PendingIntent.getBroadcast(getActivity().getApplicationContext(),listOfTasks.get(viewHolder.getAdapterPosition()).getId_notification(), inte, PendingIntent.FLAG_UPDATE_CURRENT));
                             // this is where the delete action should be executed
                             dbOpenHelper.deleteTask(listOfTasks.get(viewHolder.getAdapterPosition()), sqLiteDatabase);
                             listOfTasks.remove(viewHolder.getAdapterPosition());

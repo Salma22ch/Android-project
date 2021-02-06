@@ -219,7 +219,7 @@ public class Add extends  DialogFragment implements View.OnClickListener, Adapte
                 Calendar time = Calendar.getInstance();
                 time.set(year, month, day, hour, minute);
                 db_date=time.getTimeInMillis();
-                System.out.println(db_details);
+                System.out.println(db_date);
                 Random r = new Random();
                 if(not_on) {
                     alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
