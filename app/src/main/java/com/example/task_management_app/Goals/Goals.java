@@ -91,7 +91,7 @@ public class Goals extends Fragment {
 
         adapter = new Adapter_Goals(this.getContext(), lisOfGoals);
         goals_listView.setAdapter(adapter);
-        handleRefresh();
+
 
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -106,11 +106,13 @@ public class Goals extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent newActivity = new Intent(getActivity(), MyGoal.class);
-                newActivity.putExtra("GoalObject", lisOfGoals.get(position));
+                //newActivity.putExtra("GoalObject", lisOfGoals.get(position));
+                newActivity.putExtra("GoalObject", dbOpenHelper.getAllRecord(sqLiteDatabase).get(position));
                 startActivity(newActivity);
             }
         });
 
+        handleRefresh();
 
 
         return view;
@@ -130,7 +132,6 @@ public class Goals extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             /**
@@ -138,14 +139,17 @@ public class Goals extends Fragment {
              */
             case R.id.deleteGoal:
                 int goalPosition = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
-                deletingGoal(goalPosition,lisOfGoals.get(goalPosition));
+                //deletingGoal(goalPosition,lisOfGoals.get(goalPosition));
+                Goal goal1 = dbOpenHelper.getAllRecord(sqLiteDatabase).get(goalPosition);
+                deletingGoal(goalPosition,goal1);
                 return true;
             /**
              * edit the goal
              */
             case R.id.editGoal:
                 int goalPosition1 = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
-                Goal goal = lisOfGoals.get(goalPosition1);
+                //Goal goal = lisOfGoals.get(goalPosition1);
+                Goal goal = dbOpenHelper.getAllRecord(sqLiteDatabase).get(goalPosition1);
                 DialogFragment dialog_goal = Edit_Goal.newInstance(goal);
                 dialog_goal.show(getActivity().getSupportFragmentManager(), "tag");
                 return true;
